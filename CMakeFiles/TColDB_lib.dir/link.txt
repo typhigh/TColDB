@@ -1,0 +1,2 @@
+/usr/bin/ar qc libTColDB_lib.a  CMakeFiles/TColDB_lib.dir/src/Parser/execute.cpp.o CMakeFiles/TColDB_lib.dir/src/Consoles/Console.cpp.o CMakeFiles/TColDB_lib.dir/src/Server/Server.cpp.o
+/usr/bin/ranlib libTColDB_lib.a

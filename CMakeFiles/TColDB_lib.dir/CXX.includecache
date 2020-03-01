@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/typhigh/Desktop/OpenSource/TColDB/src/Consoles/Console.cpp
+
+/home/typhigh/Desktop/OpenSource/TColDB/src/Parser/defs.h
+stdint.h
+-
+stdlib.h
+-
+
+/home/typhigh/Desktop/OpenSource/TColDB/src/Parser/execute.cpp
+stdio.h
+-
+stdlib.h
+-
+execute.h
+/home/typhigh/Desktop/OpenSource/TColDB/src/Parser/execute.h
+
+/home/typhigh/Desktop/OpenSource/TColDB/src/Parser/execute.h
+defs.h
+/home/typhigh/Desktop/OpenSource/TColDB/src/Parser/defs.h
+
+/home/typhigh/Desktop/OpenSource/TColDB/src/Server/Server.cpp
+Server.h
+/home/typhigh/Desktop/OpenSource/TColDB/src/Server/Server.h
+
+/home/typhigh/Desktop/OpenSource/TColDB/src/Server/Server.h
+

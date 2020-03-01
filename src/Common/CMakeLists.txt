@@ -1,0 +1,7 @@
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tests)
+set(SOURCE
+	${SOURCE}
+	${CMAKE_CURRENT_SOURCE_DIR}/Client.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Server.cpp
+	PARENT_SCOPE
+)
