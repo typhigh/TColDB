@@ -4,15 +4,17 @@
 
 #include <cstdint>
 #include <cstdlib>
+#include <string>
 
 namespace Parser {
-enum field_type_t{
+enum FieldType_t{
 	FIELD_TYPE_INT,
 	FIELD_TYPE_FLOAT,
 	FIELD_TYPE_CHAR,
 	FIELD_TYPE_DATE,
 	FIELD_TYPE_VARCHAR
 };
+class FieldType;
 
 enum field_flag_t{
 	FIELD_FLAG_NOTNULL = 1,
@@ -30,6 +32,8 @@ enum table_constraint_type_t{
 enum table_join_type_t{
 	TABLE_JOIN_NONE,
 } ;
+
+
 
 #define OPERATOR_UNARY 0x80
 enum operator_type_t {
@@ -64,7 +68,7 @@ enum operator_type_t {
 	OPERATOR_COUNT,
 } ;
 
-enum term_type_t {
+enum TermType_t {
 	TERM_NONE = 0,
 	TERM_COLUMN_REF,
 	TERM_INT,
@@ -76,7 +80,9 @@ enum term_type_t {
 	TERM_NULL
 } ;
 
-class ASTFieldItem;
+class TermType;
+class IAST;
+class FieldDef;
 class ASTLinkedList;
 class ASTColumnRef;
 class ASTTableDef;
@@ -88,16 +94,17 @@ class ASTUpdateInfo;
 class ASTSelectInfo;
 class ASTTableJoinInfo;
 
+using IASTPtr = std::shared_ptr<IAST>;
 // Old classes(useless)
 
-class ASTFieldItem {
+/*
+class FieldDef {
 public:	
 	char *name;
 	int type, width, flags;
-	ASTFieldItem *next;
 	ASTExprNode *default_value;
 };
- 
+*/
 
 class ASTLinkedList {
 public:
@@ -111,12 +118,14 @@ public:
 	char *column;
 };
 
+/*
 class ASTTableDef {
 public:
 	char *name;
-	ASTFieldItem *fields;
+	std::vector<FieldDefPtr> fields;
 	ASTLinkedList *constraints;
 } ;
+*/
 
 class ASTInsertInfo {
 public:
@@ -137,7 +146,7 @@ public:
 	};
 	ASTExprNode *right;
 	operator_type_t op;
-	term_type_t term_type;
+	TermType_t term_type;
 };
 
 class ASTTableConstraint {
@@ -147,11 +156,13 @@ public:
 	ASTExprNode *check_cond;
 } ;
 
+/*
 class ASTDeleteInfo {
 public:
 	char *table;
 	ASTExprNode *where;
 } ;
+*/
 
 class ASTUpdateInfo {
 public:
@@ -175,3 +186,6 @@ public:
 
 }
 #endif
+
+
+

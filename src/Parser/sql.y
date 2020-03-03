@@ -9,34 +9,50 @@
 #include <stdlib.h>
 #include "defs.h"
 #include "execute.h"
+#include "IAST.h"
+#include "ASTCreator.h"
+#include "FieldDef.h"
+#include "ASTTableDef.h"
+#include "ASTDeleteInfo.h"
+#include <memory>
+#include <vector>
 
 void yyerror(const char *s);
 
 #include "sql.yy.cc"
 using namespace Parser;
+using namespace std;
 %}
 
 %code requires {
 
 #include "defs.h"
 #include "execute.h"
+#include "IAST.h"
+#include "ASTTableDef.h"
+#include <vector>
+#include <memory>
+
 }
 %union {
 //	std::string val_name;
 	char *val_s;
 	int   val_i;
 	float val_f;
-	class Parser::ASTFieldItem       *field_items;
-	class Parser::ASTTableDef        *table_def;
-	class Parser::ASTColumnRef       *column_ref;
-	class Parser::ASTLinkedList      *list;
-	class Parser::ASTTableConstraint *constraint;
-	class Parser::ASTInsertInfo      *insert_info;
-	class Parser::ASTUpdateInfo      *update_info;
-	class Parser::ASTDeleteInfo      *delete_info;
-	class Parser::ASTSelectInfo      *select_info;
-	class Parser::ASTTableJoinInfo  *join_info;
-	class Parser::ASTExprNode        *expr;
+	Parser::FieldType_t					field_type;				
+	Parser::FieldDef*					field_def;
+	std::vector<Parser::FieldDef*>*		field_defs;
+	Parser::ASTTableDef*				table_def;
+	Parser::ASTColumnRef*				column_ref;
+	Parser::ASTLinkedList*				list;
+	Parser::ASTTableConstraint*			constraint;
+	std::vector<Parser::ASTTableConstraint*>*	constraints;
+	Parser::ASTInsertInfo*				insert_info;
+	Parser::ASTUpdateInfo*				update_info;
+	Parser::ASTDeleteInfo*				delete_info;
+	Parser::ASTSelectInfo*				select_info;
+	Parser::ASTTableJoinInfo*			join_info;
+	Parser::ASTExprNode*				expr;
 }
 
 %token TRUE FALSE NULL_TOKEN MIN MAX SUM AVG COUNT
@@ -58,17 +74,19 @@ using namespace Parser;
 %type <val_f> FLOAT_LITERAL
 %type <val_i> INT_LITERAL
 
-%type <val_i> field_type field_width field_flag field_flags
+%type <val_i> field_width field_flag field_flags
 %type <val_s> table_name database_name
 %type <val_s> create_database_stmt use_database_stmt drop_database_stmt show_database_stmt 
 %type <val_s> drop_table_stmt show_table_stmt
 
-%type <field_items> table_field table_fields
+%type <field_type> field_type
+%type <field_def> table_field
+%type <field_defs> table_fields
 %type <table_def> create_table_stmt
 %type <column_ref> column_ref
 %type <constraint> table_extra_option
 %type <list> column_list expr_list insert_values literal_list
-%type <list> table_extra_options table_extra_option_list
+%type <constraints> table_extra_options table_extra_option_list
 %type <insert_info> insert_stmt insert_columns
 %type <update_info> update_stmt
 %type <delete_info> delete_stmt
@@ -100,7 +118,7 @@ sql_stmt   :  create_table_stmt ';'    { execute_create_table($1); }
 		   ;
 
 create_table_stmt : CREATE TABLE table_name '(' table_fields table_extra_options ')' {
-				  	$$ = (ASTTableDef*) malloc(sizeof(ASTTableDef));
+				  	$$ = new ASTTableDef();
 					$$->name = $3;
 					$$->fields = $5;
 					$$->constraints = $6;
@@ -146,7 +164,7 @@ insert_columns       : table_name {
 					 ;
 
 delete_stmt         : DELETE FROM table_name where_clause {
-					 	$$ = (ASTDeleteInfo*)malloc(sizeof(ASTDeleteInfo));
+					 	$$ = new ASTDeleteInfo();
 						$$->table = $3;
 						$$->where = $4;
 					}
@@ -251,14 +269,12 @@ table_extra_options : ',' table_extra_option_list  { $$ = $2; }
 					;
 
 table_extra_option_list : table_extra_option_list ',' table_extra_option {
-							$$ = (ASTLinkedList*)malloc(sizeof(ASTLinkedList));
-							$$->data = $3;
-							$$->next = $1;
+							$1->push_back($3);
+							$$ = $1;
 						}
 						| table_extra_option {
-							$$ = (ASTLinkedList*)malloc(sizeof(ASTLinkedList));
-							$$->data = $1;
-							$$->next = NULL;
+							$$ = new vector<ASTTableConstraint*> ();
+							$$->push_back($1);
 						}
 						;
 
@@ -316,18 +332,17 @@ column_list  : column_list ',' column_ref {
 			 ;
 
 
-table_fields : table_field                  { $$ = $1; }
-			 | table_fields ',' table_field { $$ = $3; $$->next = $1; }
+table_fields : table_field                  { $$ = new vector<FieldDef*>(); $$->push_back($1);}
+			 | table_fields ',' table_field { $1->push_back($3); $$ = $1;}
 			 ;
 
 table_field  : IDENTIFIER field_type field_width field_flags default_expr {
-			 	$$ = (ASTFieldItem*)malloc(sizeof(ASTFieldItem));
+			 	$$ = new FieldDef();
 				$$->name = $1;
-				$$->type = $2;
+				$$->type = FieldType($2);
 				$$->width = $3;
 				$$->flags = $4;
 				$$->default_value = $5;
-				$$->next = NULL;
 			 }
 			 ;
 
@@ -373,7 +388,7 @@ condition  : condition logical_op cond_term {
 				$$->right = $3;
 				$$->op    = (operator_type_t) $2;
 		   }
-		   | cond_term { $$ = $1; }
+		   | cond_term { $$ = $1; } 
 		   ;
 
 cond_term  : expr compare_op expr {
