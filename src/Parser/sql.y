@@ -9,11 +9,12 @@
 #include <stdlib.h>
 #include "defs.h"
 #include "execute.h"
-#include "IAST.h"
 #include "ASTCreator.h"
 #include "FieldDef.h"
 #include "ASTTableDef.h"
 #include "ASTDeleteInfo.h"
+
+#include <iostream>
 #include <memory>
 #include <vector>
 
@@ -28,8 +29,6 @@ using namespace std;
 
 #include "defs.h"
 #include "execute.h"
-#include "IAST.h"
-#include "ASTTableDef.h"
 #include <vector>
 #include <memory>
 
@@ -334,6 +333,7 @@ column_list  : column_list ',' column_ref {
 
 table_fields : table_field                  { $$ = new vector<FieldDef*>(); $$->push_back($1);}
 			 | table_fields ',' table_field { $1->push_back($3); $$ = $1;}
+			 | { $$ = NULL;}
 			 ;
 
 table_field  : IDENTIFIER field_type field_width field_flags default_expr {

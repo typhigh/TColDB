@@ -10,7 +10,7 @@ public:
     virtual ~IAST() {};
     virtual std::string ToString() const {
         return "";
-    };
+    }
     IAST() {}
 };
 

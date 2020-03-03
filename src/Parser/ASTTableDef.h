@@ -8,11 +8,11 @@
 
 namespace Parser {
 
-class ASTTableDef {
+class ASTTableDef : public IAST {
 public:
 	virtual ~ASTTableDef() {}
 	ASTTableDef() {}
-	std::string ToString() const;
+	virtual std::string ToString() const override ;
 
 public:
 	char* name;

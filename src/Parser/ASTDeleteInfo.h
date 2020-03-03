@@ -10,7 +10,6 @@ public:
     ASTDeleteInfo() : IAST() {}
     virtual ~ASTDeleteInfo() {}
     virtual std::string ToString() const override;
-
 public:
 	char *table;
 	ASTExprNode *where;

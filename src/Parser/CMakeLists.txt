@@ -25,6 +25,9 @@ add_library(sql_parser
 set(SOURCE
 	${SOURCE}
 	${CMAKE_CURRENT_SOURCE_DIR}/execute.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/ASTCreator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/ASTDeleteInfo.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/ASTTableDef.cpp
 	PARENT_SCOPE
 )
 
