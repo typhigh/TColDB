@@ -1,5 +1,4 @@
 #pragma once
-
 #include "defs.h"
 #include "FieldDef.h"
 #include "IAST.h"

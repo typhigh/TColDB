@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <string>
+#include <vector>
 
 namespace Parser {
 enum FieldType_t{
@@ -84,7 +85,7 @@ class TermType;
 class IAST;
 class FieldDef;
 class ASTLinkedList;
-class ASTColumnRef;
+class ColumnRef;
 class ASTTableDef;
 class ASTInsertInfo;
 class ASTExprNode;
@@ -96,15 +97,8 @@ class ASTTableJoinInfo;
 
 using IASTPtr = std::shared_ptr<IAST>;
 // Old classes(useless)
-
-/*
-class FieldDef {
-public:	
-	char *name;
-	int type, width, flags;
-	ASTExprNode *default_value;
-};
-*/
+using ColumnRefList = std::vector<ColumnRef*>;
+using FieldDefList = std::vector<FieldDef*>;
 
 class ASTLinkedList {
 public:
@@ -112,76 +106,13 @@ public:
 	ASTLinkedList *next;
 };
 
-class ASTColumnRef {
-public:
-	char *table;
-	char *column;
-};
-
-/*
-class ASTTableDef {
-public:
-	char *name;
-	std::vector<FieldDefPtr> fields;
-	ASTLinkedList *constraints;
-} ;
-*/
-
-class ASTInsertInfo {
-public:
-	char *table;
-	ASTLinkedList *columns, *values;
-} ;
-
-class ASTExprNode {
-public:
-	union {
-		int    val_i;
-		float  val_f;
-		char   val_b;
-		char  *val_s;
-		ASTColumnRef  *column_ref;
-		ASTExprNode   *left;
-		ASTLinkedList *literal_list;
-	};
-	ASTExprNode *right;
-	operator_type_t op;
-	TermType_t term_type;
-};
-
-class ASTTableConstraint {
-public:
-	int type;
-	ASTColumnRef *column_ref, *foreign_column_ref;
-	ASTExprNode *check_cond;
-} ;
-
-/*
-class ASTDeleteInfo {
-public:
-	char *table;
-	ASTExprNode *where;
-} ;
-*/
-
-class ASTUpdateInfo {
-public:
-	char *table;
-	ASTColumnRef *column_ref;
-	ASTExprNode *where, *value;
-};
+using ASTExprNodeList = std::vector<ASTExprNode*>;
+using ASTTableConstraintList = std::vector<ASTTableConstraint*>;
 
 class ASTSelectInfo {
 public:
 	ASTLinkedList *tables, *exprs;
 	ASTExprNode *where;
-};
-
-class ASTTableJoinInfo {
-public:
-	table_join_type_t join_type;
-	char *table, *join_table, *alias;
-	ASTExprNode *cond;
 };
 
 }

@@ -13,6 +13,7 @@
 #include "FieldDef.h"
 #include "ASTTableDef.h"
 #include "ASTDeleteInfo.h"
+#include "ASTInsertInfo.h"
 
 #include <iostream>
 #include <memory>
@@ -29,6 +30,12 @@ using namespace std;
 
 #include "defs.h"
 #include "execute.h"
+#include "FieldDef.h"
+#include "ColumnRef.h"
+#include "ASTExprNode.h"
+#include "ASTTableConstraint.h"
+#include "ASTUpdateInfo.h"
+#include "ASTTableJoinInfo.h"
 #include <vector>
 #include <memory>
 
@@ -40,18 +47,20 @@ using namespace std;
 	float val_f;
 	Parser::FieldType_t					field_type;				
 	Parser::FieldDef*					field_def;
-	std::vector<Parser::FieldDef*>*		field_defs;
+	Parser::FieldDefList*				field_defs;
 	Parser::ASTTableDef*				table_def;
-	Parser::ASTColumnRef*				column_ref;
+	Parser::ColumnRef*					column_ref;
+	Parser::ColumnRefList*				column_refs;
 	Parser::ASTLinkedList*				list;
 	Parser::ASTTableConstraint*			constraint;
-	std::vector<Parser::ASTTableConstraint*>*	constraints;
+	Parser::ASTTableConstraintList*		constraints;
 	Parser::ASTInsertInfo*				insert_info;
 	Parser::ASTUpdateInfo*				update_info;
 	Parser::ASTDeleteInfo*				delete_info;
 	Parser::ASTSelectInfo*				select_info;
 	Parser::ASTTableJoinInfo*			join_info;
 	Parser::ASTExprNode*				expr;
+	Parser::ASTExprNodeList*		 	exprs;
 }
 
 %token TRUE FALSE NULL_TOKEN MIN MAX SUM AVG COUNT
@@ -83,8 +92,8 @@ using namespace std;
 %type <field_defs> table_fields
 %type <table_def> create_table_stmt
 %type <column_ref> column_ref
-%type <constraint> table_extra_option
-%type <list> column_list expr_list insert_values literal_list
+%type <column_refs> column_list
+%type <constraint> table_extra_option 
 %type <constraints> table_extra_options table_extra_option_list
 %type <insert_info> insert_stmt insert_columns
 %type <update_info> update_stmt
@@ -92,6 +101,7 @@ using namespace std;
 %type <select_info> select_stmt
 %type <expr> expr factor term condition cond_term where_clause literal literal_list_expr
 %type <expr> aggregate_expr aggregate_term select_expr default_expr
+%type <exprs> insert_values expr_list literal_list
 %type <val_i> logical_op compare_op aggregate_op
 %type <list> select_expr_list select_expr_list_s table_refs
 %type <join_info> table_item
@@ -137,25 +147,27 @@ insert_stmt          : INSERT INTO insert_columns VALUES insert_values {
 					 ;
 
 insert_values        : '(' expr_list ')' {
-					 	$$ = (ASTLinkedList*)malloc(sizeof(ASTLinkedList));
-						$$->data = $2;
-						$$->next = NULL;
+					 	$$ = new ASTExprNodeList ();
+						ASTExprNode* newNode = new ASTExprNode();
+						newNode->literal_list = $2;
+						$$->push_back(newNode);
 					 }
 					 | insert_values ',' '(' expr_list ')' {
-					 	$$ = (ASTLinkedList*)malloc(sizeof(ASTLinkedList));
-						$$->data = $4;
-						$$->next = $1;
+						ASTExprNode* newNode = new ASTExprNode();
+						newNode->literal_list = $4;
+					 	$1->push_back(newNode);
+						$$ = $1;
 					 }
 					 ;
 
 insert_columns       : table_name {
-					 	$$ = (ASTInsertInfo*)malloc(sizeof(ASTInsertInfo));
+					 	$$ = new ASTInsertInfo();
 						$$->table   = $1;
 						$$->columns = NULL;
 						$$->values  = NULL;
 					 }
 					 | table_name '(' column_list ')' {
-					 	$$ = (ASTInsertInfo*)malloc(sizeof(ASTInsertInfo));
+					 	$$ = new ASTInsertInfo();
 						$$->table   = $1;
 						$$->columns = $3;
 						$$->values  = NULL;
@@ -170,7 +182,7 @@ delete_stmt         : DELETE FROM table_name where_clause {
 					;
 
 update_stmt         : UPDATE table_name SET column_ref '=' expr where_clause {
-					 	$$ = (ASTUpdateInfo*)malloc(sizeof(ASTUpdateInfo));
+					 	$$ = new ASTUpdateInfo();
 						$$->table = $2;
 						$$->value = $6;
 						$$->where = $7;
@@ -230,24 +242,24 @@ select_expr         : expr            { $$ = $1; }
 					| aggregate_expr  { $$ = $1; }
 
 aggregate_expr      : aggregate_op '(' aggregate_term ')' {
-						$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+						$$ = new ASTExprNode();
 						$$->left  = $3;
 						$$->op    = (operator_type_t) $1;
 					}
 					| COUNT '(' aggregate_term ')' {
-						$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+						$$ = new ASTExprNode();
 						$$->left  = $3;
 						$$->op    = OPERATOR_COUNT;
 					}
 					| COUNT '(' '*' ')' {
-						$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+						$$ = new ASTExprNode();
 						$$->left  = NULL;
 						$$->op    = OPERATOR_COUNT;
 					}
 					;
 
 aggregate_term      : column_ref {
-						$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+						$$ = new ASTExprNode();
 						$$->column_ref = $1;
 						$$->term_type  = TERM_COLUMN_REF;
 					}
@@ -278,61 +290,65 @@ table_extra_option_list : table_extra_option_list ',' table_extra_option {
 						;
 
 table_extra_option : PRIMARY KEY '(' IDENTIFIER ')' {
-				   	$$ = (ASTTableConstraint*)calloc(1, sizeof(ASTTableConstraint));
-					$$->column_ref = (ASTColumnRef*)malloc(sizeof(ASTColumnRef));
+					$$ = new ASTTableConstraint();
+					$$->column_ref = (ColumnRef*)malloc(sizeof(ColumnRef));
 					$$->column_ref->table = NULL;
 					$$->column_ref->column = $4;
 					$$->type = TABLE_CONSTRAINT_PRIMARY_KEY;
 				   }
 				   | FOREIGN KEY '(' IDENTIFIER ')' REFERENCES IDENTIFIER '(' IDENTIFIER ')' {
-				   	$$ = (ASTTableConstraint*)calloc(1, sizeof(ASTTableConstraint));
-					$$->column_ref = (ASTColumnRef*)malloc(sizeof(ASTColumnRef));
+				   	$$ = new ASTTableConstraint();
+					$$->column_ref = (ColumnRef*)malloc(sizeof(ColumnRef));
 					$$->column_ref->table = NULL;
 					$$->column_ref->column = $4;
-					$$->foreign_column_ref = (ASTColumnRef*)malloc(sizeof(ASTColumnRef));
+					$$->foreign_column_ref = (ColumnRef*)malloc(sizeof(ColumnRef));
 					$$->foreign_column_ref->table = $7;
 					$$->foreign_column_ref->column = $9;
 					$$->type = TABLE_CONSTRAINT_FOREIGN_KEY;
 				   }
 				   | UNIQUE '(' column_ref ')' {
-				   	$$ = (ASTTableConstraint*)calloc(1, sizeof(ASTTableConstraint));
+				   	$$ = new ASTTableConstraint();
 					$$->type = TABLE_CONSTRAINT_UNIQUE;
 					$$->column_ref = $3;
 				   }
 				   | CHECK '(' condition ')' {
-				   	$$ = (ASTTableConstraint*)calloc(1, sizeof(ASTTableConstraint));
+				   	$$ = new ASTTableConstraint();
 					$$->type = TABLE_CONSTRAINT_CHECK;
 					$$->check_cond = $3;
 				   }
 				   ;
 
 column_ref   : IDENTIFIER {
-			 	$$ = (ASTColumnRef*)malloc(sizeof(ASTColumnRef));
+				$$ = new ColumnRef();
 				$$->table  = NULL;
 				$$->column = $1;
 			 }
 			 | table_name '.' IDENTIFIER {
-			 	$$ = (ASTColumnRef*)malloc(sizeof(ASTColumnRef));
+			 	$$ = new ColumnRef();
 				$$->table  = $1;
 				$$->column = $3;
 			 }
 			 ;
 
 column_list  : column_list ',' column_ref {
-				$$ = (ASTLinkedList*)malloc(sizeof(ASTLinkedList));
-				$$->data = $3;
-				$$->next = $1;
+				$1->push_back($3);
+				$$ = $1;
 			 }
 			 | column_ref {
-			 	$$ = (ASTLinkedList*)malloc(sizeof(ASTLinkedList));
-				$$->data = $1;
-				$$->next = NULL;
+			 	$$ = new ColumnRefList();
+				$$->push_back($1);
 			 }
 			 ;
 
 
-table_fields : table_field                  { $$ = new vector<FieldDef*>(); $$->push_back($1);}
-			 | table_fields ',' table_field { $1->push_back($3); $$ = $1;}
+table_fields : table_field { 
+				$$ = new vector<FieldDef*>(); 
+				$$->push_back($1);
+			 }
+			 | table_fields ',' table_field { 
+				$1->push_back($3); 
+				$$ = $1;
+			 }
 			 | { $$ = NULL;}
 			 ;
 
@@ -383,7 +399,7 @@ compare_op : '='  { $$ = OPERATOR_EQ; }
 		   ;
 
 condition  : condition logical_op cond_term {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+				$$ = new ASTExprNode();
 				$$->left  = $1;
 				$$->right = $3;
 				$$->op    = (operator_type_t) $2;
@@ -392,65 +408,63 @@ condition  : condition logical_op cond_term {
 		   ;
 
 cond_term  : expr compare_op expr {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+		   		$$ = new ASTExprNode();
 				$$->left  = $1;
 				$$->right = $3;
 				$$->op    = (operator_type_t) $2;
 		   }
 		   | expr IN '(' literal_list_expr ')' {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+		   		$$ = new ASTExprNode();
 				$$->left  = $1;
 				$$->right = $4;
 				$$->op    = OPERATOR_IN;
 		   }
 		   | expr IS NULL_TOKEN {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+		   		$$ = new ASTExprNode();
 				$$->left  = $1;
 				$$->op    = OPERATOR_ISNULL;
 		   }
 		   | expr IS NOT NULL_TOKEN {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+		   		$$ = new ASTExprNode();
 				$$->left  = $1;
 				$$->op    = OPERATOR_NOTNULL;
 		   }
 		   | NOT cond_term {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+		   		$$ = new ASTExprNode();
 				$$->left  = $2;
 				$$->op    = OPERATOR_NOT;
 		   }
 		   | '(' condition ')' { $$ = $2; }
 		   | TRUE {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+		   		$$ = new ASTExprNode();
 				$$->val_b     = 1;
 				$$->term_type = TERM_BOOL;
 		   }
 		   | FALSE {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+		   		$$ = new ASTExprNode();
 				$$->val_b     = 0;
 				$$->term_type = TERM_BOOL;
 		   }
 		   ;
 
 expr_list  : expr_list ',' expr {
-				$$ = (ASTLinkedList*)malloc(sizeof(ASTLinkedList));
-				$$->data = $3;
-				$$->next = $1;
+				$1->push_back($3);
+				$$ = $1;
 		   }
 		   | expr {
-				$$ = (ASTLinkedList*)malloc(sizeof(ASTLinkedList));
-				$$->data = $1;
-				$$->next = NULL;
+				$$ = new ASTExprNodeList();
+				$$->push_back($1);
 		   }
 		   ;
 
 expr       : expr '+' factor {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+		   		$$ = new ASTExprNode();
 				$$->left  = $1;
 				$$->right = $3;
 				$$->op    = OPERATOR_ADD;
 		   }
 		   | expr '-' factor {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+		   		$$ = new ASTExprNode();
 				$$->left  = $1;
 				$$->right = $3;
 				$$->op    = OPERATOR_MINUS;
@@ -459,13 +473,13 @@ expr       : expr '+' factor {
 		   ;
 
 factor     : factor '*' term {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+		   		$$ = new ASTExprNode();
 				$$->left  = $1;
 				$$->right = $3;
 				$$->op    = OPERATOR_MUL;
 		   }
 		   | factor '/' term {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+		   		$$ = new ASTExprNode();
 				$$->left  = $1;
 				$$->right = $3;
 				$$->op    = OPERATOR_DIV;
@@ -474,59 +488,57 @@ factor     : factor '*' term {
 		   ;
 
 term       : column_ref {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+		   		$$ = new ASTExprNode();
 				$$->column_ref = $1;
 				$$->term_type  = TERM_COLUMN_REF;
 		   }
 		   | '-' term {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+		   		$$ = new ASTExprNode();
 				$$->left  = $2;
 				$$->op    = OPERATOR_NEGATE;
 		   }
 		   | literal      { $$ = $1; }
 		   | NULL_TOKEN {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+		   		$$ = new ASTExprNode();
 				$$->term_type  = TERM_NULL;
 		   }
 		   | '(' expr ')' { $$ = $2; }
 		   ;
 
 literal    : INT_LITERAL {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+		   		$$ = new ASTExprNode();
 				$$->val_i      = $1;
 				$$->term_type  = TERM_INT;
 		   }
 		   | FLOAT_LITERAL {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+		   		$$ = new ASTExprNode();
 				$$->val_f      = $1;
 				$$->term_type  = TERM_FLOAT;
 		   }
 		   | DATE_LITERAL {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+		   		$$ = new ASTExprNode();
 				$$->val_s      = $1;
 				$$->term_type  = TERM_DATE;
 		   }
 		   | STRING_LITERAL {
-		   		$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+		   		$$ = new ASTExprNode();
 				$$->val_s      = $1;
 				$$->term_type  = TERM_STRING;
 		   }
 		   ;
 
 literal_list : literal_list ',' literal {
-				$$ = (ASTLinkedList*)malloc(sizeof(ASTLinkedList));
-				$$->data = $3;
-				$$->next = $1;
+				$1->push_back($3);
+				$$ = $1;
 			 }
 			 | literal {
-				$$ = (ASTLinkedList*)malloc(sizeof(ASTLinkedList));
-				$$->data = $1;
-				$$->next = NULL;
+				$$ = new ASTExprNodeList();
+				$$->push_back($1);
 			 }
 			 ;
 
 literal_list_expr : literal_list {
-					$$ = (ASTExprNode*)calloc(1, sizeof(ASTExprNode));
+					$$ = new ASTExprNode();
 					$$->literal_list = $1;
 					$$->term_type    = TERM_LITERAL_LIST;
 				  }
