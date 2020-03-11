@@ -5,7 +5,8 @@ namespace Parser {
 
 class ASTExprNode : public IAST {
 public:
-	union {
+	union 
+	{
 		int    val_i;
 		float  val_f;
 		char   val_b;

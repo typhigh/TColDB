@@ -4,7 +4,8 @@
 
 namespace Parser {
 
-class ASTTableConstraint : public IAST {
+class ASTTableConstraint : public IAST 
+{
 public:
 	int type;
 	ColumnRef *column_ref, *foreign_column_ref;

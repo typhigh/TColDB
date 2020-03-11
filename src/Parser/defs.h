@@ -8,7 +8,8 @@
 #include <vector>
 
 namespace Parser {
-enum FieldType_t{
+enum FieldType_t
+{
 	FIELD_TYPE_INT,
 	FIELD_TYPE_FLOAT,
 	FIELD_TYPE_CHAR,
@@ -17,27 +18,31 @@ enum FieldType_t{
 };
 class FieldType;
 
-enum field_flag_t{
+enum field_flag_t
+{
 	FIELD_FLAG_NOTNULL = 1,
 	FIELD_FLAG_UNIQUE  = 2,
 	FIELD_FLAG_PRIMARY = 4
 };
 
-enum table_constraint_type_t{
+enum table_constraint_type_t
+{
 	TABLE_CONSTRAINT_PRIMARY_KEY,
 	TABLE_CONSTRAINT_FOREIGN_KEY,
 	TABLE_CONSTRAINT_UNIQUE,
 	TABLE_CONSTRAINT_CHECK
 };
 
-enum table_join_type_t{
+enum table_join_type_t
+{
 	TABLE_JOIN_NONE,
 } ;
 
 
 
 #define OPERATOR_UNARY 0x80
-enum operator_type_t {
+enum operator_type_t 
+{
 	OPERATOR_NONE = 0,
 	/* arithematic */
 	OPERATOR_ADD,
@@ -69,7 +74,8 @@ enum operator_type_t {
 	OPERATOR_COUNT,
 } ;
 
-enum TermType_t {
+enum TermType_t 
+{
 	TERM_NONE = 0,
 	TERM_COLUMN_REF,
 	TERM_INT,
@@ -96,24 +102,11 @@ class ASTSelectInfo;
 class ASTTableJoinInfo;
 
 using IASTPtr = std::shared_ptr<IAST>;
-// Old classes(useless)
 using ColumnRefList = std::vector<ColumnRef*>;
 using FieldDefList = std::vector<FieldDef*>;
-
-class ASTLinkedList {
-public:
-	void *data;
-	ASTLinkedList *next;
-};
-
+using ASTTableJoinInfoList = std::vector<ASTTableJoinInfo*>;
 using ASTExprNodeList = std::vector<ASTExprNode*>;
 using ASTTableConstraintList = std::vector<ASTTableConstraint*>;
-
-class ASTSelectInfo {
-public:
-	ASTLinkedList *tables, *exprs;
-	ASTExprNode *where;
-};
 
 }
 #endif

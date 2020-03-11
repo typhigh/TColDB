@@ -3,7 +3,8 @@ using namespace std;
 
 namespace Parser {
 
-string ASTInsertInfo::ToString() const {
+string ASTInsertInfo::ToString() const 
+{
     return "ASTInsertInfo";
 }
 

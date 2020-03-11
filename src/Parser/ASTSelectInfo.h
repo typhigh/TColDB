@@ -4,13 +4,12 @@
 
 namespace Parser {
 
-class ASTTableJoinInfo : public IAST
+class ASTSelectInfo : public IAST 
 {
 public:
-	table_join_type_t join_type;
-	char *table, *join_table, *alias;
-	ASTExprNode *cond;
-
+	ASTTableJoinInfoList* tables;
+	ASTExprNodeList* exprs;
+	ASTExprNode* where;
 public:
     virtual std::string ToString() const override;
 };

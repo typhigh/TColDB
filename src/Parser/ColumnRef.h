@@ -3,7 +3,8 @@
 
 namespace Parser {
 
-class ColumnRef {
+class ColumnRef 
+{
 public:
 	char *table;
 	char *column;

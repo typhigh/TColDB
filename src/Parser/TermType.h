@@ -9,7 +9,8 @@ public:
     TermType_t type;
 
     TermType(TermType_t type) : type(type) {}
-    std::string ToString() {
+    std::string ToString() 
+    {
         std::string ret;
         switch (type)
         {

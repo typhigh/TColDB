@@ -1,3 +1,5 @@
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/CityHash101)
+
 set(HEADERS
 	${HEADERS}
     PARENT_SCOPE

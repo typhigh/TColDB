@@ -11,3 +11,4 @@ target_link_libraries(ServerUnitTest
         )
 
 gtest_discover_tests(ServerUnitTest)
+enable_testing()

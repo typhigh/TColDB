@@ -9,6 +9,8 @@ add_subdirectory(src/Databases)
 add_subdirectory(src/Common)
 add_subdirectory(src/Concurrency)
 add_subdirectory(src/Utils)
+add_subdirectory(src/ThreePart)
+add_subdirectory(src/Plan)
 
 set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_BINARY_DIR build)

@@ -10,7 +10,8 @@ public:
     FieldType_t type;
     FieldType() {}
     FieldType(FieldType_t type) : type(type) {}
-    std::string ToString() {
+    std::string ToString() 
+    {
         std::string ret;
         switch (type)
         {

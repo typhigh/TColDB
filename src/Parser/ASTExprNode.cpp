@@ -3,7 +3,8 @@ using namespace std;
 
 namespace Parser {
 
-string ASTExprNode::ToString() const {
+string ASTExprNode::ToString() const 
+{
     return "ASTExprNode";
 }
 }

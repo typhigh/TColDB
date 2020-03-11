@@ -3,7 +3,8 @@ using namespace std;
 
 namespace Parser {
 
-string ASTTableJoinInfo::ToString() const {
+string ASTTableJoinInfo::ToString() const 
+{
     return "ASTTableJoinInfo";
 }
 

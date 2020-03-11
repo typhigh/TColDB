@@ -3,7 +3,8 @@
 using namespace std;
 namespace Parser {
 
-string ASTDeleteInfo::ToString() const {
+string ASTDeleteInfo::ToString() const 
+{
     return "ASTDeleteInfo";
 }
 }

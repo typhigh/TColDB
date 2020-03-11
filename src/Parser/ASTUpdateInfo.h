@@ -3,7 +3,8 @@
 #include "IAST.h"
 namespace Parser {
 
-class ASTUpdateInfo : public IAST{
+class ASTUpdateInfo : public IAST
+{
 public:
 	char *table;
 	ColumnRef *column_ref;

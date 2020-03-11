@@ -7,7 +7,8 @@
 
 namespace Parser {
 
-class ASTTableDef : public IAST {
+class ASTTableDef : public IAST 
+{
 public:
 	virtual ~ASTTableDef() {}
 	ASTTableDef() {}
@@ -20,5 +21,4 @@ public:
 };
 
 using ASTTableDefPtr = std::shared_ptr<ASTTableDef>;
-
 }

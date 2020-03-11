@@ -1,5 +1,11 @@
+set(HEADERS
+	${HEADERS}
+    PARENT_SCOPE
+)
+
 set(SOURCE
 	${SOURCE}
 	${CMAKE_CURRENT_SOURCE_DIR}/TransactionID.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/TransactionManager.cpp
 	PARENT_SCOPE
 )

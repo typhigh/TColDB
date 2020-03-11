@@ -36,6 +36,7 @@ using namespace std;
 #include "ASTTableConstraint.h"
 #include "ASTUpdateInfo.h"
 #include "ASTTableJoinInfo.h"
+#include "ASTSelectInfo.h"
 #include <vector>
 #include <memory>
 
@@ -59,6 +60,7 @@ using namespace std;
 	Parser::ASTDeleteInfo*				delete_info;
 	Parser::ASTSelectInfo*				select_info;
 	Parser::ASTTableJoinInfo*			join_info;
+	Parser::ASTTableJoinInfoList*		join_infos;
 	Parser::ASTExprNode*				expr;
 	Parser::ASTExprNodeList*		 	exprs;
 }
@@ -101,10 +103,10 @@ using namespace std;
 %type <select_info> select_stmt
 %type <expr> expr factor term condition cond_term where_clause literal literal_list_expr
 %type <expr> aggregate_expr aggregate_term select_expr default_expr
-%type <exprs> insert_values expr_list literal_list
+%type <exprs> insert_values expr_list literal_list select_expr_list select_expr_list_s
 %type <val_i> logical_op compare_op aggregate_op
-%type <list> select_expr_list select_expr_list_s table_refs
 %type <join_info> table_item
+%type <join_infos> table_refs
 
 %start sql_stmt
 
@@ -191,7 +193,7 @@ update_stmt         : UPDATE table_name SET column_ref '=' expr where_clause {
 					;
 
 select_stmt         : SELECT select_expr_list_s FROM table_refs where_clause {
-					 	$$ = (ASTSelectInfo*)malloc(sizeof(ASTSelectInfo));
+					 	$$ = new ASTSelectInfo();
 						$$->tables = $4;
 						$$->exprs  = $2;
 						$$->where  = $5;
@@ -199,24 +201,22 @@ select_stmt         : SELECT select_expr_list_s FROM table_refs where_clause {
 					;
 
 table_refs          : table_refs ',' table_item {
-						$$ = (ASTLinkedList*)malloc(sizeof(ASTLinkedList));
-						$$->data = $3;
-						$$->next = $1;
+						$1->push_back($3);
+						$$ = $1;
 					}
 					| table_item {
-						$$ = (ASTLinkedList*)malloc(sizeof(ASTLinkedList));
-						$$->data = $1;
-						$$->next = NULL;
+						$$ = new ASTTableJoinInfoList();
+						$$->push_back($1);
 					}
 					;
 
 table_item          : table_name {
-					 	$$ = (ASTTableJoinInfo*)calloc(1, sizeof(ASTTableJoinInfo));
+					 	$$ = new ASTTableJoinInfo();
 						$$->join_type = TABLE_JOIN_NONE;
 						$$->table = $1;
 					}
 				    | table_name AS IDENTIFIER {
-					 	$$ = (ASTTableJoinInfo*)calloc(1, sizeof(ASTTableJoinInfo));
+					 	$$ = new ASTTableJoinInfo();
 						$$->join_type = TABLE_JOIN_NONE;
 						$$->table = $1;
 						$$->alias = $3;
@@ -227,14 +227,12 @@ select_expr_list_s  : select_expr_list { $$ = $1; }
 					| '*'              { $$ = NULL; }
 
 select_expr_list    : select_expr_list ',' select_expr {
-						$$ = (ASTLinkedList*)malloc(sizeof(ASTLinkedList));
-						$$->data = $3;
-						$$->next = $1;
+						$1->push_back($3);
+						$$ = $1;
 					}
 					| select_expr {
-						$$ = (ASTLinkedList*)malloc(sizeof(ASTLinkedList));
-						$$->data = $1;
-						$$->next = NULL;
+						$$ = new ASTExprNodeList();
+						$$->push_back($1);
 					}
 					;
 

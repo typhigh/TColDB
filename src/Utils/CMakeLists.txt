@@ -1,5 +1,14 @@
+set(HEADERS
+	${HEADERS}
+    PARENT_SCOPE
+)
+
 set(SOURCE
 	${SOURCE}
 	${CMAKE_CURRENT_SOURCE_DIR}/ProductConsumerQueue.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/BloomFilter.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/ThreadPool.cpp
 	PARENT_SCOPE
 )
+
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tests)

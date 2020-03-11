@@ -3,7 +3,8 @@ using namespace std;
 
 namespace Parser {
 
-string ASTTableDef::ToString() const {
+string ASTTableDef::ToString() const 
+{
     return "ASTTableDef";
 }
 }

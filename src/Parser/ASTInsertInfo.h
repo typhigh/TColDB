@@ -5,7 +5,8 @@
 
 namespace Parser {
 
-class ASTInsertInfo : public IAST {
+class ASTInsertInfo : public IAST 
+{
 public:
 	virtual ~ASTInsertInfo() {}
     ASTInsertInfo() {}
