@@ -1,6 +1,7 @@
 #pragma once
 #include "defs.h"
 #include "IAST.h"
+#include "../Plan/Plan.h"
 
 namespace Parser {
 
@@ -8,10 +9,11 @@ class ASTSelectInfo : public IAST
 {
 public:
 	ASTTableJoinInfoList* tables;
-	ASTExprNodeList* exprs;
-	ASTExprNode* where;
+	ExprNodeList* exprs;
+	ExprNode* where;
 public:
-    virtual std::string ToString() const override;
+    std::string ToString() const;
+	Plan::PlanPtr MakePlan() const;
 };
 
 }

@@ -14,6 +14,7 @@
 #include "ASTTableDef.h"
 #include "ASTDeleteInfo.h"
 #include "ASTInsertInfo.h"
+#include "SQLParserResult.h"
 
 #include <iostream>
 #include <memory>
@@ -24,6 +25,8 @@ void yyerror(const char *s);
 #include "sql.yy.cc"
 using namespace Parser;
 using namespace std;
+
+extern SQLParserResult* thisptr;
 %}
 
 %code requires {
@@ -32,8 +35,8 @@ using namespace std;
 #include "execute.h"
 #include "FieldDef.h"
 #include "ColumnRef.h"
-#include "ASTExprNode.h"
-#include "ASTTableConstraint.h"
+#include "ExprNode.h"
+#include "TableConstraint.h"
 #include "ASTUpdateInfo.h"
 #include "ASTTableJoinInfo.h"
 #include "ASTSelectInfo.h"
@@ -52,17 +55,16 @@ using namespace std;
 	Parser::ASTTableDef*				table_def;
 	Parser::ColumnRef*					column_ref;
 	Parser::ColumnRefList*				column_refs;
-	Parser::ASTLinkedList*				list;
-	Parser::ASTTableConstraint*			constraint;
-	Parser::ASTTableConstraintList*		constraints;
+	Parser::TableConstraint*			constraint;
+	Parser::TableConstraintList*		constraints;
 	Parser::ASTInsertInfo*				insert_info;
 	Parser::ASTUpdateInfo*				update_info;
 	Parser::ASTDeleteInfo*				delete_info;
 	Parser::ASTSelectInfo*				select_info;
 	Parser::ASTTableJoinInfo*			join_info;
 	Parser::ASTTableJoinInfoList*		join_infos;
-	Parser::ASTExprNode*				expr;
-	Parser::ASTExprNodeList*		 	exprs;
+	Parser::ExprNode*				expr;
+	Parser::ExprNodeList*		 	exprs;
 }
 
 %token TRUE FALSE NULL_TOKEN MIN MAX SUM AVG COUNT
@@ -149,13 +151,13 @@ insert_stmt          : INSERT INTO insert_columns VALUES insert_values {
 					 ;
 
 insert_values        : '(' expr_list ')' {
-					 	$$ = new ASTExprNodeList ();
-						ASTExprNode* newNode = new ASTExprNode();
+					 	$$ = new ExprNodeList ();
+						ExprNode* newNode = new ExprNode();
 						newNode->literal_list = $2;
 						$$->push_back(newNode);
 					 }
 					 | insert_values ',' '(' expr_list ')' {
-						ASTExprNode* newNode = new ASTExprNode();
+						ExprNode* newNode = new ExprNode();
 						newNode->literal_list = $4;
 					 	$1->push_back(newNode);
 						$$ = $1;
@@ -231,7 +233,7 @@ select_expr_list    : select_expr_list ',' select_expr {
 						$$ = $1;
 					}
 					| select_expr {
-						$$ = new ASTExprNodeList();
+						$$ = new ExprNodeList();
 						$$->push_back($1);
 					}
 					;
@@ -240,24 +242,24 @@ select_expr         : expr            { $$ = $1; }
 					| aggregate_expr  { $$ = $1; }
 
 aggregate_expr      : aggregate_op '(' aggregate_term ')' {
-						$$ = new ASTExprNode();
+						$$ = new ExprNode();
 						$$->left  = $3;
 						$$->op    = (operator_type_t) $1;
 					}
 					| COUNT '(' aggregate_term ')' {
-						$$ = new ASTExprNode();
+						$$ = new ExprNode();
 						$$->left  = $3;
 						$$->op    = OPERATOR_COUNT;
 					}
 					| COUNT '(' '*' ')' {
-						$$ = new ASTExprNode();
+						$$ = new ExprNode();
 						$$->left  = NULL;
 						$$->op    = OPERATOR_COUNT;
 					}
 					;
 
 aggregate_term      : column_ref {
-						$$ = new ASTExprNode();
+						$$ = new ExprNode();
 						$$->column_ref = $1;
 						$$->term_type  = TERM_COLUMN_REF;
 					}
@@ -282,20 +284,20 @@ table_extra_option_list : table_extra_option_list ',' table_extra_option {
 							$$ = $1;
 						}
 						| table_extra_option {
-							$$ = new vector<ASTTableConstraint*> ();
+							$$ = new vector<TableConstraint*> ();
 							$$->push_back($1);
 						}
 						;
 
 table_extra_option : PRIMARY KEY '(' IDENTIFIER ')' {
-					$$ = new ASTTableConstraint();
+					$$ = new TableConstraint();
 					$$->column_ref = (ColumnRef*)malloc(sizeof(ColumnRef));
 					$$->column_ref->table = NULL;
 					$$->column_ref->column = $4;
 					$$->type = TABLE_CONSTRAINT_PRIMARY_KEY;
 				   }
 				   | FOREIGN KEY '(' IDENTIFIER ')' REFERENCES IDENTIFIER '(' IDENTIFIER ')' {
-				   	$$ = new ASTTableConstraint();
+				   	$$ = new TableConstraint();
 					$$->column_ref = (ColumnRef*)malloc(sizeof(ColumnRef));
 					$$->column_ref->table = NULL;
 					$$->column_ref->column = $4;
@@ -305,12 +307,12 @@ table_extra_option : PRIMARY KEY '(' IDENTIFIER ')' {
 					$$->type = TABLE_CONSTRAINT_FOREIGN_KEY;
 				   }
 				   | UNIQUE '(' column_ref ')' {
-				   	$$ = new ASTTableConstraint();
+				   	$$ = new TableConstraint();
 					$$->type = TABLE_CONSTRAINT_UNIQUE;
 					$$->column_ref = $3;
 				   }
 				   | CHECK '(' condition ')' {
-				   	$$ = new ASTTableConstraint();
+				   	$$ = new TableConstraint();
 					$$->type = TABLE_CONSTRAINT_CHECK;
 					$$->check_cond = $3;
 				   }
@@ -397,7 +399,7 @@ compare_op : '='  { $$ = OPERATOR_EQ; }
 		   ;
 
 condition  : condition logical_op cond_term {
-				$$ = new ASTExprNode();
+				$$ = new ExprNode();
 				$$->left  = $1;
 				$$->right = $3;
 				$$->op    = (operator_type_t) $2;
@@ -406,40 +408,40 @@ condition  : condition logical_op cond_term {
 		   ;
 
 cond_term  : expr compare_op expr {
-		   		$$ = new ASTExprNode();
+		   		$$ = new ExprNode();
 				$$->left  = $1;
 				$$->right = $3;
 				$$->op    = (operator_type_t) $2;
 		   }
 		   | expr IN '(' literal_list_expr ')' {
-		   		$$ = new ASTExprNode();
+		   		$$ = new ExprNode();
 				$$->left  = $1;
 				$$->right = $4;
 				$$->op    = OPERATOR_IN;
 		   }
 		   | expr IS NULL_TOKEN {
-		   		$$ = new ASTExprNode();
+		   		$$ = new ExprNode();
 				$$->left  = $1;
 				$$->op    = OPERATOR_ISNULL;
 		   }
 		   | expr IS NOT NULL_TOKEN {
-		   		$$ = new ASTExprNode();
+		   		$$ = new ExprNode();
 				$$->left  = $1;
 				$$->op    = OPERATOR_NOTNULL;
 		   }
 		   | NOT cond_term {
-		   		$$ = new ASTExprNode();
+		   		$$ = new ExprNode();
 				$$->left  = $2;
 				$$->op    = OPERATOR_NOT;
 		   }
 		   | '(' condition ')' { $$ = $2; }
 		   | TRUE {
-		   		$$ = new ASTExprNode();
+		   		$$ = new ExprNode();
 				$$->val_b     = 1;
 				$$->term_type = TERM_BOOL;
 		   }
 		   | FALSE {
-		   		$$ = new ASTExprNode();
+		   		$$ = new ExprNode();
 				$$->val_b     = 0;
 				$$->term_type = TERM_BOOL;
 		   }
@@ -450,19 +452,19 @@ expr_list  : expr_list ',' expr {
 				$$ = $1;
 		   }
 		   | expr {
-				$$ = new ASTExprNodeList();
+				$$ = new ExprNodeList();
 				$$->push_back($1);
 		   }
 		   ;
 
 expr       : expr '+' factor {
-		   		$$ = new ASTExprNode();
+		   		$$ = new ExprNode();
 				$$->left  = $1;
 				$$->right = $3;
 				$$->op    = OPERATOR_ADD;
 		   }
 		   | expr '-' factor {
-		   		$$ = new ASTExprNode();
+		   		$$ = new ExprNode();
 				$$->left  = $1;
 				$$->right = $3;
 				$$->op    = OPERATOR_MINUS;
@@ -471,13 +473,13 @@ expr       : expr '+' factor {
 		   ;
 
 factor     : factor '*' term {
-		   		$$ = new ASTExprNode();
+		   		$$ = new ExprNode();
 				$$->left  = $1;
 				$$->right = $3;
 				$$->op    = OPERATOR_MUL;
 		   }
 		   | factor '/' term {
-		   		$$ = new ASTExprNode();
+		   		$$ = new ExprNode();
 				$$->left  = $1;
 				$$->right = $3;
 				$$->op    = OPERATOR_DIV;
@@ -486,40 +488,40 @@ factor     : factor '*' term {
 		   ;
 
 term       : column_ref {
-		   		$$ = new ASTExprNode();
+		   		$$ = new ExprNode();
 				$$->column_ref = $1;
 				$$->term_type  = TERM_COLUMN_REF;
 		   }
 		   | '-' term {
-		   		$$ = new ASTExprNode();
+		   		$$ = new ExprNode();
 				$$->left  = $2;
 				$$->op    = OPERATOR_NEGATE;
 		   }
 		   | literal      { $$ = $1; }
 		   | NULL_TOKEN {
-		   		$$ = new ASTExprNode();
+		   		$$ = new ExprNode();
 				$$->term_type  = TERM_NULL;
 		   }
 		   | '(' expr ')' { $$ = $2; }
 		   ;
 
 literal    : INT_LITERAL {
-		   		$$ = new ASTExprNode();
+		   		$$ = new ExprNode();
 				$$->val_i      = $1;
 				$$->term_type  = TERM_INT;
 		   }
 		   | FLOAT_LITERAL {
-		   		$$ = new ASTExprNode();
+		   		$$ = new ExprNode();
 				$$->val_f      = $1;
 				$$->term_type  = TERM_FLOAT;
 		   }
 		   | DATE_LITERAL {
-		   		$$ = new ASTExprNode();
+		   		$$ = new ExprNode();
 				$$->val_s      = $1;
 				$$->term_type  = TERM_DATE;
 		   }
 		   | STRING_LITERAL {
-		   		$$ = new ASTExprNode();
+		   		$$ = new ExprNode();
 				$$->val_s      = $1;
 				$$->term_type  = TERM_STRING;
 		   }
@@ -530,13 +532,13 @@ literal_list : literal_list ',' literal {
 				$$ = $1;
 			 }
 			 | literal {
-				$$ = new ASTExprNodeList();
+				$$ = new ExprNodeList();
 				$$->push_back($1);
 			 }
 			 ;
 
 literal_list_expr : literal_list {
-					$$ = new ASTExprNode();
+					$$ = new ExprNode();
 					$$->literal_list = $1;
 					$$->term_type    = TERM_LITERAL_LIST;
 				  }

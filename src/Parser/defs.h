@@ -90,12 +90,11 @@ enum TermType_t
 class TermType;
 class IAST;
 class FieldDef;
-class ASTLinkedList;
 class ColumnRef;
 class ASTTableDef;
 class ASTInsertInfo;
-class ASTExprNode;
-class ASTTableConstraint;
+class ExprNode;
+class TableConstraint;
 class ASTDeleteInfo;
 class ASTUpdateInfo;
 class ASTSelectInfo;
@@ -105,8 +104,8 @@ using IASTPtr = std::shared_ptr<IAST>;
 using ColumnRefList = std::vector<ColumnRef*>;
 using FieldDefList = std::vector<FieldDef*>;
 using ASTTableJoinInfoList = std::vector<ASTTableJoinInfo*>;
-using ASTExprNodeList = std::vector<ASTExprNode*>;
-using ASTTableConstraintList = std::vector<ASTTableConstraint*>;
+using ExprNodeList = std::vector<ExprNode*>;
+using TableConstraintList = std::vector<TableConstraint*>;
 
 }
 #endif

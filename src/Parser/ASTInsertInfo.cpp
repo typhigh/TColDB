@@ -8,4 +8,9 @@ string ASTInsertInfo::ToString() const
     return "ASTInsertInfo";
 }
 
+Plan::PlanPtr ASTInsertInfo::MakePlan() const 
+{
+    return Plan::PlanPtr();
+}
+
 }

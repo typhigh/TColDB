@@ -1,3 +1,4 @@
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Expression)
 find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
 
@@ -29,8 +30,8 @@ set(SOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/ASTDeleteInfo.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ASTTableDef.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ASTInsertInfo.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ASTExprNode.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/ASTTableConstraint.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/ExprNode.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/TableConstraint.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ASTUpdateInfo.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ASTTableJoinInfo.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/ASTSelectInfo.cpp

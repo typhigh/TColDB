@@ -4,15 +4,13 @@
 
 namespace Parser {
 
-class ASTTableConstraint : public IAST 
+class TableConstraint 
 {
 public:
 	int type;
 	ColumnRef *column_ref, *foreign_column_ref;
-	ASTExprNode *check_cond;
+	ExprNode *check_cond;
 
-public:
-    virtual std::string ToString() const override;
 } ;
 
 }

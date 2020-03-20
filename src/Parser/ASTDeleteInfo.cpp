@@ -7,4 +7,10 @@ string ASTDeleteInfo::ToString() const
 {
     return "ASTDeleteInfo";
 }
+
+Plan::PlanPtr ASTDeleteInfo::MakePlan() const 
+{
+    return Plan::PlanPtr();
+}
+
 }

@@ -3,7 +3,7 @@
 #include "IAST.h"
 namespace Parser {
 
-class ASTExprNode : public IAST {
+class ExprNode  {
 public:
 	union 
 	{
@@ -12,15 +12,15 @@ public:
 		char   val_b;
 		char  *val_s;
 		ColumnRef  	*column_ref;
-		ASTExprNode   	*left;
-		ASTExprNodeList *literal_list;
+		ExprNode   	*left;
+		ExprNodeList *literal_list;
 	};
-	ASTExprNode *right;
+	ExprNode *right;
 	operator_type_t op;
 	TermType_t term_type;
 
 public:
-    virtual std::string ToString() const override;
+    
 };
 
 }

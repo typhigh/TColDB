@@ -7,4 +7,10 @@ string ASTUpdateInfo::ToString() const
 {
     return "ASTUpdateInfo";
 }
+
+Plan::PlanPtr ASTUpdateInfo::MakePlan() const 
+{
+    return Plan::PlanPtr();
+}
+
 }

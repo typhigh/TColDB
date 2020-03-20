@@ -1,6 +1,7 @@
 #pragma once 
 #include "defs.h"
 #include "IAST.h"
+#include "../Plan/Plan.h"
 
 namespace Parser {
 
@@ -9,10 +10,12 @@ class ASTDeleteInfo : public IAST
 public:
     ASTDeleteInfo() : IAST() {}
     virtual ~ASTDeleteInfo() {}
-    virtual std::string ToString() const override;
+    
+    std::string ToString() const ;
+    Plan::PlanPtr MakePlan() const;
 public:
 	char *table;
-	ASTExprNode *where;
+	ExprNode *where;
 };
 
 }

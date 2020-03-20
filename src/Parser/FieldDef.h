@@ -11,7 +11,7 @@ public:
 	FieldType type;
 	int width;
 	int flags;
-	ASTExprNode *default_value;
+	ExprNode *default_value;
 };
 
 using FieldDefPtr = std::shared_ptr<FieldDef>;
