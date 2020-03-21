@@ -98,12 +98,12 @@ class TableConstraint;
 class ASTDeleteInfo;
 class ASTUpdateInfo;
 class ASTSelectInfo;
-class ASTTableJoinInfo;
+class TableFrom;
 
 using IASTPtr = std::shared_ptr<IAST>;
 using ColumnRefList = std::vector<ColumnRef*>;
 using FieldDefList = std::vector<FieldDef*>;
-using ASTTableJoinInfoList = std::vector<ASTTableJoinInfo*>;
+using TableFromList = std::vector<TableFrom*>;
 using ExprNodeList = std::vector<ExprNode*>;
 using TableConstraintList = std::vector<TableConstraint*>;
 

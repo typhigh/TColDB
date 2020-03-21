@@ -12,7 +12,7 @@ public:
     ProjectPlan(/* args */);
     virtual ~ProjectPlan();
 
-    virtual void RuleOptimize (Optimizer::RulePtr rule);
+    virtual void AcceptRule (Optimizer::RulePtr rule);
 };
 
 using ProjectPlanPtr = std::shared_ptr<ProjectPlan>;

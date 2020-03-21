@@ -12,6 +12,7 @@ private:
 public:
     TupleDesc(/* args */);
     ~TupleDesc();
+    TupleDescPtr Clone() const;
 };
 
 using TupleDescPtr = std::shared_ptr<TupleDesc>;

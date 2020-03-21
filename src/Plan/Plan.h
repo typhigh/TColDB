@@ -13,7 +13,7 @@ public:
     Plan();
     virtual ~Plan() {}
 
-    virtual void RuleOptimize (Optimizer::RulePtr rule) = 0;
+    virtual void AcceptRule (Optimizer::RulePtr rule) = 0;
 };
 
 using PlanPtr = std::shared_ptr<Plan>;

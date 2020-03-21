@@ -1,5 +1,6 @@
 #pragma once
 #include "defs.h"
+#include "ColumnRef.h"
 #include "IAST.h"
 namespace Parser {
 
@@ -20,7 +21,7 @@ public:
 	TermType_t term_type;
 
 public:
-    
+	ExprNode();
 };
 
 }

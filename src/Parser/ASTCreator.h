@@ -1,12 +1,13 @@
 #pragma once
-#include "FieldDef.h"
+#include "defs.h"
+#include "ExprNode.h"
 
 namespace Parser {
 
 class ASTCreator
 {
-private:
-
+public:
+    static ExprNode* MakeExprNode();
 };
 
 }

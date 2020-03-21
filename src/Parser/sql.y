@@ -38,7 +38,7 @@ extern SQLParserResult* thisptr;
 #include "ExprNode.h"
 #include "TableConstraint.h"
 #include "ASTUpdateInfo.h"
-#include "ASTTableJoinInfo.h"
+#include "TableFrom.h"
 #include "ASTSelectInfo.h"
 #include <vector>
 #include <memory>
@@ -61,8 +61,8 @@ extern SQLParserResult* thisptr;
 	Parser::ASTUpdateInfo*				update_info;
 	Parser::ASTDeleteInfo*				delete_info;
 	Parser::ASTSelectInfo*				select_info;
-	Parser::ASTTableJoinInfo*			join_info;
-	Parser::ASTTableJoinInfoList*		join_infos;
+	Parser::TableFrom*			join_info;
+	Parser::TableFromList*		join_infos;
 	Parser::ExprNode*				expr;
 	Parser::ExprNodeList*		 	exprs;
 }
@@ -207,18 +207,18 @@ table_refs          : table_refs ',' table_item {
 						$$ = $1;
 					}
 					| table_item {
-						$$ = new ASTTableJoinInfoList();
+						$$ = new TableFromList();
 						$$->push_back($1);
 					}
 					;
 
 table_item          : table_name {
-					 	$$ = new ASTTableJoinInfo();
+					 	$$ = new TableFrom();
 						$$->join_type = TABLE_JOIN_NONE;
 						$$->table = $1;
 					}
 				    | table_name AS IDENTIFIER {
-					 	$$ = new ASTTableJoinInfo();
+					 	$$ = new TableFrom();
 						$$->join_type = TABLE_JOIN_NONE;
 						$$->table = $1;
 						$$->alias = $3;

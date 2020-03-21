@@ -8,9 +8,10 @@ namespace Parser {
 class ASTSelectInfo : public IAST 
 {
 public:
-	ASTTableJoinInfoList* tables;
+	TableFromList* tables;
 	ExprNodeList* exprs;
 	ExprNode* where;
+	
 public:
     std::string ToString() const;
 	Plan::PlanPtr MakePlan() const;

@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <cstdlib>
+#include <cstring>
 
 namespace Utils {
 
@@ -34,6 +35,15 @@ std::string RandomString(int len)
         ret[i] = rand() % len;
     }
     return ret;
+}
+
+// Copy a new c style string 
+char* CopyFromCString(char* s)
+{
+    size_t len = strlen(s);
+    char* ret = new char[len];
+    memcpy(ret, s, len);
+    return s;
 }
 
 }

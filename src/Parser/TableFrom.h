@@ -5,16 +5,12 @@
 
 namespace Parser {
 
-class ASTTableJoinInfo : public IAST
+class TableFrom
 {
 public:
 	table_join_type_t join_type;
 	char *table, *join_table, *alias;
 	ExprNode *cond;
-
-public:
-    std::string ToString() const;
-	Plan::PlanPtr MakePlan() const;
 };
 
 }

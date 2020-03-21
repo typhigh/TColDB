@@ -1,5 +1,6 @@
 #include "Plan.h"
 #include "../Columns/TupleDesc.h"
+#include "../Parser/TableFrom.h"
 #include <vector>
 #include <string>
 namespace Plan {
@@ -10,12 +11,12 @@ private:
     /* data */
     std::string tableName;
     Columns::TupleDescPtr desc;
+    // helper
     std::vector<int> columns;
 public:
-    ScanPlan(/* args */);
+    ScanPlan(Parser::TableFrom* tableFrom);
     virtual ~ScanPlan() {};
-
-    virtual void RuleOptimize (Optimizer::RulePtr rule); 
+    virtual void AcceptRule (Optimizer::RulePtr rule); 
 };
 
 using ScanPlanPtr = std::shared_ptr<ScanPlan>;
