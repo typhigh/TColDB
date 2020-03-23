@@ -15,7 +15,12 @@ void JoinPlan::AddSubPlan(PlanPtr subPlan)
 
 void JoinPlan::SetCondition(Parser::ExprNode* expr) 
 {
-    condition = make_shared<Parser::ExprNode>();
+    condition = make_shared<Parser::ExprNode*>();
+}
+
+void JoinPlan::AcceptRule(Optimizer::RulePtr rule) 
+{
+    rule->AcceptPlan(*this);    
 }
 
 }

@@ -1,4 +1,7 @@
+#pragma once
 #include "Plan.h"
+#include "defs.h"
+#include "../Executor/Projector.h"
 #include <vector>
 
 namespace Plan {
@@ -6,13 +9,16 @@ class ProjectPlan : public Plan
 {
 private:
     PlanPtr subPlan;
-    std::vector<int> fields;
-    
+    Executor::ProjectorPtr projector;
 public:
-    ProjectPlan(/* args */);
-    virtual ~ProjectPlan();
+    ProjectPlan(/* args */) {}
+    virtual ~ProjectPlan() {}
+    void SetProjector(Executor::ProjectorPtr projector);
+    void SetProjector(const Parser::ExprNodeList* exprs);
+    void SetSubPlan(PlanPtr subPlan);
 
-    virtual void AcceptRule (Optimizer::RulePtr rule);
+private:
+    void AcceptRule (Optimizer::RulePtr rule);
 };
 
 using ProjectPlanPtr = std::shared_ptr<ProjectPlan>;

@@ -1,4 +1,6 @@
+#pragma once
 #include "Plan.h"
+#include "defs.h"
 #include "../Columns/TupleDesc.h"
 #include "../Parser/TableFrom.h"
 #include <vector>
@@ -13,10 +15,14 @@ private:
     Columns::TupleDescPtr desc;
     // helper
     std::vector<int> columns;
+    
 public:
+    ScanPlan() {}
     ScanPlan(Parser::TableFrom* tableFrom);
-    virtual ~ScanPlan() {};
-    virtual void AcceptRule (Optimizer::RulePtr rule); 
+    virtual ~ScanPlan() {}
+
+private:
+    void AcceptRule (Optimizer::RulePtr rule); 
 };
 
 using ScanPlanPtr = std::shared_ptr<ScanPlan>;

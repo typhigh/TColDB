@@ -1,3 +1,4 @@
+#pragma once
 #include "TupleDesc.h"
 #include <memory>
 
@@ -9,8 +10,8 @@ private:
     /* data */
 
 public:
-    TableMeta(/* args */);
-    ~TableMeta();
+    TableMeta(/* args */) {}
+    ~TableMeta() {}
     TupleDescPtr GetTupleDesc() const;
 };
 

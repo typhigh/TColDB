@@ -1,3 +1,4 @@
+#pragma once
 #include "ColumnDesc.h"
 #include <memory>
 

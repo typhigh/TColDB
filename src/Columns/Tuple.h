@@ -8,13 +8,14 @@ namespace Colunms {
 
 class Tuple
 {
+
 private:
     /* data */
     TupleDescPtr desc;
     std::vector<FieldPtr> fields;
 public:
-    Tuple(/* args */);
-    ~Tuple();
+    Tuple(/* args */) {}
+    ~Tuple() {}
 };
 
 using TuplePtr = std::shared_ptr<Tuple>;

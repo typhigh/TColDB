@@ -9,8 +9,17 @@ namespace Parser {
 ColumnRef* ColumnRef::Clone() const 
 {
     ColumnRef* ret = new ColumnRef();
-    ret->column = Utils::CopyFromCString(column);
-    ret->table = Utils::CopyFromCString(table);
+    ret->column = Utils::CopyCStringFromCString(column);
+    ret->table = Utils::CopyCStringFromCString(table);
+    return ret;
+}
+
+string ColumnRef::GetFieldName() const 
+{
+    string ret = Utils::CopyStringFromCString(column);
+    if (table) {
+        ret = Utils::CopyStringFromCString(table) + "." + ret;
+    }
     return ret;
 }
 

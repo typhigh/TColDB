@@ -1,3 +1,4 @@
+#pragma once
 #include "Operator.h"
 namespace Executor {
 

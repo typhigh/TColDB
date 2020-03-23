@@ -1,5 +1,6 @@
+#pragma once
 #include "../Common/Common.h"
-#include "../Columns/ColumnChunk.h"
+#include "../Columns/Chunk.h"
 
 namespace Executor {
 
@@ -14,7 +15,7 @@ public:
     virtual bool HashNext() = 0;
 
     // Return next tuple
-    virtual Columns::ColumnChunkPtr Next() = 0;
+    virtual Columns::ChunkPtr Next() = 0;
 
     // Close and ReOpen the operator
     virtual void Rewind() = 0;

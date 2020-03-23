@@ -6,5 +6,9 @@ set(HEADERS
 
 set (SOURCE
 	${SOURCE}
+    ${CMAKE_CURRENT_SOURCE_DIR}/ColumnDesc.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Table.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/TableMeta.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/TupleDesc.cpp
     PARENT_SCOPE
 )

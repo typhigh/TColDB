@@ -5,5 +5,7 @@ set(HEADERS
 
 set (SOURCE
 	${SOURCE}
+    ${CMAKE_CURRENT_SOURCE_DIR}/Catalog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Database.cpp
     PARENT_SCOPE
 )

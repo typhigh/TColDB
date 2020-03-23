@@ -6,7 +6,7 @@ using namespace std;
 
 namespace Parser {
 
-ExprNode* Expression::Copy(ExprNode* expr) 
+ExprNode* Expression::Copy(const ExprNode* expr) 
 {
     // Do a light copy first
     ExprNode* ret = ASTCreator::MakeExprNode();
@@ -23,7 +23,7 @@ ExprNode* Expression::Copy(ExprNode* expr)
             break;
         case TERM_DATE:
         case TERM_STRING:
-            ret->val_s = Utils::CopyFromCString(expr->val_s);
+            ret->val_s = Utils::CopyCStringFromCString(expr->val_s);
             break;
         default:
             break;
@@ -42,13 +42,36 @@ ExprNode* Expression::Copy(ExprNode* expr)
     return ret;
 }
 
-ExprNodeList* Expression::Copy(ExprNodeList* exprs)
+ExprNodeList* Expression::Copy(const ExprNodeList* exprs)
 {
     ExprNodeList* ret = new ExprNodeList();
     for (ExprNode* expr: *exprs) {
         ret->push_back(Copy(expr));
     }
     return ret;
+}
+
+bool Expression::IsAggregate(const ExprNode* expr) 
+{
+    return expr->op == OPERATOR_COUNT
+        || expr->op == OPERATOR_SUM
+		|| expr->op == OPERATOR_AVG
+		|| expr->op == OPERATOR_MIN
+		|| expr->op == OPERATOR_MAX;
+}
+
+bool Expression::IsAggregate(const ExprNodeList* exprs) 
+{
+    for (const ExprNode* expr: *exprs) {
+        if (IsAggregate(expr)) return true;
+    }
+    return false;
+}
+
+bool Expression::IsColumnRef(const ExprNode* expr)
+{
+    return expr->op == OPERATOR_NONE
+        && expr->term_type == TERM_COLUMN_REF;
 }
 
 }

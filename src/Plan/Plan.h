@@ -1,6 +1,7 @@
 #pragma once
+#include "defs.h"
 #include "../Common/Common.h"
-#include "../Optimizer/Rule.h"
+#include "../Optimizer/Rules/Rule.h"
 #include <memory>
 
 namespace Plan {
@@ -10,9 +11,10 @@ class Plan
 private:
     /* data */
 public:
-    Plan();
+    Plan() {};
     virtual ~Plan() {}
 
+private:
     virtual void AcceptRule (Optimizer::RulePtr rule) = 0;
 };
 

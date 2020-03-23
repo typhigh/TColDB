@@ -11,8 +11,10 @@ private:
     Parser::FieldType fieldType;
 
 public: 
-    ColumnDesc(/* args */);
-    ~ColumnDesc();
+    ColumnDesc(/* args */) {}
+    ~ColumnDesc() {}
+
+    void SetAlis(std::string alis, bool isTableAlis = true);
 };
 
 using ColumnDescPtr = std::shared_ptr<ColumnDesc>; 

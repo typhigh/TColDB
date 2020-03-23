@@ -8,8 +8,8 @@ class Table
 private:
     /* data */
 public:
-    Table(/* args */);
-    ~Table();
+    Table(/* args */) {}
+    ~Table() {}
     TableMetaPtr GetCurrentMeta() const;
 };
 

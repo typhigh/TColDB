@@ -8,4 +8,11 @@ TupleDescPtr TupleDesc::Clone() const
     return tuple;
 }
 
+void TupleDesc::SetAlis(string alis) 
+{
+    for (ColumnDesc& colDesc: desc) {
+        colDesc.SetAlis(alis);
+    }
+}
+
 }
