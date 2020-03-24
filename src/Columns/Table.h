@@ -10,7 +10,8 @@ private:
 public:
     Table(/* args */) {}
     ~Table() {}
-    TableMetaPtr GetCurrentMeta() const;
+    TableMetaPtr GetCurrentWriteMeta() const;
+    TableMetaPtr GetCurrentReadOnlyMeta() const;
 };
 
 using TablePtr = std::shared_ptr<Table>;

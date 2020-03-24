@@ -11,6 +11,9 @@ public:
 	table_join_type_t join_type;
 	char *table, *join_table, *alias;
 	ExprNode *cond;
+
+public:
+	std::string GetTableRef() const;
 };
 
 }

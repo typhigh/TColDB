@@ -9,4 +9,9 @@ TupleDescPtr TableMeta::GetTupleDesc() const
     return TupleDescPtr();
 }
 
+string TableMeta::GetTableName() const 
+{
+    return tabelName;
+}
+
 }

@@ -75,4 +75,18 @@ Plan::PlanPtr ASTSelectInfo::MakePlan() const
     return ret;
 }
 
+bool ASTSelectInfo::IsWriteSQL() const
+{
+    return false;
+}
+
+vector<string> ASTSelectInfo::GetTablesRef() const
+{
+    vector<string> ret;
+    for (const TableFrom* table: *tables) {
+        ret.push_back(table->GetTableRef());
+    }
+    return ret;
+}
+
 }

@@ -19,9 +19,13 @@ protected:
     void LoadInfo();
     void StoreInfo();
 
+private:
+    Columns::TablePtr GetTableImpl(const std::string& tableName);
+    void InsertTableImpl(const std::string& tableName, Columns::TablePtr table);
+
 public:
-    Columns::TablePtr GetTable(std::string tableName);
-    void InsertTable(std::string tableName, Columns::TablePtr);
+    Columns::TablePtr GetTable(const std::string& tableName);
+    void InsertTable(const std::string& tableName, Columns::TablePtr table);
     friend class Database;
 };
 

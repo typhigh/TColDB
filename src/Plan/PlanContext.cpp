@@ -1,0 +1,38 @@
+#include "PlanContext.h"
+#include "../Databases/Catalog.h"
+#include "../Databases/Database.h"
+using namespace std;
+
+namespace Plan {
+
+PlanContext::PlanContext(const vector<string>& tableNames, bool ReadOnly) 
+{
+    tableMetasRef.clear();
+    tableMetasRef.resize(tableNames.size());
+    for (size_t i = 0; i < tableNames.size(); ++i) {
+        Columns::TablePtr table = Databases::Database::GetInstance()->GetCatalog()->GetTable(tableNames[i]);
+        tableMetasRef[i] = ReadOnly ? table->GetCurrentReadOnlyMeta()
+                                    : table->GetCurrentWriteMeta();
+    }
+}
+
+Columns::TableMetaPtr PlanContext::GetTableMeta(const string& tableName) const
+{
+    for (int i = 0; i < tableMetasRef.size(); ++i) {
+        if (tableMetasRef[i]->GetTableName() == tableName) {
+            return tableMetasRef[i];
+        }
+    }
+    return Columns::TableMetaPtr();
+}
+
+Columns::TableMetaPtr PlanContext::GetTableMeta() const 
+{
+    if (tableMetasRef.size() != 1) {
+        LOG_ERROR("expected only one tableMeta");
+        return Columns::TableMetaPtr();
+    }
+    return tableMetasRef[0];
+}
+
+}

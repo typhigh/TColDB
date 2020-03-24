@@ -3,7 +3,13 @@ using namespace std;
 
 namespace Columns {
 
-TableMetaPtr Table::GetCurrentMeta() const 
+TableMetaPtr Table::GetCurrentReadOnlyMeta() const 
+{
+    /*TODO*/
+    return TableMetaPtr();
+}
+
+TableMetaPtr Table::GetCurrentWriteMeta() const 
 {
     /*TODO*/
     return TableMetaPtr();

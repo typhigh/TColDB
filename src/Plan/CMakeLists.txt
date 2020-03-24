@@ -8,6 +8,8 @@ set (SOURCE
     ${CMAKE_CURRENT_SOURCE_DIR}/AggregatePlan.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FilterPlan.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/JoinPlan.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Plan.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/PlanContext.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ProjectPlan.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ScanPlan.cpp
     PARENT_SCOPE
