@@ -11,8 +11,8 @@ PlanContext::PlanContext(const vector<string>& tableNames, bool ReadOnly)
     tableMetasRef.resize(tableNames.size());
     for (size_t i = 0; i < tableNames.size(); ++i) {
         Columns::TablePtr table = Databases::Database::GetInstance()->GetCatalog()->GetTable(tableNames[i]);
-        tableMetasRef[i] = ReadOnly ? table->GetCurrentReadOnlyMeta()
-                                    : table->GetCurrentWriteMeta();
+        tableMetasRef[i] = ReadOnly ? table->GetCurrentReadOnlyTableMeta()
+                                    : table->GetCurrentWriteTableMeta();
     }
 }
 

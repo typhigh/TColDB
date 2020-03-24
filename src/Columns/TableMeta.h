@@ -9,6 +9,7 @@ class TableMeta
 private:
     /* data */
     std::string tabelName; 
+
 public:
     TableMeta(/* args */) {}
     ~TableMeta() {}

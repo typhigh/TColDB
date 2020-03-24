@@ -3,16 +3,24 @@ using namespace std;
 
 namespace Columns {
 
-TableMetaPtr Table::GetCurrentReadOnlyMeta() const 
+TableMetaPtr Table::GetCurrentReadOnlyTableMeta() const
 {
-    /*TODO*/
-    return TableMetaPtr();
+    return currentReadOnlyTableMeta.get();
 }
 
-TableMetaPtr Table::GetCurrentWriteMeta() const 
+TableMetaPtr Table::GetCurrentWriteTableMeta() const
 {
-    /*TODO*/
-    return TableMetaPtr();
+    return currentWriteTableMeta.get();
+}
+
+void Table::SetCurrentReadOnlyTableMeta(TableMetaPtr& tableMeta) 
+{
+    currentReadOnlyTableMeta.set(tableMeta);
+}
+
+void Table::SetCurrentWriteTableMeta(TableMetaPtr& tableMeta)
+{
+    currentWriteTableMeta.set(tableMeta);
 }
 
 }
