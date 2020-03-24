@@ -7,7 +7,7 @@
 
 namespace Parser {
 
-class ASTTableDef : public IAST 
+class ASTCreateInfo : public IAST 
 {
 public:
 	char* name;
@@ -15,8 +15,8 @@ public:
 	std::vector<TableConstraint*>* constraints;
 
 public:
-	virtual ~ASTTableDef() {}
-	ASTTableDef() {}
+	virtual ~ASTCreateInfo() {}
+	ASTCreateInfo() {}
 	std::string ToString() const;
 	Plan::PlanPtr MakePlan() const;
 	bool IsWriteSQL() const;
@@ -24,5 +24,5 @@ public:
 
 };
 
-using ASTTableDefPtr = std::shared_ptr<ASTTableDef>;
+using ASTCreateInfoPtr = std::shared_ptr<ASTCreateInfo>;
 }

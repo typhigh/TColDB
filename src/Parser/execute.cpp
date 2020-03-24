@@ -9,7 +9,7 @@ void execute_switch_output(const char *output_filename)
     puts("execute_switch_output");
 }
 
-void execute_create_table(const ASTTableDef *table)
+void execute_create_table(const ASTCreateInfo *table)
 {
 	puts("execute_create_table");
 }

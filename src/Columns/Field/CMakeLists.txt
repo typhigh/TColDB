@@ -5,5 +5,10 @@ set(HEADERS
 
 set (SOURCE
 	${SOURCE}
+    ${CMAKE_CURRENT_SOURCE_DIR}/CharField.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/DateField.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/DoubleField.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/IntField.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/VarcharField.cpp
     PARENT_SCOPE
 )

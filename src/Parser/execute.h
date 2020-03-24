@@ -8,7 +8,7 @@ void execute_create_database(const char *db_name);
 void execute_use_database(const char *db_name);
 void execute_drop_database(const char *db_name);
 void execute_show_database(const char *db_name);
-void execute_create_table(const ASTTableDef *table);
+void execute_create_table(const ASTCreateInfo *table);
 void execute_drop_table(const char *table_name);
 void execute_show_table(const char *table_name);
 void execute_insert(const ASTInsertInfo *insert_info);

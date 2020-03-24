@@ -1,20 +1,17 @@
 #pragma once
 #include "Field.h"
-
 namespace Columns {
-
-class DoubleField : public Field
+class CharField : public Field
 {
 private:
     /* data */
-    double data;
-    
+    std::string data;
 public:
-    DoubleField(/* args */) {}
-    ~DoubleField() {}
+    CharField(/* args */) {}
+    ~CharField() {}
     bool IsType(Parser::FieldType type) const;
     std::string ToString() const;
 };
 
-
+using CharFieldPtr = std::shared_ptr<CharField>;
 }

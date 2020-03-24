@@ -91,7 +91,7 @@ class TermType;
 class IAST;
 class FieldDef;
 class ColumnRef;
-class ASTTableDef;
+class ASTCreateInfo;
 class ASTInsertInfo;
 class ExprNode;
 class TableConstraint;

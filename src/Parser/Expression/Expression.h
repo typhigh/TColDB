@@ -11,6 +11,7 @@ public:
     static bool IsAggregate(const ExprNode* expr);
     static bool IsAggregate(const ExprNodeList* epxrs);
     static bool IsColumnRef(const ExprNode* expr);
+
 };
 
 

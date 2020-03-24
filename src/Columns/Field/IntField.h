@@ -3,15 +3,15 @@
 
 namespace Columns {
 
-class DoubleField : public Field
+class IntField : public Field
 {
 private:
     /* data */
-    double data;
+    int data;
     
 public:
-    DoubleField(/* args */) {}
-    ~DoubleField() {}
+    IntField(/* args */) {}
+    ~IntField() {}
     bool IsType(Parser::FieldType type) const;
     std::string ToString() const;
 };

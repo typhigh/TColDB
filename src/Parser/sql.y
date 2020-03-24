@@ -11,7 +11,7 @@
 #include "execute.h"
 #include "ASTCreator.h"
 #include "FieldDef.h"
-#include "ASTTableDef.h"
+#include "ASTCreateInfo.h"
 #include "ASTDeleteInfo.h"
 #include "ASTInsertInfo.h"
 #include "SQLParserResult.h"
@@ -52,7 +52,7 @@ extern SQLParserResult* thisptr;
 	Parser::FieldType_t					field_type;				
 	Parser::FieldDef*					field_def;
 	Parser::FieldDefList*				field_defs;
-	Parser::ASTTableDef*				table_def;
+	Parser::ASTCreateInfo*				table_def;
 	Parser::ColumnRef*					column_ref;
 	Parser::ColumnRefList*				column_refs;
 	Parser::TableConstraint*			constraint;
@@ -131,7 +131,7 @@ sql_stmt   :  create_table_stmt ';'    { execute_create_table($1); }
 		   ;
 
 create_table_stmt : CREATE TABLE table_name '(' table_fields table_extra_options ')' {
-				  	$$ = new ASTTableDef();
+				  	$$ = new ASTCreateInfo();
 					$$->name = $3;
 					$$->fields = $5;
 					$$->constraints = $6;

@@ -1,17 +1,16 @@
-#pragma once
 #include "Field.h"
 
 namespace Columns {
 
-class DoubleField : public Field
+class DateField : public Field
 {
 private:
     /* data */
-    double data;
+    std::string data;
     
 public:
-    DoubleField(/* args */) {}
-    ~DoubleField() {}
+    DateField(/* args */) {}
+    ~DateField() {}
     bool IsType(Parser::FieldType type) const;
     std::string ToString() const;
 };

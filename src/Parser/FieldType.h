@@ -10,6 +10,10 @@ public:
     FieldType_t type;
     FieldType() {}
     FieldType(FieldType_t type) : type(type) {}
+    bool IsType(FieldType_t type) const 
+    {
+        return this->type == type;
+    }
     std::string ToString() const
     {
         std::string ret;
