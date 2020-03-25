@@ -1,7 +1,9 @@
 #include "Expression.h"
+#include "Operations.h"
 #include "../ASTCreator.h"
 #include "../../Utils/StringUtils.h"
 #include <cstring>
+
 using namespace std;
 
 namespace Parser {
@@ -51,6 +53,7 @@ ExprNodeList* Expression::Copy(const ExprNodeList* exprs)
     return ret;
 }
 
+
 bool Expression::IsAggregate(const ExprNode* expr) 
 {
     return expr->op == OPERATOR_COUNT
@@ -74,4 +77,49 @@ bool Expression::IsColumnRef(const ExprNode* expr)
         && expr->term_type == TERM_COLUMN_REF;
 }
 
+bool Expression::IsLeafNode(const ExprNode* expr) 
+{
+    return expr->op == OPERATOR_NONE;
+}
+
+bool Expression::IsUnary(const ExprNode* expr) 
+{
+    return expr->op == OPERATOR_NOT
+        || expr->op == OPERATOR_NEGATE
+        || expr->op == OPERATOR_NOTNULL
+        || expr->op == OPERATOR_ISNULL;
+}
+
+EValue Expression::Eval(const ExprNode* expr, const Columns::TuplePtr& tupleRef) 
+{
+    if (expr == NULL) {
+        return EValue();
+    }
+
+    if (IsLeafNode(expr)) {
+        return EvalLeafNode(expr, tupleRef);
+    }
+
+    /// Not LeafNode
+    operator_type_t op = expr->op;
+
+    /// Check op == in ; such as expr: "x in (1, 2, 4)"
+    if (op == OPERATOR_IN) {
+        EValue left = Eval(expr->left);
+        EValueList
+    }
+    bool isUnary = IsUnary(expr);
+    EValue left = Eval(expr->left, tupleRef);
+    EValue right = isUnary ? EValue() : Eval(expr->right, tupleRef);
+    if (isUnary) {
+        return left->Op(op);
+    } else {
+        return left->Op(op, right);
+    }
+}
+
+EValue Expression::EvalLeafNode(const ExprNode* expr, const Columns::TuplePtr& tupleRef)
+{
+    
+}
 }

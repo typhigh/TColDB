@@ -13,7 +13,13 @@ public:
     ~DateField() {}
     bool IsType(Parser::FieldType type) const;
     std::string ToString() const;
-};
+    std::string GetData() const;
 
+/// Operations def
+public:
+    FieldPtr Op(Parser::operator_type_t op, const FieldPtr other) const;
+    FieldPtr Op(Parser::operator_type_t op) const;
+};
+using DateFieldPtr = std::shared_ptr<DateField>;
 
 }

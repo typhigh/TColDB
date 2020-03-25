@@ -3,23 +3,24 @@
 
 namespace Columns {
 
-class IntField : public Field
+class BoolField : public Field
 {
 private:
     /* data */
-    int data;
+    bool data;
     
 public:
-    IntField(/* args */) {}
-    ~IntField() {}
+    BoolField(/* args */) {}
+    ~BoolField() {}
     bool IsType(Parser::FieldType type) const;
     std::string ToString() const;
-    int GetData() const;
+    bool GetData() const;
+
 /// Operations def
 public:
     FieldPtr Op(Parser::operator_type_t op, const FieldPtr other) const;
     FieldPtr Op(Parser::operator_type_t op) const;
 };
-using IntFieldPtr = std::shared_ptr<IntField>;
 
+using BoolFieldPtr = std::shared_ptr<BoolField>;
 }

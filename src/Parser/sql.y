@@ -49,6 +49,7 @@ extern SQLParserResult* thisptr;
 	char *val_s;
 	int   val_i;
 	float val_f;
+	bool  val_b;
 	Parser::FieldType_t					field_type;				
 	Parser::FieldDef*					field_def;
 	Parser::FieldDefList*				field_defs;
@@ -61,15 +62,15 @@ extern SQLParserResult* thisptr;
 	Parser::ASTUpdateInfo*				update_info;
 	Parser::ASTDeleteInfo*				delete_info;
 	Parser::ASTSelectInfo*				select_info;
-	Parser::TableFrom*			join_info;
-	Parser::TableFromList*		join_infos;
-	Parser::ExprNode*				expr;
-	Parser::ExprNodeList*		 	exprs;
+	Parser::TableFrom*					join_info;
+	Parser::TableFromList*				join_infos;
+	Parser::ExprNode*					expr;
+	Parser::ExprNodeList*		 		exprs;
 }
 
 %token TRUE FALSE NULL_TOKEN MIN MAX SUM AVG COUNT
 %token LIKE IS OR AND NOT NEQ GEQ LEQ
-%token INTEGER DOUBLE FLOAT CHAR VARCHAR DATE
+%token INTEGER DOUBLE FLOAT CHAR VARCHAR DATE BOOL
 %token INTO FROM WHERE VALUES JOIN INNER OUTER
 %token LEFT RIGHT FULL ASC DESC ORDER BY IN ON AS
 %token DISTINCT GROUP USING INDEX TABLE DATABASE
@@ -85,6 +86,7 @@ extern SQLParserResult* thisptr;
 %type <val_s> IDENTIFIER STRING_LITERAL DATE_LITERAL
 %type <val_f> FLOAT_LITERAL
 %type <val_i> INT_LITERAL
+%type <val_b> BOOL_LITERAL
 
 %type <val_i> field_width field_flag field_flags
 %type <val_s> table_name database_name
@@ -384,6 +386,7 @@ field_type  : INTEGER { $$ = FIELD_TYPE_INT; }
 		    | CHAR    { $$ = FIELD_TYPE_CHAR; }
 		    | DATE    { $$ = FIELD_TYPE_DATE; }
 		    | VARCHAR { $$ = FIELD_TYPE_VARCHAR; }
+			| BOOL    { $$ = FIELD_TYPE_BOOL; }
 		    ;
 
 logical_op : AND  { $$ = OPERATOR_AND; }
@@ -525,7 +528,16 @@ literal    : INT_LITERAL {
 				$$->val_s      = $1;
 				$$->term_type  = TERM_STRING;
 		   }
+		   | BOOL_LITERAL {
+			   $$ = new ExprNode();
+			   $$->val_b	   = $1;
+			   $$->term_type   = TERM_BOOL; 
+		   }
 		   ;
+
+BOOL_LITERAL : TRUE 	{$$ = true;} 
+			 | FALSE	{$$ = false;}
+			 ;
 
 literal_list : literal_list ',' literal {
 				$1->push_back($3);

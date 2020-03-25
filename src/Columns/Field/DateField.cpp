@@ -12,4 +12,9 @@ string DateField::ToString() const
     return this->data;
 }
 
+string DateField::GetData() const 
+{
+    return data;
+}
+
 }

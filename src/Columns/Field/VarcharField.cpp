@@ -11,4 +11,10 @@ string VarcharField::ToString() const
 {
     return data;
 }
+
+string VarcharField::GetData() const 
+{
+    return data;
+}
+
 }

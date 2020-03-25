@@ -11,4 +11,10 @@ string IntField::ToString() const
 {
     return to_string(data);
 }
+
+int IntField::GetData() const 
+{
+    return data;
+}
+
 }

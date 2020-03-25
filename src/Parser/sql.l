@@ -15,7 +15,6 @@ INT_TEMPLATE     [0-9]+
 FLOAT_TEMPLATE   [0-9]+|([0-9]*\.[0-9]+)([eE][-+]?[0-9]+)?
 STRING_TEMPLATE  '(\\\\|\\n|\\r|\\\"|\\0|\\'|[^'\\])*'
 DATE_TEMPLATE    '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
-
 %%
 
 use|USE          { return USE; }
@@ -88,7 +87,7 @@ float|FLOAT               { return FLOAT; }
 char|CHAR                 { return CHAR; }
 date|DATE                 { return DATE; }
 varchar|VARCHAR           { return VARCHAR; }
-
+bool|BOOL                 { return BOOL; }
 exit|EXIT                 { return EXIT; }
 
 {ID_TEMPLATE}             { yylval.val_s = strdup(yytext); return IDENTIFIER; }

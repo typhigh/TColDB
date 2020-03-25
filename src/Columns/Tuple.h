@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 
-namespace Colunms {
+namespace Columns {
 
 class Tuple
 {
