@@ -20,6 +20,11 @@ bool BoolField::GetData() const
     return data;
 }
 
+void BoolField::SetData(bool data) 
+{
+    this->data = data;
+}
+
 FieldPtr BoolField::Op(Parser::operator_type_t op, const FieldPtr other) const 
 {
     bool ret;
@@ -41,9 +46,9 @@ FieldPtr BoolField::Op(Parser::operator_type_t op, const FieldPtr other) const
         break;
     default:
         LOG_ERROR("Unsupported operator type %s", Parser::Operations::ToString(op).c_str());
-        return FieldPtr();
+//        return FieldPtr();
     }
-    return FieldsCreator::CreateBoolField(ret);
+//    return move(FieldsCreator::CreateBoolField(ret));
 }
 
 FieldPtr BoolField::Op(Parser::operator_type_t op) const
@@ -63,8 +68,8 @@ FieldPtr BoolField::Op(Parser::operator_type_t op) const
         break;
     default:
         LOG_ERROR("Unsupported operator type %s", Parser::Operations::ToString(op).c_str());
-        return FieldPtr();
+//        return FieldPtr();
     }
-    return FieldsCreator::CreateBoolField(ret);
+//    return FieldsCreator::CreateBoolField(ret);
 }
 }

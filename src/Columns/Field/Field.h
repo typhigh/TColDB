@@ -1,7 +1,10 @@
 #pragma once
-#include <memory>
 #include "../../Parser/FieldType.h"
 #include "../../Parser/defs.h"
+#include "../../Utils/ObjectPool.h"
+#include <memory>
+#include <functional>
+
 namespace Columns {
 class Field
 {
@@ -19,5 +22,5 @@ public:
     virtual FieldPtr Op(Parser::operator_type_t op) const = 0;
 };
 
-using FieldPtr = std::shared_ptr<Field>;
+using FieldPtr = Utils::ObjectPool<Field>::ObjectPtr;
 }

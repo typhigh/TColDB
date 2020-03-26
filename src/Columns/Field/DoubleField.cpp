@@ -17,4 +17,9 @@ DoubleField::ValT DoubleField::GetData() const
     return data;
 }
 
+void DoubleField::SetData(DoubleField::ValT data) 
+{
+    this->data = data;
+}
+
 }

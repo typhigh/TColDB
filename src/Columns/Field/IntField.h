@@ -15,11 +15,12 @@ public:
     bool IsType(Parser::FieldType type) const;
     std::string ToString() const;
     int GetData() const;
+    void SetData(int data);
 /// Operations def
 public:
     FieldPtr Op(Parser::operator_type_t op, const FieldPtr other) const;
     FieldPtr Op(Parser::operator_type_t op) const;
 };
-using IntFieldPtr = std::shared_ptr<IntField>;
+using IntFieldPtr = Utils::ObjectPool<IntField>::ObjectPtr;
 
 }

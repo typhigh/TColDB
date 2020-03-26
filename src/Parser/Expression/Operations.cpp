@@ -15,7 +15,7 @@ EValue Operations::Op(operator_type_t op, ExprNode* expr1, ExprNode* expr2, Colu
             LOG_ERROR("expected a bool EValue");
             return EValue();
         }  
-        Columns::BoolFieldPtr left_ = left;
+        
 
     }
 }

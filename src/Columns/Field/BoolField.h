@@ -1,6 +1,5 @@
 #pragma once
 #include "Field.h"
-
 namespace Columns {
 
 class BoolField : public Field
@@ -15,6 +14,7 @@ public:
     bool IsType(Parser::FieldType type) const;
     std::string ToString() const;
     bool GetData() const;
+    void SetData(bool data);
 
 /// Operations def
 public:
@@ -22,5 +22,5 @@ public:
     FieldPtr Op(Parser::operator_type_t op) const;
 };
 
-using BoolFieldPtr = std::shared_ptr<BoolField>;
+using BoolFieldPtr = Utils::ObjectPool<BoolField>::ObjectPtr;
 }

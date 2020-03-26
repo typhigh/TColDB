@@ -17,4 +17,9 @@ string VarcharField::GetData() const
     return data;
 }
 
+void VarcharField::SetData(const string& data) 
+{
+    this->data = data;
+}
+
 }

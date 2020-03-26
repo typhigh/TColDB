@@ -30,40 +30,15 @@ public:
     LRUCache(size_t maxSize = 1) : maxSize(std::max((size_t) 1, maxSize)) {}
     virtual ~LRUCache() {};
 
-    // Insert a (key, val) pair into the Cache     
-    void Insert(TKey key, TValPtr val) 
-    {
-        std::lock_guard<std::mutex> lock(mLock);
-        InsertImpl(key, val);
-    }
+    /// Insert a (key, val) pair into the Cache     
+    void Insert(TKey key, TValPtr val);
 
-    // Get a val's pointer, if the val not exists, just return null pointer
-    TValPtr Get(TKey key) 
-    {
-        std::lock_guard<std::mutex> lock(mLock);
-        TValPtr ret = GetImpl(key);
-        if (ret) {
-            ++hits;
-        } else {
-            ++misses;
-        }
-        return ret;
-    }
+    /// Get a val's pointer, if the val not exists, just return null pointer
+    TValPtr Get(TKey key);
 
-    // Clear the cache without change base configure
-    void Clear() 
-    {
-        std::lock_guard<std::mutex> lock(mLock);
-        overflowQueue.clear();
-        queue.clear();
-        hashMap.clear();
-        hits = misses = 0;
-    }
-
-    double GetHitRatio() const 
-    {
-        return 1.0 * hits / (hits + misses);
-    }
+    /// Clear the cache without change base configure
+    void Clear();
+    double GetHitRatio() const ;
 
 private:
     static constexpr size_t DEFAULT_OVERFLOWMAXSIZE = 100;
@@ -74,70 +49,114 @@ private:
     Map hashMap;
     Queue queue;
     std::vector<TValPtr> overflowQueue;
-    // History information for hits and misses of LRUCache
+    /// History information for hits and misses of LRUCache
     size_t hits = 0;
     size_t misses = 0;
 
 private:
-    void InsertImpl(TKey key, TValPtr val) 
-    {
-        auto res = hashMap.emplace(
-            key, 
-            MapResult {
-                val,
-                /**/
-            }
-        );
-        // inserted may be false if there exists the same key
-        bool inserted = res.second;
-        MapResult& mRes = res.first->second;
-        if (inserted) {
-            queue.push_front(key);
-        } else {
-            queue.erase(mRes.queueIter);
-            queue.push_front(key);
-        }
-        mRes.queueIter = queue.begin();
-        RemoveOverflowIfNeed();
-    }
+    void InsertImpl(TKey key, TValPtr val);
 
-    TValPtr GetImpl(TKey key) 
-    {
-        typename Map::iterator iter = hashMap.find(key);
-        if (iter == hashMap.end()) {
-            return TValPtr();
-        }
-        MapResult& mRes = iter->second;
-        TValPtr ret = mRes.val;
-        queue.erase(mRes.queueIter);
-        queue.push_front(key);
-        mRes.queueIter = queue.begin();
-        return ret;   
-    }
+    TValPtr GetImpl(TKey key);
 
-    void RemoveOverflowIfNeed() 
-    {
-        // Free sapce in a lazy way
-        while (queue.size() > maxSize) {
-            TKey key = queue.back();
-            queue.pop_back();
-            auto it = hashMap.find(key);
-            if (it == hashMap.end()) {
-                LOG_ERROR("Expected hashMap element");
-                continue;
-            }
-            overflowQueue.push_back(it->second.val);
-            hashMap.erase(it);
-        }
-
-        if (overflowQueue.size() > overflowMaxSize) {
-            overflowQueue.clear();
-            LOG_INFO("Clear the overflowQueue");
-        }
-    }
+    void RemoveOverflowIfNeed();
     
 };
 
+template <typename TKey, typename TVal, typename HashFuncType>
+void LRUCache<TKey, TVal, HashFuncType>::Insert(TKey key, TValPtr val) 
+{
+    std::lock_guard<std::mutex> lock(mLock);
+    InsertImpl(key, val);
+}
 
+template <typename TKey, typename TVal, typename HashFuncType>
+LRUCache<TKey, TVal, HashFuncType>::TValPtr LRUCache<TKey, TVal, HashFuncType>::Get(TKey key) 
+{
+    std::lock_guard<std::mutex> lock(mLock);
+    TValPtr ret = GetImpl(key);
+    if (ret) {
+        ++hits;
+    } else {
+        ++misses;
+    }
+    return ret;
+}
+
+template <typename TKey, typename TVal, typename HashFuncType>
+void LRUCache<TKey, TVal, HashFuncType>::Clear()
+{
+    std::lock_guard<std::mutex> lock(mLock);
+    overflowQueue.clear();
+    queue.clear();
+    hashMap.clear();
+    hits = misses = 0;
+} 
+
+template <typename TKey, typename TVal, typename HashFuncType>
+double LRUCache<TKey, TVal, HashFuncType>::GetHitRatio() const
+{
+    return 1.0 * hits / (hits + misses);
+}
+
+template <typename TKey, typename TVal, typename HashFuncType>
+void LRUCache<TKey, TVal, HashFuncType>::InsertImpl(TKey key, TValPtr val) 
+{
+    auto res = hashMap.emplace(
+        key, 
+        MapResult {
+            val,
+            /**/
+        }
+    );
+        
+    /// inserted may be false if there exists the same key
+    bool inserted = res.second;
+    MapResult& mRes = res.first->second;
+    if (inserted) {
+        queue.push_front(key);
+    } else {
+        queue.erase(mRes.queueIter);
+        queue.push_front(key);
+    }
+    mRes.queueIter = queue.begin();
+    RemoveOverflowIfNeed();
+}
+
+template <typename TKey, typename TVal, typename HashFuncType>
+LRUCache<TKey, TVal, HashFuncType>::TValPtr LRUCache<TKey, TVal, HashFuncType>::GetImpl(TKey key) 
+{
+    typename Map::iterator iter = hashMap.find(key);
+    if (iter == hashMap.end()) {
+        return TValPtr();
+    }
+    MapResult& mRes = iter->second;
+    TValPtr ret = mRes.val;
+    queue.erase(mRes.queueIter);
+    queue.push_front(key);
+    mRes.queueIter = queue.begin();
+    return ret; 
+}
+
+template <typename TKey, typename TVal, typename HashFuncType>
+void LRUCache<TKey, TVal, HashFuncType>::RemoveOverflowIfNeed()
+{
+    /// Free sapce in a lazy way
+    while (queue.size() > maxSize) {
+        TKey key = queue.back();
+        queue.pop_back();
+        auto it = hashMap.find(key);
+        if (it == hashMap.end()) {
+            LOG_ERROR("Expected hashMap element");
+            continue;
+        }
+        overflowQueue.push_back(it->second.val);
+        hashMap.erase(it);
+    }
+
+    if (overflowQueue.size() > overflowMaxSize) {
+        overflowQueue.clear();
+        LOG_INFO("Clear the overflowQueue");
+    }
+}
 
 }

@@ -17,4 +17,9 @@ int IntField::GetData() const
     return data;
 }
 
+void IntField::SetData(int data)
+{
+    this->data = data;
+}
+
 }

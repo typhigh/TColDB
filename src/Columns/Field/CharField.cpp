@@ -18,4 +18,9 @@ string CharField::GetData() const
     return data;
 }
 
+void CharField::SetData(const string& data) 
+{
+    this->data = data;
+}
+
 }

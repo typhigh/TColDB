@@ -17,4 +17,8 @@ string DateField::GetData() const
     return data;
 }
 
+void DateField::SetData(const string& data) 
+{
+    this->data = data;
+}
 }

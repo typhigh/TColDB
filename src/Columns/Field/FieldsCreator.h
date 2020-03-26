@@ -6,17 +6,31 @@
 #include "DoubleField.h"
 #include "IntField.h"
 #include "VarcharField.h"
+#include "../../Utils/ObjectPool.h"
+#include <functional>
 
 namespace Columns {
+/// FieldsCreator is not thread-safe
+/// Every exector thread pool holds a FieldsCreator
 class FieldsCreator
 {
+/// Every field type refer to a ObjectPool
+private:
+    Utils::ObjectPool<BoolField> BoolFieldPool;
+    Utils::ObjectPool<CharField> CharFieldPool;
+    Utils::ObjectPool<DateField> DateFieldPool;
+    Utils::ObjectPool<DoubleField> DoubleFieldPool;
+    Utils::ObjectPool<IntField> IntFieldPool;
+    Utils::ObjectPool<VarcharField> VarcharFieldPool;
+
+/// Create Operations
 public:
-    static BoolFieldPtr CreateBoolField(bool data);
-    static CharFieldPtr CreateCharField(const std::string& data);
-    static DateFieldPtr CreateDateField(const std::string& data);
-    static DoubleFieldPtr CreateDoubleField(double data);
-    static IntFieldPtr CreateIntField(int data);
-    static VarcharFieldPtr CreateVarcharField(const std::string& data);
+    BoolFieldPtr CreateBoolField(bool data);
+    CharFieldPtr CreateCharField(const std::string& data);
+    DateFieldPtr CreateDateField(const std::string& data);
+    DoubleFieldPtr CreateDoubleField(double data);
+    IntFieldPtr CreateIntField(int data);
+    VarcharFieldPtr CreateVarcharField(const std::string& data);
 };
 
 }
