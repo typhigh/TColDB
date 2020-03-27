@@ -10,16 +10,24 @@ private:
     std::string data;
 public:
     CharField(/* args */) {}
+    CharField(const std::string& data) : data(data) {}
     ~CharField() {}
-    bool IsType(Parser::FieldType type) const;
+    Parser::FieldType_t GetType() const;
     std::string ToString() const;
+    FieldPtr Clone() const = 0;
     std::string GetData() const;
     void SetData(const std::string& data);
-/// Operations def
+
 public:
-    FieldPtr Op(Parser::operator_type_t op, const FieldPtr other) const;
+    bool Compare(Parser::operator_type_t op, const Field* other) const;
+    bool Query(Parser::operator_type_t op) const;
+
+    FieldPtr Op(Parser::operator_type_t op, const Field* other) const;
     FieldPtr Op(Parser::operator_type_t op) const;
+
+    void UpdateWithOp(Parser::operator_type_t op, const Field* other);
+    void UpdateWithOp(Parser::operator_type_t op);
 };
 
-using CharFieldPtr = Utils::ObjectPool<CharField>::ObjectPtr;
+using CharFieldPtr = std::unique_ptr<CharField, FieldDeleteFunc>;
 }

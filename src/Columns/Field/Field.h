@@ -6,6 +6,9 @@
 #include <functional>
 
 namespace Columns {
+class Field;
+using FieldDeleteFunc = std::function<void (Field*)>;
+using FieldPtr = std::unique_ptr<Field, FieldDeleteFunc>;
 class Field
 {
 private:
@@ -13,14 +16,31 @@ private:
 public:
     Field(/* args */) {}
     virtual ~Field() {}
-    virtual bool IsType(Parser::FieldType type) const = 0;
-    virtual std::string ToString() const = 0;
 
+    /// Get the field type
+    virtual Parser::FieldType_t GetType() const = 0;
+    
+    /// Get the string-format
+    virtual std::string ToString() const = 0;
+    
+    /// Clone (deep copy)
+    virtual FieldPtr Clone() const = 0;
+    
 /// Operation between this and another field
 public:
-    virtual FieldPtr Op(Parser::operator_type_t op, const FieldPtr& other) const = 0;
+    /// Compare with other field
+    virtual bool Compare(Parser::operator_type_t op, const Field* other) const = 0;
+    virtual bool Query(Parser::operator_type_t op) const = 0;
+
+    /// Op with other field, return a new field 
+    virtual FieldPtr Op(Parser::operator_type_t op, const Field* other) const = 0;
+    
+    /// Op seft, return a new field
     virtual FieldPtr Op(Parser::operator_type_t op) const = 0;
+    
+    /// Update this data with op (and other field)
+    virtual void UpdateWithOp(Parser::operator_type_t op, const Field* other) = 0;
+    virtual void UpdateWithOp(Parser::operator_type_t op) = 0;
 };
 
-using FieldPtr = Utils::ObjectPool<Field>::ObjectPtr;
 }

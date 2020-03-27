@@ -2,6 +2,8 @@
 #include "Operations.h"
 #include "../ASTCreator.h"
 #include "../../Utils/StringUtils.h"
+#include "../../Columns/Field/BoolField.h"
+#include "../../Columns/Field/FieldsCreator.h"
 #include <cstring>
 
 using namespace std;
@@ -90,14 +92,14 @@ bool Expression::IsUnary(const ExprNode* expr)
         || expr->op == OPERATOR_ISNULL;
 }
 
-EValue Expression::Eval(const ExprNode* expr, const Columns::TuplePtr& tupleRef) 
+EValue Expression::Eval(const ExprNode* expr, Columns::TuplePtr tuple) 
 {
     if (expr == NULL) {
         return EValue();
     }
 
     if (IsLeafNode(expr)) {
-        return EvalLeafNode(expr, tupleRef);
+        return EvalLeafNode(expr, tuple);
     }
 
     /// Not LeafNode
@@ -105,21 +107,44 @@ EValue Expression::Eval(const ExprNode* expr, const Columns::TuplePtr& tupleRef)
 
     /// Check op == in ; such as expr: "x in (1, 2, 4)"
     if (op == OPERATOR_IN) {
-        EValue left = Eval(expr->left);
-        EValueList
+        EValue left = Eval(expr->left, tuple);
+        bool isIn = Operations::IsIn(left.get(), expr->right->literal_list, tuple);
+        return Columns::FieldsCreator::CreateBoolField(isIn);
     }
+    
+    /// Check unary op ; such as : - , is null, is not null
     bool isUnary = IsUnary(expr);
-    EValue left = Eval(expr->left, tupleRef);
-    EValue right = isUnary ? EValue() : Eval(expr->right, tupleRef);
     if (isUnary) {
-        return left->Op(op);
-    } else {
-        return left->Op(op, right);
+        return Operations::Op(op, expr->left, tuple);
     }
+
+    /// Do binary op ; such as  +, -, *, /
+    return Operations::Op(op, expr->left, expr->right, tuple); 
 }
 
-EValue Expression::EvalLeafNode(const ExprNode* expr, const Columns::TuplePtr& tupleRef)
+EValue Expression::EvalLeafNode(const ExprNode* expr, Columns::TuplePtr tuple)
 {
-    
+    switch (expr->term_type)
+    {
+    case TERM_BOOL:     return Columns::FieldsCreator::CreateBoolField(expr->val_b);
+    /// For executor we use varchar
+    case TERM_STRING:   return Columns::FieldsCreator::CreateVarcharField(expr->val_s);
+    case TERM_DATE:     return Columns::FieldsCreator::CreateDateField(expr->val_s);
+    case TERM_FLOAT:    return Columns::FieldsCreator::CreateDoubleField(expr->val_f);
+    case TERM_INT:      return Columns::FieldsCreator::CreateIntField(expr->val_i);
+    case TERM_COLUMN_REF: 
+    {
+        ColumnRef* colRef = expr->column_ref;
+        if (colRef->pos > 0) {
+            /*TODO*/
+            return tuple->GetFieldCopy(colRef->pos);
+        }
+        string fieldName = colRef->GetFieldName();
+        return tuple->GetFieldCopy(fieldName);
+    }
+    default:
+        LOG_ERROR("Unsupported term type in EValLeafNode");
+        return nullptr;
+    }
 }
 }

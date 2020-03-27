@@ -5,6 +5,7 @@
 namespace Parser {
 
 using EValue = Columns::FieldPtr;
+
 class Expression
 {
 private:
@@ -34,8 +35,8 @@ public:
 
 /// Eval Operation
 public:
-    static EValue Eval(const ExprNode* expr, const Columns::TuplePtr& tupleRef = Columns::TuplePtr());
-    static EValue EvalLeafNode(const ExprNode* expr, const Columns::TuplePtr& tupleRef = Columns::TuplePtr());
+    static EValue Eval(const ExprNode* expr, Columns::TuplePtr tuple);
+    static EValue EvalLeafNode(const ExprNode* expr, Columns::TuplePtr tuple);
 };
 
 

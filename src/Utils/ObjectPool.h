@@ -13,9 +13,7 @@ class ObjectPool
 {
 public:
     using ObjectBlock = Object*;
-    using ObjectDeleteFunc = std::function<void(Object*)>;
-    using ObjectPtr = std::unique_ptr<Object, ObjectDeleteFunc>;
-    static const DEFAULT_BLOCKSIZE = 100;
+    static const size_t DEFAULT_BLOCKSIZE = 100;
     
 private:
     std::vector<ObjectBlock> blocks;
@@ -30,11 +28,11 @@ public:
     ~ObjectPool();
 
     /// Get one object from pool
-    ObjectPtr Get();
+    Object* Get();
     
     /// Add (return) one object to pool
     /// Gengerally we don't use it
-    void Add(ObjectPtr object);
+    void Add(Object* object);
 
     /// Get pool's name
     std::string GetName() const;
@@ -55,7 +53,7 @@ ObjectPool<Object>::~ObjectPool()
 }
 
 template <typename Object>
-ObjectPool<Object>::ObjectPtr ObjectPool<Object>::Get() 
+Object* ObjectPool<Object>::Get() 
 {
     if (objectPool.empty()) {
         GrowPool();
@@ -68,16 +66,13 @@ ObjectPool<Object>::ObjectPtr ObjectPool<Object>::Get()
 
     Object* ret = objectPool.top();
     objectPool.pop();
-    return ObjectPtr(
-        ret, 
-        [this](Object* object) { ObjectPool.push_back(object); }
-    );
+    return ret;
 }
 
 template <typename Object>
-void ObjectPool<Object>::Add(ObjectPtr object) 
+void ObjectPool<Object>::Add(Object* object) 
 {
-    objectPool.push(object.release());
+    objectPool.push(object);
 }
 
 template <typename Object>

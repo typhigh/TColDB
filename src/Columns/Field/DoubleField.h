@@ -14,16 +14,24 @@ private:
     
 public:
     DoubleField(/* args */) {}
+    DoubleField(ValT data) : data(data) {}
     ~DoubleField() {}
-    bool IsType(Parser::FieldType type) const;
+    Parser::FieldType_t GetType() const;
     std::string ToString() const;
+    FieldPtr Clone() const = 0;
     ValT GetData() const;
     void SetData(ValT data);    
 /// Operations def
 public:
-    FieldPtr Op(Parser::operator_type_t op, const FieldPtr other) const;
+    bool Compare(Parser::operator_type_t op, const Field* other) const;
+    bool Query(Parser::operator_type_t op) const;
+
+    FieldPtr Op(Parser::operator_type_t op, const Field* other) const;
     FieldPtr Op(Parser::operator_type_t op) const;
+
+    void UpdateWithOp(Parser::operator_type_t op, const Field* other);
+    void UpdateWithOp(Parser::operator_type_t op);
 };
-using DoubleFieldPtr = Utils::ObjectPool<DoubleField>::ObjectPtr;
+using DoubleFieldPtr = std::unique_ptr<DoubleField, FieldDeleteFunc>;
 
 }

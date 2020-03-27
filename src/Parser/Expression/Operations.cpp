@@ -1,33 +1,63 @@
 #include "Operations.h"
 #include "../../Columns/Field/BoolField.h"
+#include "../../Columns/Field/FieldsCreator.h"
+#include "Expression.h"
 using namespace std;
 
 namespace Parser {
-EValue Operations::Op(operator_type_t op, ExprNode* expr1, ExprNode* expr2, Columns::TuplePtr)
+EValue Operations::Op(operator_type_t op, ExprNode* expr1, ExprNode* expr2, Columns::TuplePtr tuple)
 {
-    /// We consider short-cut optimize OR AND
-    EValue ret;
-    EValue left;
-    EValue eright;
-    if (op == OPERATOR_OR) {
-        left = Expression::Eval(expr1);
-        if (!left->IsType(FieldType(FIELD_TYPE_BOOL))) {
-            LOG_ERROR("expected a bool EValue");
-            return EValue();
-        }  
-        
-
+    EValue ret = move(Expression::Eval(expr1, tuple));
+    EValue right;
+     /// We consider short-cut optimize OR AND
+    if (op == OPERATOR_OR && dynamic_cast<Columns::BoolField*>(ret.get())->GetData()) {
+        return ret;
     }
+    if (op == OPERATOR_AND && !dynamic_cast<Columns::BoolField*>(ret.get())->GetData()) {
+        return ret;
+    }
+    
+    /// Then we do a EVal
+    right = move(Expression::Eval(expr2, tuple));
+    if (IsOpCompared(op)) {
+        bool compare = ret->Compare(op, right.get());
+        Columns::BoolFieldPtr result = move(Columns::FieldsCreator::CreateBoolField());
+        result->SetData(compare);
+        ret = move(result);
+    } else {
+        ret->UpdateWithOp(op, right.get());
+    }
+    return ret;
 }
 
-EValue Operations::Op(operator_type_t op, ExprNode* expr, Columns::TuplePtr)
+EValue Operations::Op(operator_type_t op, ExprNode* expr, Columns::TuplePtr tuple)
 {
-
+    EValue ret = move(Expression::Eval(expr, tuple));
+    if (IsOpQuery(op)) {
+        bool compare = ret->Query(op);
+        Columns::BoolFieldPtr result = Columns::FieldsCreator::CreateBoolField(compare);
+        ret = move(result);
+    } else {
+        ret->UpdateWithOp(op);
+    }
+    return ret;
 }
 
-EValue Operations::In(ExprNode* expr, ExprNodeList* lists, Columns::TuplePtr) 
+bool Operations::IsIn(const Columns::Field* field, ExprNodeList* lists, Columns::TuplePtr tuple) 
 {
-
+    bool isIn = false;
+    if (lists == nullptr) {
+        return isIn;
+    }
+    for (int i = 0; i < lists->size(); ++i) {
+        ExprNode* expr = lists->at(i);
+        EValue val = move(Expression::EvalLeafNode(expr, tuple));
+        if (field->Compare(OPERATOR_EQ, val.get())) {
+            isIn = true;
+            break;
+        }
+    }
+    return isIn;
 }
 
 string Operations::ToString(operator_type_t op) 
@@ -60,5 +90,23 @@ string Operations::ToString(operator_type_t op)
     case OPERATOR_SUM:      return "OPERATOR_SUM";
     default:                return "UNKNOWN_OPTYPE";
     }
+}
+
+bool Operations::IsOpCompared(operator_type_t op) 
+{
+    return OPERATOR_EQ 
+        || OPERATOR_GEQ
+        || OPERATOR_GT
+        || OPERATOR_LEQ
+        || OPERATOR_LT
+        || OPERATOR_LIKE
+        ;
+}
+
+bool Operations::IsOpQuery(operator_type_t op)
+{
+    return OPERATOR_ISNULL
+        || OPERATOR_NOTNULL
+        ;
 }
 }

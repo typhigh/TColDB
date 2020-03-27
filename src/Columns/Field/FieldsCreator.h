@@ -16,21 +16,32 @@ class FieldsCreator
 {
 /// Every field type refer to a ObjectPool
 private:
-    Utils::ObjectPool<BoolField> BoolFieldPool;
-    Utils::ObjectPool<CharField> CharFieldPool;
-    Utils::ObjectPool<DateField> DateFieldPool;
-    Utils::ObjectPool<DoubleField> DoubleFieldPool;
-    Utils::ObjectPool<IntField> IntFieldPool;
-    Utils::ObjectPool<VarcharField> VarcharFieldPool;
+    static Utils::ObjectPool<BoolField> BoolFieldPool;
+    static Utils::ObjectPool<CharField> CharFieldPool;
+    static Utils::ObjectPool<DateField> DateFieldPool;
+    static Utils::ObjectPool<DoubleField> DoubleFieldPool;
+    static Utils::ObjectPool<IntField> IntFieldPool;
+    static Utils::ObjectPool<VarcharField> VarcharFieldPool;
+
+/// Delete Operation
+private:
+    static void DeleteField(Field* field);
 
 /// Create Operations
 public:
-    BoolFieldPtr CreateBoolField(bool data);
-    CharFieldPtr CreateCharField(const std::string& data);
-    DateFieldPtr CreateDateField(const std::string& data);
-    DoubleFieldPtr CreateDoubleField(double data);
-    IntFieldPtr CreateIntField(int data);
-    VarcharFieldPtr CreateVarcharField(const std::string& data);
+    static BoolFieldPtr CreateBoolField();
+    static CharFieldPtr CreateCharField();
+    static DateFieldPtr CreateDateField();
+    static DoubleFieldPtr CreateDoubleField();
+    static IntFieldPtr CreateIntField();
+    static VarcharFieldPtr CreateVarcharField();
+
+    static BoolFieldPtr CreateBoolField(bool data);
+    static CharFieldPtr CreateCharField(const std::string& data);
+    static DateFieldPtr CreateDateField(const std::string& data);
+    static DoubleFieldPtr CreateDoubleField(const DoubleField::ValT data);
+    static IntFieldPtr CreateIntField(int data);
+    static VarcharFieldPtr CreateVarcharField(const std::string& data);
 };
 
 }
