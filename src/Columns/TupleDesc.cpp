@@ -15,4 +15,9 @@ void TupleDesc::SetAlis(string alis)
     }
 }
 
+string TupleDesc::GetFieldName(size_t fieldNo) const 
+{
+    return desc[fieldNo].GetFieldName();
+}
+
 }

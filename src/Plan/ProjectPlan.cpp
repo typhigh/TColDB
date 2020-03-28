@@ -1,5 +1,5 @@
 #include "ProjectPlan.h"
-#include "../Optimizer/Rules/Rule.h"
+#include "PlanVisitor.h"
 using namespace std;
 
 namespace Plan {
@@ -19,8 +19,14 @@ void ProjectPlan::SetSubPlan(PlanPtr subPlan)
     this->subPlan = subPlan;
 }
 
-void ProjectPlan::AcceptRule(Optimizer::RulePtr rule)
+bool ProjectPlan::Accept(PlanVisitorPtr visitor)
 {
-    rule->AcceptPlan(*this);
+    visitor->VisitPlan(shared_from_this());
 }
+
+PlanType_t ProjectPlan::GetType() const 
+{
+    return PLAN_PROJECT;
+}
+
 }

@@ -15,7 +15,7 @@ public:
     ~ColumnDesc() {}
 
     void SetAlis(std::string alis, bool isTableAlis = true);
-    
+    std::string GetFieldName() const;
 };
 
 using ColumnDescPtr = std::shared_ptr<ColumnDesc>; 

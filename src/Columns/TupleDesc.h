@@ -17,7 +17,7 @@ public:
     TupleDescPtr Clone() const;
 
     void SetAlis(std::string alis);
-    std::string GetFieldName(size_t i) const;
+    std::string GetFieldName(size_t fieldNo) const;
 };
 
 using TupleDescPtr = std::shared_ptr<TupleDesc>;

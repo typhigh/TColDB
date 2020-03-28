@@ -1,21 +1,17 @@
 #pragma once
 #include "../../Plan/defs.h"
+#include "../../Plan/PlanVisitor.h"
+#include "../../Plan/Plan.h"
+#include "../../Plan/AggregatePlan.h"
+#include "../../Plan/FilterPlan.h"
+#include "../../Plan/JoinPlan.h"
+#include "../../Plan/ProjectPlan.h"
+#include "../../Plan/ScanPlan.h"
 #include <string>
 #include <memory>
 namespace Optimizer {
 
-class Rule
-{
-private:
-    /* data */
-
-public:
-    Rule(/* args */) {}
-    virtual ~Rule() {}
-
-public:
-    virtual void AcceptPlan(Plan::Plan& plan);
-};
-using RulePtr = std::shared_ptr<Rule>;
+using Rule = Plan::PlanVisitor;
+using RulePtr = Plan::PlanVisitorPtr;
 
 }

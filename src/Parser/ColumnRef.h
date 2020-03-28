@@ -15,6 +15,7 @@ public:
 	int pos;
 public:
 	ColumnRef* Clone() const;
+	~ColumnRef();
 	std::string GetFieldName() const;
 };
 }

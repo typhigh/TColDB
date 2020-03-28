@@ -5,14 +5,16 @@ namespace Executor {
 
 class Predicator
 {
-private:
+public:
     /* data */
     Parser::ExprNode* cond;
     
 public:
     Predicator(/* args */) {};
-    ~Predicator() {};
+    ~Predicator();
     Predicator(Parser::ExprNode* cond);
+
+
 };
 
 using PredicatorPtr = std::shared_ptr<Predicator>;

@@ -5,7 +5,7 @@
 #include <vector>
 
 namespace Plan {
-class ProjectPlan : public Plan
+class ProjectPlan : public Plan, public std::enable_shared_from_this<ProjectPlan>
 {
 private:
     PlanPtr subPlan;
@@ -17,8 +17,9 @@ public:
     void SetProjector(const Parser::ExprNodeList* exprs);
     void SetSubPlan(PlanPtr subPlan);
 
-private:
-    void AcceptRule (Optimizer::RulePtr rule);
+public:
+    bool Accept (PlanVisitorPtr visitor);
+    PlanType_t GetType() const;
 };
 
 using ProjectPlanPtr = std::shared_ptr<ProjectPlan>;

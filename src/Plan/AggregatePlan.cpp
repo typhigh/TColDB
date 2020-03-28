@@ -1,4 +1,5 @@
 #include "AggregatePlan.h"
+#include "PlanVisitor.h"
 using namespace std;
 
 namespace Plan {
@@ -23,9 +24,14 @@ void AggregatePlan::AddAggregator(const string& fieldName, Parser::operator_type
     );
 }
 
-void AggregatePlan::AcceptRule(Optimizer::RulePtr rule)
+bool AggregatePlan::Accept (PlanVisitorPtr visitor)
 {
-    rule->AcceptPlan(*this);
+    visitor->VisitPlan(shared_from_this());
+}
+
+PlanType_t AggregatePlan::GetType() const 
+{
+    return PLAN_AGGREGATE;
 }
 
 }

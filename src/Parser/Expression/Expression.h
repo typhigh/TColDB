@@ -9,13 +9,19 @@ using EValue = Columns::FieldPtr;
 class Expression
 {
 private:
-/// Copy Operation
+/// Copy/Free Operation
 public:
     /// Deep copy a expr 
     static ExprNode* Copy(const ExprNode* expr);
     
     /// Deep copy a expr-list
     static ExprNodeList* Copy(const ExprNodeList* exprs);
+
+    /// Deep free a expr
+    static void Free(ExprNode* expr);
+
+    /// Deep free a expr-list
+    static void Free(ExprNodeList* exprs);
 
 public:
     /// Is a expr aggregate

@@ -14,6 +14,12 @@ ColumnRef* ColumnRef::Clone() const
     return ret;
 }
 
+ColumnRef::~ColumnRef()
+{
+    delete column;
+    delete table;
+}
+
 string ColumnRef::GetFieldName() const 
 {
     string ret = Utils::CopyStringFromCString(column);

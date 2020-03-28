@@ -12,15 +12,20 @@ namespace Parser {
 
 ExprNode* Expression::Copy(const ExprNode* expr) 
 {
-    // Do a light copy first
+    if (expr == nullptr) {
+        return nullptr;
+    }
+    
+    /// Do a light copy first
     ExprNode* ret = ASTCreator::MakeExprNode();
     ret->op = expr->op;
     ret->term_type = expr->term_type;
     if (expr->constVal) {
         ret->constVal = expr->constVal->Clone();
     }
-    if (expr->op == OPERATOR_NONE) {
-        // Single node without child
+    
+    if (IsLeafNode(expr)) {
+        /// Single (Leaf) node without child
         switch (expr->term_type)
         {
         case TERM_COLUMN_REF:
@@ -48,11 +53,11 @@ ExprNode* Expression::Copy(const ExprNode* expr)
         return ret;
     }
 
-    if (expr->op == OPERATOR_UNARY) {
-        // Single-Op
+    if (IsUnary(expr)) {
+        /// Single-Op
         ret->left = Copy(expr->left);
     } else {
-        // Binary-Op
+        /// Binary-Op
         ret->left = Copy(expr->left);
         ret->right = Copy(expr->right);
     }
@@ -68,6 +73,51 @@ ExprNodeList* Expression::Copy(const ExprNodeList* exprs)
     return ret;
 }
 
+void Expression::Free(ExprNode* expr) 
+{
+    if (expr == nullptr) {
+        return ;
+    }
+    
+    /// Single (Leaf) node without child
+    if (IsLeafNode(expr)) {
+        switch (expr->term_type)
+        {
+        case TERM_COLUMN_REF:
+            delete expr->column_ref;
+            /* code */
+            break;
+        case TERM_DATE:
+        case TERM_STRING:
+            delete expr->val_s;
+            break;
+        case TERM_LITERAL_LIST:
+            Free(expr->literal_list);
+            break;
+        default:
+            break;
+        }
+        ASTCreator::FreeExprNode(expr);
+        return;
+    }
+
+    /// No matter Unary or Binary
+    Free(expr->left);
+    Free(expr->right);
+    ASTCreator::FreeExprNode(expr);
+}
+
+void Expression::Free(ExprNodeList* exprs) 
+{
+    if (exprs == nullptr) {
+        return;
+    }
+
+    for (size_t i = 0; i < exprs->size(); ++i) {
+        Free(exprs->at(i));
+    }
+    delete exprs;
+}
 
 bool Expression::IsAggregate(const ExprNode* expr) 
 {
@@ -171,7 +221,7 @@ EValue Expression::EvalLeafNode(const ExprNode* expr, Columns::TuplePtr tuple)
             return tuple->GetFieldCopy(colRef->pos);
         }
         string fieldName = colRef->GetFieldName();
-        return tuple->GetFieldCopy(fieldName);
+        return tuple->GetFieldCopy(fieldName, colRef->pos);
     }
     default:
         LOG_ERROR("Unsupported term type in EValLeafNode");

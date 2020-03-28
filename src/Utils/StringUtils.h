@@ -44,7 +44,6 @@ inline std::string GetPointAfter(const std::string& s)
         return s;
     }
     return s.substr(pos+1, s.size());
-
 }
 
 // Copy a new c style string, return c-style

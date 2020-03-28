@@ -1,4 +1,5 @@
 #include "ASTSelectInfo.h"
+#include "../Plan/PlansCreator.h"
 #include "../Plan/JoinPlan.h"
 #include "../Plan/ScanPlan.h"
 #include "../Plan/AggregatePlan.h"
@@ -20,26 +21,29 @@ Plan::PlanPtr ASTSelectInfo::MakePlan() const
 
     // First we deal with Where and Table (LowPLan)
     Plan::PlanPtr LowPlan;
-    if (tables == NULL) {
+    if (tables == nullptr) {
         LOG_ERROR("expected not null table");
-        return ret;
+        return nullptr;
     }
+
     if (tables->size() > 1) {
         // JoinPlan
-        Plan::JoinPlanPtr plan = make_shared<Plan::JoinPlan>();
+        Plan::JoinPlanPtr plan = Plan::PlansCreator::CreateJoinPlan();
         plan->SetCondition(where);
         for (size_t i = 0; i < tables->size(); ++i)  {
-            Plan::PlanPtr subPlan = make_shared<Plan::ScanPlan>(tables->at(i));
+            Plan::PlanPtr subPlan = Plan::PlansCreator::CreateScanPlan(tables->at(i));
             plan->AddSubPlan(subPlan);
+            subPlan->SetParent(plan);
         }
         LowPlan = plan;
     } else {
-        Plan::ScanPlanPtr plan = make_shared<Plan::ScanPlan>(tables->at(0));
+        Plan::ScanPlanPtr plan = Plan::PlansCreator::CreateScanPlan(tables->at(0));
         if (where) {
             // FilterPlan
-            Plan::FilterPlanPtr filterPlan = make_shared<Plan::FilterPlan>();
+            Plan::FilterPlanPtr filterPlan = Plan::PlansCreator::CreateFilterPlan();
             filterPlan->SetPredicator(where);
             filterPlan->SetSubPlan(plan);
+            plan->SetParent(filterPlan);
             LowPlan = filterPlan;
         } else {
             // ScanPlan

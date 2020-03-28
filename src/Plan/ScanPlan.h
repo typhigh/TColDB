@@ -7,7 +7,7 @@
 #include <string>
 namespace Plan {
 
-class ScanPlan : public Plan
+class ScanPlan : public Plan, public std::enable_shared_from_this<ScanPlan>
 {
 private:
     /* data */
@@ -21,8 +21,9 @@ public:
     ScanPlan(Parser::TableFrom* tableFrom);
     virtual ~ScanPlan() {}
 
-private:
-    void AcceptRule (Optimizer::RulePtr rule); 
+public:
+    bool Accept (PlanVisitorPtr visitor);
+    PlanType_t GetType() const;
 };
 
 using ScanPlanPtr = std::shared_ptr<ScanPlan>;

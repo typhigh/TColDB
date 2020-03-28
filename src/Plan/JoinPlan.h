@@ -6,7 +6,7 @@
 
 namespace Plan {
 
-class JoinPlan : public Plan
+class JoinPlan : public Plan, public std::enable_shared_from_this<JoinPlan>
 {
 private:
     std::vector<PlanPtr> subPlans;
@@ -21,8 +21,9 @@ public:
 //    std::vector<PlanPtr> GetSubPlans() const;
     virtual ~JoinPlan() {}
 
-private:
-    void AcceptRule(Optimizer::RulePtr rule);
+public:
+    bool Accept (PlanVisitorPtr visitor);
+    PlanType_t GetType() const;
 };
 
 using JoinPlanPtr = std::shared_ptr<JoinPlan>;

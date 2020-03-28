@@ -9,4 +9,9 @@ Predicator::Predicator(Parser::ExprNode* cond)
     this->cond = Parser::Expression::Copy(cond);
 }
 
+Predicator::~Predicator() 
+{
+    Parser::Expression::Free(this->cond);
+}
+
 }

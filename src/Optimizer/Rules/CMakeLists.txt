@@ -3,8 +3,8 @@ set(HEADERS
     PARENT_SCOPE
 )
 
-set (SOURCE
+set(SOURCE
 	${SOURCE}
-     ${CMAKE_CURRENT_SOURCE_DIR}/Rule.cpp
-    PARENT_SCOPE
+	${CMAKE_CURRENT_SOURCE_DIR}/ConstOptimize.cpp
+	PARENT_SCOPE
 )

@@ -4,7 +4,7 @@
 #include <vector>
 namespace Plan {
 
-class AggregatePlan : public Plan
+class AggregatePlan : public Plan, public std::enable_shared_from_this<AggregatePlan>
 {
 private:
     /* data */
@@ -15,13 +15,14 @@ public:
     AggregatePlan(/* args */) {};
     virtual ~AggregatePlan() {};
 
-private:
-    void AcceptRule (Optimizer::RulePtr rule) ;
-
 public:
     void AddAggregator(Executor::AggregatorPtr agg);
     void AddAggregator(const std::string &fieldName, Parser::operator_type_t aggOp);
     void SetSubPlan(PlanPtr subPlan);
+
+private:
+    bool Accept (PlanVisitorPtr rule);
+    PlanType_t GetType() const;
 };
 using AggregatePlanPtr = std::shared_ptr<AggregatePlan>;
 

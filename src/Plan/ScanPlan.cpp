@@ -1,5 +1,5 @@
 #include "ScanPlan.h"
-#include "../Databases/Database.h"
+#include "PlanVisitor.h"
 using namespace std;
 
 namespace Plan {
@@ -12,9 +12,14 @@ ScanPlan::ScanPlan(Parser::TableFrom* tableFrom) {
     }
 }
 
-void ScanPlan::AcceptRule(Optimizer::RulePtr rule) 
+bool ScanPlan::Accept (PlanVisitorPtr visitor)
 {
-    rule->AcceptPlan(*this);
+    visitor->VisitPlan(shared_from_this());
+}
+
+PlanType_t ScanPlan::GetType() const 
+{
+    return PLAN_SCAN;
 }
 
 }

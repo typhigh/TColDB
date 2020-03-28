@@ -1,5 +1,5 @@
 #include "FilterPlan.h"
-#include "../Optimizer/Rules/Rule.h"
+#include "PlanVisitor.h"
 using namespace std;
 
 namespace Plan {
@@ -19,8 +19,19 @@ void FilterPlan::SetSubPlan(PlanPtr subPlan)
     this->subPlan = subPlan;
 }
 
-void FilterPlan::AcceptRule(Optimizer::RulePtr rule)
+Executor::PredicatorPtr FilterPlan::GetPredicator()
 {
-    rule->AcceptPlan(*this);
+    return predicator;
 }
+
+bool FilterPlan::Accept(PlanVisitorPtr visitor)
+{
+    visitor->VisitPlan(shared_from_this());
+}
+
+PlanType_t FilterPlan::GetType() const 
+{
+    return PLAN_FILTER;
+}
+
 }

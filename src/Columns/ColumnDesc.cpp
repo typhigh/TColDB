@@ -16,4 +16,9 @@ void ColumnDesc::SetAlis(string alis, bool isTableAlis) {
     fieldName = alis + "." + Utils::GetPointAfter(fieldName);
 }
 
+string ColumnDesc::GetFieldName() const 
+{
+    return fieldName;
+}
+
 }

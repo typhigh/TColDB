@@ -2,7 +2,7 @@
 #include "defs.h"
 #include "PlanContext.h"
 #include "../Common/Common.h"
-#include "../Optimizer/Rules/Rule.h"
+#include "PlanVisitor.h"
 #include <memory>
 
 namespace Plan {
@@ -17,16 +17,16 @@ public:
     virtual ~Plan() {}
     void SetPlanContext(PlanContextPtr planContext);
     void SetPlanContext(const std::vector<std::string>& tableNames, bool ReadOnly);
+    
     PlanPtr GetParent();
     void SetParent(PlanPtr parent);
     
 protected:
     PlanContextPtr planContext;
 
-private:
-    virtual void AcceptRule (Optimizer::RulePtr rule) = 0;
+public:
+    virtual bool Accept (PlanVisitorPtr visitor) = 0;
     virtual PlanType_t GetType() const = 0;
-
 };
 
 

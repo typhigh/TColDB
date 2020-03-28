@@ -1,5 +1,6 @@
 #include "JoinPlan.h"
 #include "../Parser/Expression/Expression.h"
+#include "PlanVisitor.h"
 using namespace std;
 namespace Plan {
 
@@ -18,9 +19,14 @@ void JoinPlan::SetCondition(Parser::ExprNode* expr)
     condition = make_shared<Parser::ExprNode*>();
 }
 
-void JoinPlan::AcceptRule(Optimizer::RulePtr rule) 
+bool JoinPlan::Accept (PlanVisitorPtr visitor)
 {
-    rule->AcceptPlan(*this);    
+    visitor->VisitPlan(shared_from_this());    
+}
+
+PlanType_t JoinPlan::GetType() const 
+{
+    return PLAN_JOIN;
 }
 
 }
