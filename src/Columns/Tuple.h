@@ -1,4 +1,5 @@
 #pragma once
+#include "RowID.h"
 #include "TupleDesc.h"
 #include "Field/Field.h"
 #include <memory>
@@ -11,6 +12,7 @@ class Tuple
 
 private:
     /* data */
+    RowID rid;
     TupleDescPtr desc;
     std::vector<FieldPtr> fields;
     FieldPtr GetFieldCopyImpl(const std::string& fieldName, int& fieldNo) const;

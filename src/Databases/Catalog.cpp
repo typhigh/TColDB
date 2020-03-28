@@ -13,7 +13,7 @@ Columns::TablePtr Catalog::GetTableImpl(const string& tableName)
 {
     auto item = tableMap.find(tableName);
     if (item == tableMap.end()) {
-        return Columns::TablePtr();
+        return nullptr;
     }
     return item->second;
 }

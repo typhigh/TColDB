@@ -13,10 +13,12 @@ private:
 public:
     Table(/* args */) {}
     ~Table() {}
-    TableMetaPtr GetCurrentReadOnlyTableMeta() const;
-    TableMetaPtr GetCurrentWriteTableMeta() const;
-    void SetCurrentReadOnlyTableMeta(TableMetaPtr& tableMeta);
-    void SetCurrentWriteTableMeta(TableMetaPtr& tableMeta); 
+    TableMetaReadOnlyPtr GetCurrentReadOnlyTableMeta() const;
+
+    /// The current write table meta is only read, we should create a newer version 
+    TableMetaReadOnlyPtr GetCurrentWriteTableMeta() const;
+    void SetCurrentReadOnlyTableMeta(TableMetaReadOnlyPtr&& tableMeta);
+    void SetCurrentWriteTableMeta(TableMetaReadOnlyPtr&& tableMeta); 
 };
 
 using TablePtr = std::shared_ptr<Table>;

@@ -7,15 +7,15 @@ class PlanContext
 {
 private:
     /* data */
-    std::vector<Columns::TableMetaPtr> tableMetasRef;
+    std::vector<Columns::TableMetaReadOnlyPtr> tableMetasRef;
 
 public:
     PlanContext(/* args */) {}
     ~PlanContext() {}
     
     PlanContext(const std::vector<std::string>& tableNames, bool ReadOnly);
-    Columns::TableMetaPtr GetTableMeta(const std::string& tableName) const;
-    Columns::TableMetaPtr GetTableMeta() const;
+    Columns::TableMetaReadOnlyPtr GetTableMeta(const std::string& tableName) const;
+    Columns::TableMetaReadOnlyPtr GetTableMeta() const;
 };
 using PlanContextPtr = std::shared_ptr<PlanContext>;
 

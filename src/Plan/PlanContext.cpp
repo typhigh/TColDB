@@ -1,4 +1,5 @@
 #include "PlanContext.h"
+
 #include "../Databases/Catalog.h"
 #include "../Databases/Database.h"
 using namespace std;
@@ -16,21 +17,21 @@ PlanContext::PlanContext(const vector<string>& tableNames, bool ReadOnly)
     }
 }
 
-Columns::TableMetaPtr PlanContext::GetTableMeta(const string& tableName) const
+Columns::TableMetaReadOnlyPtr PlanContext::GetTableMeta(const string& tableName) const
 {
     for (int i = 0; i < tableMetasRef.size(); ++i) {
         if (tableMetasRef[i]->GetTableName() == tableName) {
             return tableMetasRef[i];
         }
     }
-    return Columns::TableMetaPtr();
+    return Columns::TableMetaReadOnlyPtr();
 }
 
-Columns::TableMetaPtr PlanContext::GetTableMeta() const 
+Columns::TableMetaReadOnlyPtr PlanContext::GetTableMeta() const 
 {
     if (tableMetasRef.size() != 1) {
         LOG_ERROR("expected only one tableMeta");
-        return Columns::TableMetaPtr();
+        return Columns::TableMetaReadOnlyPtr();
     }
     return tableMetasRef[0];
 }
