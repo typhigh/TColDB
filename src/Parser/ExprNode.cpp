@@ -10,6 +10,8 @@ ExprNode::ExprNode()
     right = nullptr;
     op = OPERATOR_NONE;
     term_type = TERM_NONE;
+
+    constVal = nullptr;
 }
 
 }

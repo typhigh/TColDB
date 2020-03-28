@@ -43,7 +43,7 @@ EValue Operations::Op(operator_type_t op, ExprNode* expr, Columns::TuplePtr tupl
     return ret;
 }
 
-bool Operations::IsIn(const Columns::Field* field, ExprNodeList* lists, Columns::TuplePtr tuple) 
+bool Operations::IsIn(const Columns::Field* field, ExprNodeList* lists) 
 {
     bool isIn = false;
     if (lists == nullptr) {
@@ -51,7 +51,7 @@ bool Operations::IsIn(const Columns::Field* field, ExprNodeList* lists, Columns:
     }
     for (int i = 0; i < lists->size(); ++i) {
         ExprNode* expr = lists->at(i);
-        EValue val = move(Expression::EvalLeafNode(expr, tuple));
+        EValue val = move(Expression::EvalLeafNode(expr, nullptr));
         if (field->Compare(OPERATOR_EQ, val.get())) {
             isIn = true;
             break;

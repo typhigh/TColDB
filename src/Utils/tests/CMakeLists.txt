@@ -2,7 +2,6 @@ find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
 add_executable(BloomFilterUnitTest BloomFilterUnitTest.cpp)
-
 target_link_libraries(
         BloomFilterUnitTest
         ${GTEST_BOTH_LIBRARIES}
@@ -11,7 +10,6 @@ target_link_libraries(
         )
 
 add_executable(LRUCacheUnitTest LRUCacheUnitTest.cpp)
-
 target_link_libraries(
         LRUCacheUnitTest
         ${GTEST_BOTH_LIBRARIES}

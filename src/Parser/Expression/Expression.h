@@ -37,6 +37,11 @@ public:
 public:
     static EValue Eval(const ExprNode* expr, Columns::TuplePtr tuple);
     static EValue EvalLeafNode(const ExprNode* expr, Columns::TuplePtr tuple);
+
+/// Const Optimize Expreesion Operation
+public:
+    static void ConstOptimize(ExprNode* expr); 
+    static bool IsConstVal (const ExprNode* expr);
 };
 
 

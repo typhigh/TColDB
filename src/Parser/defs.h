@@ -15,7 +15,8 @@ enum FieldType_t
 	FIELD_TYPE_CHAR,
 	FIELD_TYPE_DATE,
 	FIELD_TYPE_VARCHAR,
-	FIELD_TYPE_BOOL
+	FIELD_TYPE_BOOL,
+	FIELD_TYPE_NULL
 };
 class FieldType;
 
@@ -118,6 +119,7 @@ inline std::string ToString(FieldType_t type)
     case FIELD_TYPE_CHAR: 		return "FIELD_CHAR";
 	case FIELD_TYPE_DATE:		return "FIELD_DATA";
     case FIELD_TYPE_VARCHAR:	return "FIELD_VARCHAR";
+	case FIELD_TYPE_NULL:		return "FIELD_NULL";
     }
 }
 

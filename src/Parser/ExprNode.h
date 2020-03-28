@@ -1,6 +1,7 @@
 #pragma once
 #include "defs.h"
 #include "ColumnRef.h"
+#include "../Columns/Field/Field.h"
 #include "IAST.h"
 namespace Parser {
 
@@ -19,7 +20,11 @@ public:
 	ExprNode *right;
 	operator_type_t op;
 	TermType_t term_type;
-	
+
+public:
+	/// For const optimize
+	Columns::FieldPtr constVal;
+
 public:
 	ExprNode();
 };

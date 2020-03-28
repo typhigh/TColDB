@@ -8,4 +8,9 @@ ExprNode* ASTCreator::MakeExprNode()
     return new ExprNode();
 }
 
+ExprNode* ASTCreator::FreeExprNode(ExprNode* expr)
+{
+    delete expr;
+}
+
 }

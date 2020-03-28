@@ -6,35 +6,25 @@ using namespace std;
 namespace Columns {
 
 /// Define the ObjectPools
-Utils::ObjectPool<BoolField>    FieldsCreator::BoolFieldPool    = Utils::ObjectPool<BoolField>();
-Utils::ObjectPool<CharField>    FieldsCreator::CharFieldPool    = Utils::ObjectPool<CharField>();
-Utils::ObjectPool<DateField>    FieldsCreator::DateFieldPool    = Utils::ObjectPool<DateField>();
-Utils::ObjectPool<DoubleField>  FieldsCreator::DoubleFieldPool  = Utils::ObjectPool<DoubleField>();
-Utils::ObjectPool<IntField>     FieldsCreator::IntFieldPool     = Utils::ObjectPool<IntField>();
-Utils::ObjectPool<VarcharField> FieldsCreator::VarcharFieldPool = Utils::ObjectPool<VarcharField>();
+thread_local Utils::ObjectPool<BoolField>    FieldsCreator::BoolFieldPool    = Utils::ObjectPool<BoolField>();
+thread_local Utils::ObjectPool<CharField>    FieldsCreator::CharFieldPool    = Utils::ObjectPool<CharField>();
+thread_local Utils::ObjectPool<DateField>    FieldsCreator::DateFieldPool    = Utils::ObjectPool<DateField>();
+thread_local Utils::ObjectPool<DoubleField>  FieldsCreator::DoubleFieldPool  = Utils::ObjectPool<DoubleField>();
+thread_local Utils::ObjectPool<IntField>     FieldsCreator::IntFieldPool     = Utils::ObjectPool<IntField>();
+thread_local Utils::ObjectPool<NullField>    FieldsCreator::NullFieldPool    = Utils::ObjectPool<NullField>();
+thread_local Utils::ObjectPool<VarcharField> FieldsCreator::VarcharFieldPool = Utils::ObjectPool<VarcharField>();
 
 void FieldsCreator::DeleteField(Field* field) 
 {
     switch (field->GetType())
     {
-    case Parser::FIELD_TYPE_BOOL:
-        BoolFieldPool.Add(dynamic_cast<BoolField*>(field));
-        break;
-    case Parser::FIELD_TYPE_CHAR:
-        CharFieldPool.Add(dynamic_cast<CharField*>(field));
-        break;
-    case Parser::FIELD_TYPE_DATE:
-        DateFieldPool.Add(dynamic_cast<DateField*>(field));
-        break;
-    case Parser::FIELD_TYPE_FLOAT:
-        DoubleFieldPool.Add(dynamic_cast<DoubleField*>(field));
-        break;
-    case Parser::FIELD_TYPE_INT:
-        IntFieldPool.Add(dynamic_cast<IntField*>(field));
-        break;
-    case Parser::FIELD_TYPE_VARCHAR:
-        VarcharFieldPool.Add(dynamic_cast<VarcharField*>(field));
-        break;
+    case Parser::FIELD_TYPE_BOOL:   return BoolFieldPool.Add(dynamic_cast<BoolField*>(field));
+    case Parser::FIELD_TYPE_CHAR:   return CharFieldPool.Add(dynamic_cast<CharField*>(field));
+    case Parser::FIELD_TYPE_DATE:   return DateFieldPool.Add(dynamic_cast<DateField*>(field));
+    case Parser::FIELD_TYPE_FLOAT:  return DoubleFieldPool.Add(dynamic_cast<DoubleField*>(field));
+    case Parser::FIELD_TYPE_INT:    return IntFieldPool.Add(dynamic_cast<IntField*>(field));
+    case Parser::FIELD_TYPE_NULL:   return NullFieldPool.Add(dynamic_cast<NullField*>(field));
+    case Parser::FIELD_TYPE_VARCHAR:return VarcharFieldPool.Add(dynamic_cast<VarcharField*>(field));
     default:
         LOG_ERROR("Unknown field type");
     }   
@@ -80,6 +70,13 @@ IntFieldPtr FieldsCreator::CreateIntField()
     );
 }
 
+NullFieldPtr FieldsCreator::CreateNullField()
+{
+    return NullFieldPtr(
+        NullFieldPool.Get(),
+        [] (Field* field) {DeleteField(field);}
+    );
+}
 VarcharFieldPtr FieldsCreator::CreateVarcharField()
 {
     return VarcharFieldPtr(
@@ -128,6 +125,17 @@ VarcharFieldPtr FieldsCreator::CreateVarcharField(const std::string& data)
     VarcharFieldPtr ret = CreateVarcharField();
     ret->SetData(data);
     return ret;
+}
+
+size_t FieldsCreator::EstimateMemoryUse()
+{
+    return BoolFieldPool.EstimateMemoryUseSize()
+         + CharFieldPool.EstimateMemoryUseSize()
+         + DateFieldPool.EstimateMemoryUseSize()
+         + DoubleFieldPool.EstimateMemoryUseSize()
+         + IntFieldPool.EstimateMemoryUseSize()
+         + NullFieldPool.EstimateMemoryUseSize()
+         + VarcharFieldPool.EstimateMemoryUseSize();  
 }
 
 }

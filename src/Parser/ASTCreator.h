@@ -8,6 +8,7 @@ class ASTCreator
 {
 public:
     static ExprNode* MakeExprNode();
+    static ExprNode* FreeExprNode(ExprNode* expr);
 };
 
 }
