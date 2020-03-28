@@ -1,5 +1,4 @@
 #pragma once
-#include "../../Parser/FieldType.h"
 #include "../../Parser/defs.h"
 #include "../../Utils/ObjectPool.h"
 #include <memory>

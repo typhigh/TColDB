@@ -13,7 +13,7 @@ public:
     ~VarcharField() {}
     Parser::FieldType_t GetType() const;
     std::string ToString() const;
-    FieldPtr Clone() const = 0;
+    FieldPtr Clone() const;
     std::string GetData() const;
     void SetData(const std::string& data);
 

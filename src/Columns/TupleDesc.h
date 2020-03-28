@@ -15,7 +15,9 @@ public:
     TupleDesc(/* args */) {}
     ~TupleDesc() {}
     TupleDescPtr Clone() const;
+
     void SetAlis(std::string alis);
+    std::string GetFieldName(size_t i) const;
 };
 
 using TupleDescPtr = std::shared_ptr<TupleDesc>;

@@ -108,6 +108,19 @@ using TableFromList = std::vector<TableFrom*>;
 using ExprNodeList = std::vector<ExprNode*>;
 using TableConstraintList = std::vector<TableConstraint*>;
 
+inline std::string ToString(FieldType_t type)
+{
+    switch (type)
+    {
+	case FIELD_TYPE_BOOL:		return "FIELD_BOOL";
+    case FIELD_TYPE_INT:   		return "FIELD_INT";    
+    case FIELD_TYPE_FLOAT: 		return "FIELD_FLOAT";
+    case FIELD_TYPE_CHAR: 		return "FIELD_CHAR";
+	case FIELD_TYPE_DATE:		return "FIELD_DATA";
+    case FIELD_TYPE_VARCHAR:	return "FIELD_VARCHAR";
+    }
+}
+
 }
 #endif
 

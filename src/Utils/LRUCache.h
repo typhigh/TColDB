@@ -70,7 +70,7 @@ void LRUCache<TKey, TVal, HashFuncType>::Insert(TKey key, TValPtr val)
 }
 
 template <typename TKey, typename TVal, typename HashFuncType>
-LRUCache<TKey, TVal, HashFuncType>::TValPtr LRUCache<TKey, TVal, HashFuncType>::Get(TKey key) 
+typename LRUCache<TKey, TVal, HashFuncType>::TValPtr LRUCache<TKey, TVal, HashFuncType>::Get(TKey key) 
 {
     std::lock_guard<std::mutex> lock(mLock);
     TValPtr ret = GetImpl(key);
@@ -123,7 +123,7 @@ void LRUCache<TKey, TVal, HashFuncType>::InsertImpl(TKey key, TValPtr val)
 }
 
 template <typename TKey, typename TVal, typename HashFuncType>
-LRUCache<TKey, TVal, HashFuncType>::TValPtr LRUCache<TKey, TVal, HashFuncType>::GetImpl(TKey key) 
+typename LRUCache<TKey, TVal, HashFuncType>::TValPtr LRUCache<TKey, TVal, HashFuncType>::GetImpl(TKey key) 
 {
     typename Map::iterator iter = hashMap.find(key);
     if (iter == hashMap.end()) {

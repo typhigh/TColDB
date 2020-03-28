@@ -5,6 +5,14 @@ using namespace std;
 
 namespace Columns {
 
+/// Define the ObjectPools
+Utils::ObjectPool<BoolField>    FieldsCreator::BoolFieldPool    = Utils::ObjectPool<BoolField>();
+Utils::ObjectPool<CharField>    FieldsCreator::CharFieldPool    = Utils::ObjectPool<CharField>();
+Utils::ObjectPool<DateField>    FieldsCreator::DateFieldPool    = Utils::ObjectPool<DateField>();
+Utils::ObjectPool<DoubleField>  FieldsCreator::DoubleFieldPool  = Utils::ObjectPool<DoubleField>();
+Utils::ObjectPool<IntField>     FieldsCreator::IntFieldPool     = Utils::ObjectPool<IntField>();
+Utils::ObjectPool<VarcharField> FieldsCreator::VarcharFieldPool = Utils::ObjectPool<VarcharField>();
+
 void FieldsCreator::DeleteField(Field* field) 
 {
     switch (field->GetType())

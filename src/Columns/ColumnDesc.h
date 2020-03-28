@@ -1,5 +1,5 @@
 #pragma once
-#include "../Parser/FieldType.h"
+#include "../Parser/defs.h"
 #include <string>
 #include <memory>
 
@@ -8,13 +8,14 @@ class ColumnDesc
 {
 private:
     std::string fieldName;
-    Parser::FieldType fieldType;
+    Parser::FieldType_t fieldType;
 
 public: 
     ColumnDesc(/* args */) {}
     ~ColumnDesc() {}
 
     void SetAlis(std::string alis, bool isTableAlis = true);
+    
 };
 
 using ColumnDescPtr = std::shared_ptr<ColumnDesc>; 

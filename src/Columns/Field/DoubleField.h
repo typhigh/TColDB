@@ -18,7 +18,7 @@ public:
     ~DoubleField() {}
     Parser::FieldType_t GetType() const;
     std::string ToString() const;
-    FieldPtr Clone() const = 0;
+    FieldPtr Clone() const;
     ValT GetData() const;
     void SetData(ValT data);    
 /// Operations def

@@ -1,6 +1,5 @@
 #pragma once
 #include "defs.h"
-#include "FieldType.h"
 
 namespace Parser {
 
@@ -8,7 +7,7 @@ class FieldDef
 {
 public:	
 	char *name;
-	FieldType type;
+	FieldType_t type;
 	int width;
 	int flags;
 	ExprNode *default_value;

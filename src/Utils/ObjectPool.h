@@ -1,8 +1,10 @@
+#pragma once
 #include "Logger.h"
 #include <memory>
 #include <vector>
 #include <stack>
 #include <functional>
+#include <algorithm>
 
 namespace Utils {
 
@@ -23,7 +25,7 @@ private:
 
 public:
     ObjectPool() = default;
-    ObjectPool(const std::string& name, size_t BlockSize = DEFAULT_BLOCKSIZE) : name(name), blockSize(max(static_cast<size_t>(1), BlockSize)) {}  
+    ObjectPool(const std::string& name, size_t BlockSize = DEFAULT_BLOCKSIZE) : name(name), blockSize(std::max(static_cast<size_t>(1), BlockSize)) {}  
     
     ~ObjectPool();
 

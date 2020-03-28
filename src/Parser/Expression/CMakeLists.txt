@@ -6,5 +6,6 @@ set(HEADERS
 set (SOURCE
 	${SOURCE}
     ${CMAKE_CURRENT_SOURCE_DIR}/Expression.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Operations.cpp
     PARENT_SCOPE
 )

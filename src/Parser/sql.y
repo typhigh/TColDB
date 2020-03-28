@@ -357,7 +357,7 @@ table_fields : table_field {
 table_field  : IDENTIFIER field_type field_width field_flags default_expr {
 			 	$$ = new FieldDef();
 				$$->name = $1;
-				$$->type = FieldType($2);
+				$$->type = $2;
 				$$->width = $3;
 				$$->flags = $4;
 				$$->default_value = $5;
