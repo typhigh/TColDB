@@ -8,6 +8,8 @@ namespace Columns {
 class Field;
 using FieldDeleteFunc = std::function<void (Field*)>;
 using FieldPtr = std::unique_ptr<Field, FieldDeleteFunc>;
+
+/// A base Field Class 
 class Field
 {
 private:

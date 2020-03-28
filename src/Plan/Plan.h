@@ -10,20 +10,24 @@ namespace Plan {
 class Plan
 {
 private:
-    /* data */
+    PlanPtr parent;
+
 public:
     Plan() {};
     virtual ~Plan() {}
     void SetPlanContext(PlanContextPtr planContext);
     void SetPlanContext(const std::vector<std::string>& tableNames, bool ReadOnly);
-
+    PlanPtr GetParent();
+    void SetParent(PlanPtr parent);
+    
 protected:
     PlanContextPtr planContext;
 
 private:
     virtual void AcceptRule (Optimizer::RulePtr rule) = 0;
+    virtual PlanType_t GetType() const = 0;
+
 };
 
-using PlanPtr = std::shared_ptr<Plan>;
 
 }
