@@ -3,8 +3,6 @@
 #include <string>
 namespace Parser {
 
-class SQLParserResult* sqlResult;
-
 class SQLParser
 {
 public:
@@ -12,5 +10,5 @@ public:
 
 };
 
-
+SQLParserResult* sqlResult;
 }

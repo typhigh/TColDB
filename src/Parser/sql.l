@@ -6,7 +6,34 @@
 #include <cstring>
 #include <cstdlib>
 #include <cmath>
+#include "ASTCreateIndexInfo.h"
+#include "ASTCreateInfo.h"
+#include "ASTCreator.h"
+#include "ASTDeleteInfo.h"
+#include "ASTDropIndexInfo.h"
+#include "ASTDropTableInfo.h"
+#include "ASTExit.h"
+#include "ASTInsertInfo.h"
+#include "ASTSelectInfo.h"
+#include "ASTSetOutput.h"
+#include "ASTShowTableInfo.h"
+#include "ASTUpdateInfo.h"
+#include "ColumnRef.h"
+#include "defs.h"
+#include "ExprNode.h"
+#include "FieldDef.h"
+#include "IAST.h"
+#include "IASTNeedPlan.h"
+#include "IASTNotNeedPlan.h"
+#include "SQLParser.h"
+#include "SQLParserResult.h"
+#include "TableConstraint.h"
+#include "TableFrom.h"
+#include <iostream>
+#include <memory>
+#include <vector>
 using namespace Parser;
+using namespace std;
 
 %}
 

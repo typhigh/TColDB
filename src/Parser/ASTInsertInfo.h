@@ -1,18 +1,17 @@
 #pragma once
 #include"defs.h"
-#include "IAST.h"
+#include "IASTNotNeedPlan.h"
 #include "../Plan/Plan.h"
 #include <vector>
 
 namespace Parser {
 
-class ASTInsertInfo : public IAST 
+class ASTInsertInfo : public IASTNotNeedPlan
 {
 public:
 	virtual ~ASTInsertInfo() {}
     ASTInsertInfo() {}
     std::string ToString() const; 
-    Plan::PlanPtr MakePlan() const;
     bool IsWriteSQL() const;
     std::vector<std::string> GetTablesRef() const;
 

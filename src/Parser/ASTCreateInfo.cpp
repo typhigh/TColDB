@@ -9,11 +9,6 @@ string ASTCreateInfo::ToString() const
     return "ASTCreateInfo";
 }
 
-Plan::PlanPtr ASTCreateInfo::MakePlan() const 
-{
-    return Plan::PlanPtr();
-}
-
 bool ASTCreateInfo::IsWriteSQL() const
 {
     return true;

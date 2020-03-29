@@ -1,13 +1,13 @@
 #pragma once
 #include "defs.h"
 #include "FieldDef.h"
-#include "IAST.h"
+#include "IASTNotNeedPlan.h"
 #include "../Plan/Plan.h"
 #include <vector>
 
 namespace Parser {
 
-class ASTCreateInfo : public IAST 
+class ASTCreateInfo : public IASTNotNeedPlan
 {
 public:
 	char* name;
@@ -18,7 +18,6 @@ public:
 	virtual ~ASTCreateInfo() {}
 	ASTCreateInfo() {}
 	std::string ToString() const;
-	Plan::PlanPtr MakePlan() const;
 	bool IsWriteSQL() const;
     std::vector<std::string> GetTablesRef() const;
 

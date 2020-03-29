@@ -1,3 +1,4 @@
+#pragma once
 #include "IAST.h"
 #include <memory>
 namespace Parser {
@@ -12,10 +13,7 @@ public:
     ~SQLParserResult();
     void Set(IAST* sqlResult) {
         this->sqlResult = sqlResult;
-        
     }
-
-    
 };
 
 using SQLParserResultPtr = std::shared_ptr<SQLParserResult>;

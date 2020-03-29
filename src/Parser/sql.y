@@ -7,43 +7,74 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-#include "defs.h"
-#include "execute.h"
-#include "ASTCreator.h"
-#include "FieldDef.h"
+#include "ASTCreateIndexInfo.h"
 #include "ASTCreateInfo.h"
+#include "ASTCreator.h"
 #include "ASTDeleteInfo.h"
+#include "ASTDropIndexInfo.h"
+#include "ASTDropTableInfo.h"
+#include "ASTExit.h"
 #include "ASTInsertInfo.h"
+#include "ASTSelectInfo.h"
+#include "ASTSetOutput.h"
+#include "ASTShowTableInfo.h"
+#include "ASTUpdateInfo.h"
+#include "ColumnRef.h"
+#include "defs.h"
+#include "ExprNode.h"
+#include "FieldDef.h"
+#include "IAST.h"
+#include "IASTNeedPlan.h"
+#include "IASTNotNeedPlan.h"
+#include "SQLParser.h"
 #include "SQLParserResult.h"
-
+#include "TableConstraint.h"
+#include "TableFrom.h"
 #include <iostream>
 #include <memory>
 #include <vector>
-
-void yyerror(const char *s);
-
-#include "sql.yy.cc"
 using namespace Parser;
 using namespace std;
 
-extern SQLParserResult* thisptr;
+void yyerror(Parser::SQLParserResult* result, const char *s);
+
+#include "sql.yy.cc"
 %}
 
 %code requires {
 
-#include "defs.h"
-#include "execute.h"
-#include "FieldDef.h"
-#include "ColumnRef.h"
-#include "ExprNode.h"
-#include "TableConstraint.h"
-#include "ASTUpdateInfo.h"
-#include "TableFrom.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "ASTCreateIndexInfo.h"
+#include "ASTCreateInfo.h"
+#include "ASTCreator.h"
+#include "ASTDeleteInfo.h"
+#include "ASTDropIndexInfo.h"
+#include "ASTDropTableInfo.h"
+#include "ASTExit.h"
+#include "ASTInsertInfo.h"
 #include "ASTSelectInfo.h"
-#include <vector>
+#include "ASTSetOutput.h"
+#include "ASTShowTableInfo.h"
+#include "ASTUpdateInfo.h"
+#include "ColumnRef.h"
+#include "defs.h"
+#include "ExprNode.h"
+#include "FieldDef.h"
+#include "IAST.h"
+#include "IASTNeedPlan.h"
+#include "IASTNotNeedPlan.h"
+#include "SQLParser.h"
+#include "SQLParserResult.h"
+#include "TableConstraint.h"
+#include "TableFrom.h"
+#include <iostream>
 #include <memory>
+#include <vector>
 
 }
+
+%parse-param {Parser::SQLParserResult* thisptr}
 %union {
 //	std::string val_name;
 	char *val_s;
@@ -53,15 +84,22 @@ extern SQLParserResult* thisptr;
 	Parser::FieldType_t					field_type;				
 	Parser::FieldDef*					field_def;
 	Parser::FieldDefList*				field_defs;
-	Parser::ASTCreateInfo*				table_def;
+	Parser::IAST*						ast;
+	Parser::IASTNeedPlan*				ast_plan;
+	Parser::IASTNotNeedPlan*			ast_noplan;
 	Parser::ColumnRef*					column_ref;
 	Parser::ColumnRefList*				column_refs;
 	Parser::TableConstraint*			constraint;
 	Parser::TableConstraintList*		constraints;
-	Parser::ASTInsertInfo*				insert_info;
-	Parser::ASTUpdateInfo*				update_info;
+	Parser::ASTCreateInfo*				table_def;
 	Parser::ASTDeleteInfo*				delete_info;
+	Parser::ASTDropTableInfo*			table_drop;
+	Parser::ASTExit*					exit;		
+	Parser::ASTInsertInfo*				insert;
 	Parser::ASTSelectInfo*				select_info;
+	Parser::ASTSetOutput*				set_path;
+	Parser::ASTShowTableInfo*			table_show;
+	Parser::ASTUpdateInfo*				update_info;
 	Parser::TableFrom*					join_info;
 	Parser::TableFromList*				join_infos;
 	Parser::ExprNode*					expr;
@@ -91,7 +129,6 @@ extern SQLParserResult* thisptr;
 %type <val_i> field_width field_flag field_flags
 %type <val_s> table_name database_name
 %type <val_s> create_database_stmt use_database_stmt drop_database_stmt show_database_stmt 
-%type <val_s> drop_table_stmt show_table_stmt
 
 %type <field_type> field_type
 %type <field_def> table_field
@@ -101,10 +138,17 @@ extern SQLParserResult* thisptr;
 %type <column_refs> column_list
 %type <constraint> table_extra_option 
 %type <constraints> table_extra_options table_extra_option_list
-%type <insert_info> insert_stmt insert_columns
+%type <ast> sql_stmt
+%type <ast_plan> sql_plan_stmt
+%type <ast_noplan> sql_noplan_stmt
+%type <insert> insert_stmt insert_columns
 %type <update_info> update_stmt
 %type <delete_info> delete_stmt
 %type <select_info> select_stmt
+%type <table_drop> drop_table_stmt
+%type <table_show> show_table_stmt
+%type <exit> exit_stmt
+%type <set_path> setpath_stmt
 %type <expr> expr factor term condition cond_term where_clause literal literal_list_expr
 %type <expr> aggregate_expr aggregate_term select_expr default_expr
 %type <exprs> insert_values expr_list literal_list select_expr_list select_expr_list_s
@@ -112,25 +156,34 @@ extern SQLParserResult* thisptr;
 %type <join_info> table_item
 %type <join_infos> table_refs
 
-%start sql_stmt
+%start sql_start
 
 %%
-sql_stmt   :  create_table_stmt ';'    { execute_create_table($1); }
-		   |  create_database_stmt ';' { execute_create_database($1); }
-		   |  use_database_stmt ';'    { execute_use_database($1); }
-		   |  show_database_stmt ';'   { execute_show_database($1); }
-		   |  drop_database_stmt ';'   { execute_drop_database($1); }
-		   |  show_table_stmt ';'      { execute_show_table($1); }
-		   |  drop_table_stmt ';'      { execute_drop_table($1); }
-		   |  insert_stmt ';'          { execute_insert($1); }
-		   |  update_stmt ';'          { execute_update($1); }
-		   |  delete_stmt ';'          { execute_delete($1); }
-		   |  select_stmt ';'          { execute_select($1); }
-		   |  EXIT ';'                 { execute_quit(); exit(0); }
-		   |  SET OUTPUT '=' STRING_LITERAL ';'  { execute_switch_output($4); }
-		   |  CREATE INDEX table_name '(' IDENTIFIER ')' ';' { execute_create_index($3, $5); }
-		   |  DROP   INDEX table_name '(' IDENTIFIER ')' ';' { execute_drop_index($3, $5); }
+sql_start  :  sql_stmt 				   { thisptr->Set($1);}
 		   ;
+
+sql_stmt   : sql_plan_stmt					{ $$ = $1;}
+		   | sql_noplan_stmt 				{ $$ = $1;}
+		   ;
+
+sql_plan_stmt   :  update_stmt ';'          { $$ = $1;}
+		   		|  delete_stmt ';'          { $$ = $1;}
+		   		|  select_stmt ';'          { $$ = $1;}
+		   		;
+
+
+
+sql_noplan_stmt	:  create_table_stmt ';'	{ $$ = $1;}
+				|  create_database_stmt ';' {}
+				|  use_database_stmt ';'	{}
+				|  show_database_stmt ';'	{}
+				|  drop_database_stmt ';'	{}
+				|  show_table_stmt ';'		{ $$ = $1;}
+				|  drop_table_stmt ';'		{ $$ = $1;}
+				|  insert_stmt ';'			{ $$ = $1;}
+				|  exit_stmt ';'			{ $$ = $1;}
+				|  setpath_stmt ';'			{ $$ = $1;}
+				;
 
 create_table_stmt : CREATE TABLE table_name '(' table_fields table_extra_options ')' {
 				  	$$ = new ASTCreateInfo();
@@ -144,8 +197,19 @@ create_database_stmt : CREATE DATABASE database_name   { $$ = $3; };
 use_database_stmt    : USE database_name               { $$ = $2; };
 drop_database_stmt   : DROP DATABASE database_name     { $$ = $3; };
 show_database_stmt   : SHOW DATABASE database_name     { $$ = $3; };
-drop_table_stmt      : DROP TABLE table_name           { $$ = $3; };
-show_table_stmt      : SHOW TABLE table_name           { $$ = $3; };
+
+drop_table_stmt      : DROP TABLE table_name           { 
+						$$ = new ASTDropTableInfo();
+						$$->table = $3;
+					 }
+					 ;
+
+show_table_stmt      : SHOW TABLE table_name           { 
+						$$ = new ASTShowTableInfo();
+						$$->table = $3; 
+					 }
+					 ;
+
 insert_stmt          : INSERT INTO insert_columns VALUES insert_values {
 					 	$$ = $3;
 						$$->values = $5;
@@ -203,6 +267,16 @@ select_stmt         : SELECT select_expr_list_s FROM table_refs where_clause {
 						$$->where  = $5;
 					}
 					;
+					
+exit_stmt			: EXIT                  	{ $$ = new ASTExit(); }
+					;
+
+setpath_stmt		: SET OUTPUT '=' STRING_LITERAL { 
+			   			ASTSetOutput* node = new ASTSetOutput();
+			   			node->path = $4;
+			   			$$ = node; 
+		   			}
+		   			;
 
 table_refs          : table_refs ',' table_item {
 						$1->push_back($3);
@@ -240,7 +314,7 @@ select_expr_list    : select_expr_list ',' select_expr {
 					}
 					;
 
-select_expr         : expr            { $$ = $1; }
+select_expr         : condition       { $$ = $1; }
 					| aggregate_expr  { $$ = $1; }
 
 aggregate_expr      : aggregate_op '(' aggregate_term ')' {
@@ -351,7 +425,7 @@ table_fields : table_field {
 				$1->push_back($3); 
 				$$ = $1;
 			 }
-			 | { $$ = NULL;}
+			 | {$$ = NULL;}
 			 ;
 
 table_field  : IDENTIFIER field_type field_width field_flags default_expr {
@@ -438,15 +512,10 @@ cond_term  : expr compare_op expr {
 				$$->op    = OPERATOR_NOT;
 		   }
 		   | '(' condition ')' { $$ = $2; }
-		   | TRUE {
-		   		$$ = new ExprNode();
-				$$->val_b     = 1;
-				$$->term_type = TERM_BOOL;
-		   }
-		   | FALSE {
-		   		$$ = new ExprNode();
-				$$->val_b     = 0;
-				$$->term_type = TERM_BOOL;
+		   | BOOL_LITERAL {
+			   $$ = new ExprNode();
+			   $$->val_b	   = $1;
+			   $$->term_type   = TERM_BOOL; 
 		   }
 		   ;
 
@@ -528,11 +597,6 @@ literal    : INT_LITERAL {
 				$$->val_s      = $1;
 				$$->term_type  = TERM_STRING;
 		   }
-		   | BOOL_LITERAL {
-			   $$ = new ExprNode();
-			   $$->val_b	   = $1;
-			   $$->term_type   = TERM_BOOL; 
-		   }
 		   ;
 
 BOOL_LITERAL : TRUE 	{$$ = true;} 
@@ -574,6 +638,7 @@ int yywrap()
 	return 1;
 }
 
+/*
 char run_parser(const char *input)
 {
 	char ret;
@@ -586,7 +651,6 @@ char run_parser(const char *input)
 		ret = yyparse();
 	}
 
-	execute_quit();
-
 	return ret;
 }
+*/

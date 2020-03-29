@@ -1,16 +1,15 @@
 #pragma once 
 #include "defs.h"
-#include "IAST.h"
+#include "IASTNeedPlan.h"
 #include "../Plan/Plan.h"
 
 namespace Parser {
 
-class ASTDeleteInfo : public IAST
+class ASTDeleteInfo : public IASTNeedPlan
 {
 public:
-    ASTDeleteInfo() : IAST() {}
+    ASTDeleteInfo() {}
     virtual ~ASTDeleteInfo() {}
-    
     std::string ToString() const ;
     Plan::PlanPtr MakePlan() const;
     bool IsWriteSQL() const;

@@ -1,10 +1,10 @@
 #pragma once
 #include "defs.h"
-#include "IAST.h"
+#include "IASTNeedPlan.h"
 #include "../Plan/Plan.h"
 namespace Parser {
 
-class ASTUpdateInfo : public IAST
+class ASTUpdateInfo : public IASTNeedPlan
 {
 public:
 	char *table;
