@@ -1,5 +1,0 @@
-if(EXISTS "/home/typhigh/Desktop/OpenSource/TColDB/build/src/Common/tests/ServerUnitTest[1]_tests.cmake")
-  include("/home/typhigh/Desktop/OpenSource/TColDB/build/src/Common/tests/ServerUnitTest[1]_tests.cmake")
-else()
-  add_test(ServerUnitTest_NOT_BUILT ServerUnitTest_NOT_BUILT)
-endif()
