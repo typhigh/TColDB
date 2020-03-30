@@ -11,7 +11,7 @@ public:
     IASTNotNeedPlan(/* args */) {}
     virtual ~IASTNotNeedPlan() {}
     virtual std::string ToString() const = 0;
-    bool NeedMakePlan() const {return false;}
+    bool NeedMakePlan(Plan::PlanContextPtr planContext) const {return false;}
     virtual bool IsWriteSQL() const = 0;
     virtual std::vector<std::string> GetTablesRef() const = 0;
 

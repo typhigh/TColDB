@@ -1,7 +1,9 @@
 #pragma once
 
-#include "Common.h"
+#include "defs.h"
+#include "Server.h"
 #include <vector>
+#include <atomic>
 
 namespace Common {
 
@@ -9,15 +11,24 @@ class Client
 {
 private:
     /* data */
-    uint64_t clientID;
+    ClientID clientID;
+    static std::atomic<ClientID> currentID;
+    char *input;
+    char *output;
+    ServerPtr server;
 
 public:
     Client();
-    Client(uint64_t clientID);
     ~Client();
-    void Start(std::vector<std::string> commands);
-};
 
+    void SetInput(char* path);
+    void SetOutput(char* path);
+    void SetServer(ServerPtr server);
+
+    void Start();
+    void Query(const std::string& text);
+
+};
 
 using ClientPtr = std::shared_ptr<Client>;
 }

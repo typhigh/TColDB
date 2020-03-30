@@ -11,12 +11,13 @@ private:
     /* data */
     CatalogPtr catalog;
     std::string name;
+
 private:
     void LoadInfo();
     void StoreInfo();
     
 public:
-    Database(/* args */);
+    Database(const string& name = "DefaultDB");
     ~Database();
     static DatabasePtr GetInstance();
     CatalogPtr GetCatalog();

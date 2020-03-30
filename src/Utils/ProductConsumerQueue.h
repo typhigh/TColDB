@@ -9,7 +9,7 @@ template <typename T>
 class ProductConsumerQueue
 {
 private:
-    std::mutex mutexLock;
+    mutable std::mutex mutexLock;
     std::queue<T> dataQueue;
     std::condition_variable dataCond;
 

@@ -1,21 +1,46 @@
 #pragma once
-#include "Command.h"
 #include "../Utils/ProductConsumerQueue.h"
+#include "../Executor/Executor.h"
+#include "defs.h"
+#include "Command.h"
+#include <atomic>
+#include <set>
 
 namespace Common {
+
+using ClientID = uint64_t;
 
 class Server
 {
 private:
     /* data */
-    static Utils::ProductConsumerQueue<Command> commandQueue;
-    
-    static void Produce(const Command& cmd);
-    static void Consume(Command& cmd);
+    Utils::ProductConsumerQueue<CommandPtr> commandQueue;
+    std::atomic<bool> started;
+    Executor::ExecutorPtr executor;
+
 public:
-    static void Start();
-    static void AddCommand(const std::string& content);
+    Server();
+    ~Server();
+
+    /// Is the server has started
+    bool IsStarted() const;
+
+    /// Run the new thread as server
+    void Start();
+
+    /// Add Client
+    void AddClient(ClientID clientID);
+
+    /// Query command by client
+    void Query(CommandPtr cmd);
+
+private:
+    void StartImpl();
+    bool ShouldShutDown() const;
+    void Produce(CommandPtr cmd);
+    void Consume(CommandPtr& cmd);
+
 };
 
-
+using ServerPtr = std::shared_ptr<Server>;
 }

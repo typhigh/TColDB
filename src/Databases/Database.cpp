@@ -4,7 +4,7 @@ using namespace std;
 
 namespace Databases {
 
-Database::Database() 
+Database::Database(const string& name) : name(name)  
 {
     catalog = make_shared<Catalog>();
     LoadInfo();
@@ -41,4 +41,5 @@ DatabasePtr Database::GetInstance()
     static DatabasePtr db = make_shared<Database>();
     return db;
 }
+
 }

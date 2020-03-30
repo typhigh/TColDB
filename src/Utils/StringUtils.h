@@ -37,16 +37,36 @@ inline std::string RandomString(int len)
     return ret;
 }
 
+
+/// Get string after the point
+/// Example: "1.233" -> "233"
 inline std::string GetPointAfter(const std::string& s) 
 {
     size_t pos = s.find_first_of('.');
     if (pos == s.size()) {
         return s;
     }
-    return s.substr(pos+1, s.size());
+    return s.substr(pos+1, s.size() - pos);
 }
 
-// Copy a new c style string, return c-style
+/// Get string vector from a string by splite some char
+/// Example: char = ';', "1;2;3;" -> vector<string>{"1","2","3"}
+inline std::vector<std::string> Splite(const std::string& s, char ch)
+{
+    std::vector<std::string> ret; 
+    for (size_t i = 0, j = 0; i < s.size(); ++i) {
+        if (s[i] == ch) {
+            std::string now = s.substr(j, i - j + 1);
+            ret.push_back(move(now));
+        }
+    }
+    
+    if (ret.empty()) {
+        ret.push_back(s);
+    }
+}
+
+/// Copy a new c style string, return c-style
 inline char* CopyCStringFromCString(const char* s)
 {
     if (s == NULL) {

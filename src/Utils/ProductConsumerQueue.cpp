@@ -1,4 +1,5 @@
 #include "ProductConsumerQueue.h"
+#include "../Common/Command.h"
 using namespace std;
 
 namespace Utils {
@@ -31,4 +32,8 @@ void ProductConsumerQueue<T>::WaitAndPop(T& value)
     dataQueue.pop();
 }
 
+
+template class ProductConsumerQueue<Common::CommandPtr>;
+
 }
+

@@ -5,4 +5,6 @@
 
 namespace Common {
 
+using ClientID = uint64_t;
+
 }

@@ -14,7 +14,7 @@ public:
 	
 public:
     std::string ToString() const;
-	Plan::PlanPtr MakePlan() const;
+	Plan::PlanPtr MakePlan(Plan::PlanContextPtr planContext) const;
 	bool IsWriteSQL() const;
     std::vector<std::string> GetTablesRef() const;
 

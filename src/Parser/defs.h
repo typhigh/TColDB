@@ -1,11 +1,9 @@
-#ifndef __TRIVIALDB_PARSER_DEF__
-#define __TRIVIALDB_PARSER_DEF__
-#include "../Common/Common.h"
-
+#pragma once
 #include <cstdint>
 #include <cstdlib>
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace Parser {
 enum FieldType_t
@@ -126,7 +124,5 @@ inline std::string ToString(FieldType_t type)
 }
 
 }
-#endif
-
 
 

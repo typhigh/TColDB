@@ -628,9 +628,10 @@ database_name : IDENTIFIER       { $$ = $1; }
 
 %%
 
-void yyerror(const char *msg)
+void yyerror(Parser::SQLReslut* result, const char *msg)
 {
-	fprintf(stderr, "[Error] %s\n", msg);
+	result->SetError(msg);
+//	fprintf(stderr, "[Error] %s\n", msg);
 }
 
 int yywrap()
@@ -638,19 +639,18 @@ int yywrap()
 	return 1;
 }
 
-/*
-char run_parser(const char *input)
+
+char run_parser(const char *input, Parser::SQLParserResult* result)
 {
 	char ret;
 	if(input) {
 		YY_BUFFER_STATE buf = yy_scan_string(input);
 		yy_switch_to_buffer(buf);
-		ret = yyparse();
+		ret = yyparse(result);
 		yy_delete_buffer(buf);
 	} else {
-		ret = yyparse();
+		ret = yyparse(result);
 	}
 
 	return ret;
 }
-*/

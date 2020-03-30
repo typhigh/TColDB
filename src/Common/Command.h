@@ -1,14 +1,40 @@
 #pragma once
-#include "Common.h"
-#include "../Concurrency/TransactionID.h"
+#include "defs.h"
+#include <memory>
 #include <string>
+#include <mutex>
+#include <condition_variable>
+#include <atomic>
 
 namespace Common {
 
-struct Command
+class Command
 {
-    std::string cmd;
-    Concurrency::TransactionIDPtr txn;  
+private:
+    /// content
+    const std::string cmd;
+    std::string result;
+    ClientID clientID;
+
+    /// state
+    bool done;
+    std::mutex mutex;
+    std::condition_variable cond;
+
+public:
+    Command(const std::string& cmd, ClientID clientID) : cmd (cmd), clientID(clientID) {}
+    ~Command() {}
+    /// Get Content
+    std::string GetContent() const;
+    
+    /// Set Result
+    void SetResult(const std::string& result);
+    
+    /// Get Result (waiting future Set)
+    std::string GetResult();
 };
+
+using CommandPtr = std::shared_ptr<Command>;
+
 
 }
