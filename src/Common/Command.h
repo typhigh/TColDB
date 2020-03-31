@@ -1,5 +1,6 @@
 #pragma once
 #include "defs.h"
+#include "../Parser/IAST.h"
 #include <memory>
 #include <string>
 #include <mutex>
@@ -16,6 +17,7 @@ private:
     std::string result;
     ClientID clientID;
 
+private:
     /// state
     bool done;
     std::mutex mutex;
@@ -35,6 +37,5 @@ public:
 };
 
 using CommandPtr = std::shared_ptr<Command>;
-
 
 }

@@ -28,6 +28,4 @@ public:
     TableMetaWritePtr CloneWrite() const;
 };
 
-
-
 }

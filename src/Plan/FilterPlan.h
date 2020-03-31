@@ -1,7 +1,7 @@
 #pragma once
 #include "defs.h"
 #include "Plan.h"
-#include "../Executor/Predicator.h"
+#include "../Executor/Operators/Predicator.h"
 #include "../Optimizer/Rules/Rule.h"
 namespace Plan {
 
@@ -15,6 +15,8 @@ private:
 public:
     FilterPlan() {}
     virtual ~FilterPlan() {}
+
+public:
     void SetPredicator(Parser::ExprNode* cond);
     void SetPredicator(Executor::PredicatorPtr predicator);
     Executor::PredicatorPtr GetPredicator();

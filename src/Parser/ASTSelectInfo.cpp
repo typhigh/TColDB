@@ -10,6 +10,20 @@
 using namespace std;
 
 namespace Parser {
+
+ASTSelectInfo::~ASTSelectInfo()
+{
+    if (tables != nullptr) {
+        for (TableFrom* ele: *tables) {
+            delete ele;
+        }
+        delete tables;
+    }
+
+    Expression::Free(exprs);
+    Expression::Free(where);
+}
+
 string ASTSelectInfo::ToString() const 
 {
     return "ASTSelectInfo";

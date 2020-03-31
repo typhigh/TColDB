@@ -1,6 +1,7 @@
-#include "../Parser/defs.h"
-#include "../Parser/ExprNode.h"
-#include "../Parser/Expression/Expression.h"
+#pragma once
+#include "../../Parser/defs.h"
+#include "../../Parser/ExprNode.h"
+#include "../../Parser/Expression/Expression.h"
 #include <memory>
 #include <vector>
 namespace Executor {

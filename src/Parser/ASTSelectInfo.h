@@ -13,6 +13,8 @@ public:
 	ExprNode* where;
 	
 public:
+	ASTSelectInfo() {}
+	~ASTSelectInfo();
     std::string ToString() const;
 	Plan::PlanPtr MakePlan(Plan::PlanContextPtr planContext) const;
 	bool IsWriteSQL() const;

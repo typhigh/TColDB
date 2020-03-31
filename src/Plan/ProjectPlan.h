@@ -1,7 +1,7 @@
 #pragma once
 #include "Plan.h"
 #include "defs.h"
-#include "../Executor/Projector.h"
+#include "../Executor/Operators/Projector.h"
 #include <vector>
 
 namespace Plan {

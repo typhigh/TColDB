@@ -15,7 +15,7 @@ public:
 	std::vector<TableConstraint*>* constraints;
 
 public:
-	virtual ~ASTCreateInfo() {}
+	~ASTCreateInfo();
 	ASTCreateInfo() {}
 	std::string ToString() const;
 	bool IsWriteSQL() const;

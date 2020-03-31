@@ -23,4 +23,19 @@ void Table::SetCurrentWriteTableMeta(TableMetaReadOnlyPtr && tableMeta)
     currentWriteTableMeta.set(move(tableMeta));
 }
 
+bool Table::TryWriteLock() 
+{
+    bool expected = false;
+    if (isWriting.compare_exchange_strong(expected, true)) {
+        return true;
+    }
+    return false;
+}
+
+void Table::ReleaseWriteLock()
+{
+    bool expected = true;
+    isWriting.compare_exchange_strong(expected, false);
+}
+
 }

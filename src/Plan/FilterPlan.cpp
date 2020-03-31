@@ -1,5 +1,4 @@
 #include "FilterPlan.h"
-#include "PlanVisitor.h"
 using namespace std;
 
 namespace Plan {

@@ -1,5 +1,6 @@
+#pragma once
 #include "Projector.h"
-#include "../Parser/Expression/Expression.h"
+#include "../../Parser/Expression/Expression.h"
 using namespace std;
 
 namespace Executor {

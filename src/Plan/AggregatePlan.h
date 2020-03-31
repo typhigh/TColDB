@@ -1,6 +1,6 @@
 #pragma once
 #include "Plan.h"
-#include "../Executor/Aggregator.h"
+#include "../Executor/Operators/Aggregator.h"
 #include <vector>
 namespace Plan {
 

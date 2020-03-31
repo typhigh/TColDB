@@ -12,7 +12,7 @@ public:
 
 public:
     ASTDropTableInfo(/* args */) {}
-    ~ASTDropTableInfo() {}
+    ~ASTDropTableInfo();
     
     std::string ToString() const;
     bool IsWriteSQL() const;

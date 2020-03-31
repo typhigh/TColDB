@@ -2,7 +2,7 @@
 #include "../Utils/ProductConsumerQueue.h"
 #include "../Executor/Executor.h"
 #include "defs.h"
-#include "Command.h"
+#include "CommandWrap.h"
 #include <atomic>
 #include <set>
 
@@ -14,7 +14,7 @@ class Server
 {
 private:
     /* data */
-    Utils::ProductConsumerQueue<CommandPtr> commandQueue;
+    Utils::ProductConsumerQueue<CommandWrapPtr> commandQueue;
     std::atomic<bool> started;
     Executor::ExecutorPtr executor;
 
@@ -37,8 +37,8 @@ public:
 private:
     void StartImpl();
     bool ShouldShutDown() const;
-    void Produce(CommandPtr cmd);
-    void Consume(CommandPtr& cmd);
+    void Produce(CommandWrapPtr cmd);
+    void Consume(CommandWrapPtr& cmd);
 
 };
 

@@ -9,7 +9,7 @@ class ASTDeleteInfo : public IASTNeedPlan
 {
 public:
     ASTDeleteInfo() {}
-    virtual ~ASTDeleteInfo() {}
+    ~ASTDeleteInfo();
     std::string ToString() const ;
     Plan::PlanPtr MakePlan() const;
     bool IsWriteSQL() const;

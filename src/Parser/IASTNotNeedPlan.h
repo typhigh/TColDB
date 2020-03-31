@@ -1,6 +1,6 @@
 #pragma once
 #include "IAST.h"
-
+#include "../Executor/ExecutorContext.h"
 namespace Parser {
 
 class IASTNotNeedPlan : public IAST
@@ -14,6 +14,7 @@ public:
     bool NeedMakePlan(Plan::PlanContextPtr planContext) const {return false;}
     virtual bool IsWriteSQL() const = 0;
     virtual std::vector<std::string> GetTablesRef() const = 0;
+    virtual void Execute(Executor::ExecutorContextPtr context) const;
 
 private:
     Plan::PlanPtr MakePlan() const {}

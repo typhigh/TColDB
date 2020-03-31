@@ -1,6 +1,5 @@
 #pragma once
-#include "../Common/Common.h"
-#include "../Columns/Chunk.h"
+#include "../../Columns/Chunk.h"
 
 namespace Executor {
 

@@ -3,6 +3,11 @@ using namespace std;
 
 namespace Parser {
 
+ASTDropTableInfo::~ASTDropTableInfo()
+{
+    delete table;
+}
+
 string ASTDropTableInfo::ToString() const 
 {
     return "ASTDropTableInfo";

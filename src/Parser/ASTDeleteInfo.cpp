@@ -1,7 +1,14 @@
 #include "ASTDeleteInfo.h"
 #include "../Utils/StringUtils.h"
+#include "Expression/Expression.h"
 using namespace std;
 namespace Parser {
+
+ASTDeleteInfo::~ASTDeleteInfo() 
+{  
+    delete table;
+    Expression::Free(where);
+}
 
 string ASTDeleteInfo::ToString() const 
 {

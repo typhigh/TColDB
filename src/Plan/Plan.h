@@ -19,13 +19,14 @@ public:
     
     PlanPtr GetParent();
     void SetParent(PlanPtr parent);
-    
 protected:
     PlanContextPtr planContext;
 
 public:
     virtual bool Accept (PlanVisitorPtr visitor) = 0;
     virtual PlanType_t GetType() const = 0;
+    
+//    virtual void Execute(Executor::ExecutorContext context) const = 0;
 };
 
 

@@ -15,12 +15,20 @@ namespace Utils {
 class ThreadPool
 {
 public:
+    /// Given a poolName and the number of threads(opt.)
     ThreadPool(std::string poolName, size_t sizes);
+
+    /// Submit a work
     template <typename Func, typename... Args>
     auto Submit(Func&& func, Args&&... args) 
         -> std::future<typename std::result_of<Func(Args...)>::type>;
+    
+    /// Start the pool
     void StartUp();
+
+    /// Shut down the pool
     void ShutDown();
+
     ~ThreadPool();
 
 private:
