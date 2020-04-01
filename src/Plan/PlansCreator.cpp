@@ -28,4 +28,8 @@ ScanPlanPtr PlansCreator::CreateScanPlan(Parser::TableFrom* table, PlanContextPt
     return make_shared<ScanPlan>(table, context);
 }
 
+ScanPlanPtr PlansCreator::CreateScanPlan(char* tableName, PlanContextPtr context)
+{
+    return make_shared<ScanPlan>(tableName, context);
+}
 }

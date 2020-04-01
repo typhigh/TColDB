@@ -33,8 +33,8 @@ Plan::PlanPtr ASTSelectInfo::MakePlan(Plan::PlanContextPtr context) const
 {
     Plan::PlanPtr ret;
 
-    // First we deal with Where and Table (LowPLan)
-    Plan::PlanPtr LowPlan;
+    // First we deal with Where and Table (lowPlan)
+    Plan::PlanPtr lowPlan;
     if (tables == nullptr) {
         LOG_ERROR("expected not null table");
         return nullptr;
@@ -49,7 +49,7 @@ Plan::PlanPtr ASTSelectInfo::MakePlan(Plan::PlanContextPtr context) const
             plan->AddSubPlan(subPlan);
             subPlan->SetParent(plan);
         }
-        LowPlan = plan;
+        lowPlan = plan;
     } else {
         Plan::ScanPlanPtr plan = Plan::PlansCreator::CreateScanPlan(tables->at(0), context);
         if (where) {
@@ -58,17 +58,17 @@ Plan::PlanPtr ASTSelectInfo::MakePlan(Plan::PlanContextPtr context) const
             filterPlan->SetPredicator(where);
             filterPlan->SetSubPlan(plan);
             plan->SetParent(filterPlan);
-            LowPlan = filterPlan;
+            lowPlan = filterPlan;
         } else {
             // ScanPlan
-            LowPlan = plan;
+            lowPlan = plan;
         }
     }
     
     // Second we deal with SelectList (exprs) (ret)
     if (exprs == NULL) {
         // ScanPlan
-        ret = LowPlan;
+        ret = lowPlan;
     } else if (Expression::IsAggregate(exprs)) {
         // AggregatePlan
         Plan::AggregatePlanPtr plan = make_shared<Plan::AggregatePlan>(context);
@@ -81,13 +81,13 @@ Plan::PlanPtr ASTSelectInfo::MakePlan(Plan::PlanContextPtr context) const
                 );
             }
         }
-        plan->SetSubPlan(LowPlan);
+        plan->SetSubPlan(lowPlan);
         ret = plan;
     } else {
         // ProjectPlan
         Plan::ProjectPlanPtr plan = make_shared<Plan::ProjectPlan>(context);
         plan->SetProjector(exprs);
-        plan->SetSubPlan(LowPlan);
+        plan->SetSubPlan(lowPlan);
         ret = plan;
     }
     return ret;

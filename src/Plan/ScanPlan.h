@@ -17,6 +17,7 @@ private:
     std::vector<int> columns;
     
 public:
+    ScanPlan(char* name, PlanContextPtr context);
     ScanPlan(Parser::TableFrom* tableFrom, PlanContextPtr context);
     virtual ~ScanPlan() {}
 

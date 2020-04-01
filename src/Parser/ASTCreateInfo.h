@@ -1,6 +1,7 @@
 #pragma once
 #include "defs.h"
 #include "FieldDef.h"
+#include "TableConstraint.h"
 #include "IASTNotNeedPlan.h"
 #include "../Plan/Plan.h"
 #include <vector>

@@ -17,6 +17,7 @@ public:
     static JoinPlanPtr      CreateJoinPlan(PlanContextPtr context);
     static ProjectPlanPtr   CreateProjectPlan(PlanContextPtr context);
     static ScanPlanPtr      CreateScanPlan(Parser::TableFrom* table, PlanContextPtr context);
+    static ScanPlanPtr      CreateScanPlan(char* table, PlanContextPtr context); 
 };
 
 
