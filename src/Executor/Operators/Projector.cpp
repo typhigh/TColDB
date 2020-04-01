@@ -1,4 +1,3 @@
-#pragma once
 #include "Projector.h"
 #include "../../Parser/Expression/Expression.h"
 using namespace std;

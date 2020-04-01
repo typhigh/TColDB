@@ -12,7 +12,7 @@ private:
     PlanPtr subPlan;
 
 public:
-    AggregatePlan(/* args */) {};
+    AggregatePlan(PlanContextPtr context) : Plan(context) {};
     virtual ~AggregatePlan() {};
 
 public:
@@ -24,6 +24,7 @@ private:
     bool Accept (PlanVisitorPtr rule);
     PlanType_t GetType() const;
 };
+
 using AggregatePlanPtr = std::shared_ptr<AggregatePlan>;
 
 }

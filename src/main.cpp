@@ -1,14 +1,12 @@
 #include <string.h>
 #include <cstdio>
-#include "Common/Server.h"
-#include "Utils/LRUCache.h"
-#include "Utils/BloomFilter.h"
-char run_parser(const char *input);
+#include "Parser/SQLParser.h"
 
 int main(int argc, char *argv[])
 {
-	using namespace Utils;
-	BloomFilter* filter = new BloomFilter(10, 10);
-	delete filter;
+	using namespace Parser;
+	SQLParserResult* result;
+	SQLParser::Parse("", result);
 	return 0;
+	
 }

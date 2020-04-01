@@ -17,7 +17,7 @@ private:
     void StoreInfo();
     
 public:
-    Database(const string& name = "DefaultDB");
+    Database(const std::string& name = "DefaultDB");
     ~Database();
     static DatabasePtr GetInstance();
     CatalogPtr GetCatalog();

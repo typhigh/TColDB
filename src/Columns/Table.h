@@ -10,7 +10,7 @@ private:
     /* data */
     MultiVersion<TableMeta> currentReadOnlyTableMeta;
     MultiVersion<TableMeta> currentWriteTableMeta;
-    atomic<bool> isWriting;
+    std::atomic<bool> isWriting;
 
 public:
     Table(/* args */) {isWriting.store(false);}

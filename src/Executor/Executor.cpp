@@ -55,6 +55,7 @@ bool Executor::TryExecuteStatement(Common::CommandWrapPtr command)
     }
 
     /// Step 3: For read/write sql, now make plan or execute
+    /// This step is on thread pool
     executePool.Submit(
         [this, command] {
             this->ExecuteStatementImpl(command);
@@ -97,6 +98,7 @@ void Executor::ExecuteStatementImpl(Common::CommandWrapPtr command)
         LOG_WARN("statemnet is null");
         return;
     }
+
     vector<string> tablesRef = stmt->GetTablesRef();
     bool isReadOnly = !stmt->IsWriteSQL();
     ExecutorContextPtr context = GetExecutorContext(tablesRef, isReadOnly);
@@ -108,6 +110,7 @@ void Executor::ExecuteStatementImpl(Common::CommandWrapPtr command)
     } else {
         ExecuteNoPlan(dynamic_cast<Parser::IASTNotNeedPlan*>(stmt), context, isReadOnly);
     }
+
     /// Delete the stmt
     delete stmt;
 }
@@ -117,7 +120,7 @@ void Executor::RemoveClient(Common::ClientID clientID)
     clients.Remove(clientID);
 }
 
-ExecutorContextPtr Executor::GetExecutorContext(const vector<string>& tableRefs, bool isReadOnly) const
+ExecutorContextPtr Executor::GetExecutorContext(const vector<string>& tableRefs, bool isReadOnly)
 {
     Databases::CatalogPtr catalog = Databases::Database::GetInstance()->GetCatalog();
     vector<Columns::TableMetaReadOnlyPtr> tableMetas;   

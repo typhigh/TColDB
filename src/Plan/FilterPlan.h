@@ -13,7 +13,7 @@ private:
     PlanPtr subPlan;
 
 public:
-    FilterPlan() {}
+    FilterPlan(PlanContextPtr context) : Plan(context) {}
     virtual ~FilterPlan() {}
 
 public:

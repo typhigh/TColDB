@@ -4,9 +4,9 @@ using namespace std;
 
 namespace Plan {
 
-ScanPlan::ScanPlan(Parser::TableFrom* tableFrom) {
+ScanPlan::ScanPlan(Parser::TableFrom* tableFrom, PlanContextPtr context) : Plan(context) {
     this->tableName = tableFrom->table;
-    this->desc = this->planContext->GetTableMeta(tableName)->GetTupleDesc();
+    this->desc = this->context->GetTableTupleDesc(tableFrom->table);
     if (tableFrom->alias) {
         desc->SetAlis(tableFrom->alias);
     }

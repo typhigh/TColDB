@@ -2,6 +2,8 @@
 #include "defs.h"
 #include "ExecutorContext.h"
 #include "../Parser/IAST.h"
+#include "../Parser/IASTNeedPlan.h"
+#include "../Parser/IASTNotNeedPlan.h"
 #include "../Common/CommandWrap.h"
 #include "../Databases/Database.h"
 #include "../Utils/ThreadPool.h"
@@ -41,6 +43,7 @@ public:
 
 private:
     /// Execute a statement (command)
+    /// Note: statement has been parsed.
     void ExecuteStatementImpl(Common::CommandWrapPtr stmt);
 
     /// Remove Client
@@ -53,7 +56,7 @@ private:
     void ExecuteNoPlan(Parser::IASTNotNeedPlan* stmt, ExecutorContextPtr context, bool isReadOnly);
 
     /// Get the context of executor now
-    ExecutorContextPtr GetExecutorContext(const std::vector<std::string>& tableRefs, bool isReadOnly) const;
+    ExecutorContextPtr GetExecutorContext(const std::vector<std::string>& tableRefs, bool isReadOnly);
 };
 
 }

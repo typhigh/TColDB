@@ -11,6 +11,10 @@ public:
 	int width;
 	int flags;
 	ExprNode *default_value;
+
+public:
+	FieldDef() {}
+	~FieldDef();
 };
 
 using FieldDefPtr = std::shared_ptr<FieldDef>;

@@ -27,7 +27,11 @@ void Server::Start()
         return ;
     }
 
-    thread start(StartImpl);
+    thread start(
+        [this] {
+            StartImpl();
+        }
+    );
     start.join();
 }
 

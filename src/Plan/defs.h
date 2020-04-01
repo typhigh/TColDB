@@ -9,6 +9,7 @@ class Plan;
 class ProjectPlan;
 class ScanPlan;
 class PlanVisitor;
+class PlanContext;
 
 using PlanPtr           = std::shared_ptr<Plan>;
 using AggregatePlanPtr  = std::shared_ptr<AggregatePlan>;
@@ -17,6 +18,7 @@ using JoinPlanPtr       = std::shared_ptr<JoinPlan>;
 using ProjectPlanPtr    = std::shared_ptr<ProjectPlan>;
 using ScanPlanPtr       = std::shared_ptr<ScanPlan>;
 using PlanVisitorPtr    = std::shared_ptr<PlanVisitor>;
+using PlanContextPtr    = std::shared_ptr<PlanContext>;
 
 enum PlanType_t {
     PLAN_AGGREGATE,

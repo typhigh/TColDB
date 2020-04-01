@@ -3,14 +3,9 @@ using namespace std;
 
 namespace Plan {
 
-void Plan::SetPlanContext(PlanContextPtr planContext) 
+void Plan::SetPlanContext(PlanContextPtr context) 
 {
-    this->planContext = planContext;
-}
-
-void Plan::SetPlanContext(const vector<string>& tableNames, bool readOnly)
-{
-    this->planContext = make_shared<PlanContext>(tableNames, readOnly);
+    this->context = context;
 }
 
 PlanPtr Plan::GetParent() 

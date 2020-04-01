@@ -29,10 +29,10 @@ set (SOURCE
 enable_testing()
 
 add_library(${CMAKE_PROJECT_NAME}_lib ${SOURCE} ${HEADERS})
-add_executable(${CMAKE_PROJECT_NAME} src/main.cpp)
+add_executable(${CMAKE_PROJECT_NAME} src/main.cpp src/Parser/SQLParser.cpp)
 target_link_libraries(
 	${CMAKE_PROJECT_NAME} 					
-	sql_parser 
+	sql_parser
 	pthread
 	${CMAKE_PROJECT_NAME}_lib
 )

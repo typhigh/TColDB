@@ -14,7 +14,7 @@ public:
     bool NeedMakePlan() const {return true;}
     virtual bool IsWriteSQL() const = 0;
     virtual std::vector<std::string> GetTablesRef() const = 0;
-    virtual Plan::PlanPtr MakePlan(Plan::PlanContextPtr planContext) const = 0;
+    virtual Plan::PlanPtr MakePlan(Plan::PlanContextPtr context) const = 0;
 };
 
 

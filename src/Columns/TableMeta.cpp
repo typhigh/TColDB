@@ -14,6 +14,10 @@ string TableMeta::GetTableName() const
     return tabelName;
 }
 
-
+FieldPtr TableMeta::GetField(RowID rid, ColID cid) const 
+{
+    /*TODO*/
+    return nullptr;
+}
 
 }

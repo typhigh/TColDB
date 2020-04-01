@@ -11,6 +11,9 @@ public:
 	ColumnRef *column_ref, *foreign_column_ref;
 	ExprNode *check_cond;
 
+public:
+	TableConstraint() {}
+	~TableConstraint();
 } ;
 
 }

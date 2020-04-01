@@ -3,6 +3,15 @@ using namespace std;
 
 namespace Columns {
 
+TableMetaReadOnlyPtr Table::GetCurrentTableMeta(bool isReadOnly) const
+{
+    if (isReadOnly) {
+        return GetCurrentReadOnlyTableMeta();
+    } else {
+        return GetCurrentWriteTableMeta();
+    }
+}
+
 TableMetaReadOnlyPtr Table::GetCurrentReadOnlyTableMeta() const
 {
     return currentReadOnlyTableMeta.get();

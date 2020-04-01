@@ -1,3 +1,4 @@
+#pragma once
 #include "Command.h"
 
 namespace Common {
@@ -10,7 +11,7 @@ private:
 
 public:
     CommandWrap(CommandPtr data) : data(data) {}
-    ~CommandWrap();
+    ~CommandWrap() {}
 
     /// Get Content
     std::string GetContent() const;

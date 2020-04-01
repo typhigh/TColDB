@@ -1,4 +1,5 @@
 #pragma once
+#include "../Executor/ExecutorContext.h"
 #include "defs.h"
 #include "../Columns/TableMeta.h"
 namespace Plan {
@@ -6,17 +7,24 @@ namespace Plan {
 class PlanContext
 {
 private:
-    /* data */
-    std::vector<Columns::TableMetaReadOnlyPtr> tableMetasRef;
+    Executor::ExecutorContextPtr context;
 
 public:
-    PlanContext(/* args */) {}
+    PlanContext(const Executor::ExecutorContextPtr context) : context(context) {}
     ~PlanContext() {}
+
+/// Just used for Plan
+public:
+    /// Fetch field by (tableName opt) row's id and col's id
+    Columns::FieldPtr FetchField(Columns::RowID rid, Columns::ColID cid) const;
+    Columns::FieldPtr FetchField(const std::string& tableName, Columns::RowID rid, Columns::ColID cid) const;
     
-    PlanContext(const std::vector<std::string>& tableNames, bool ReadOnly);
-    Columns::TableMetaReadOnlyPtr GetTableMeta(const std::string& tableName) const;
-    Columns::TableMetaReadOnlyPtr GetTableMeta() const;
+    /// Get tupleDesc by (tableName opt)
+    Columns::TupleDescPtr GetTableTupleDesc() const;
+    Columns::TupleDescPtr GetTableTupleDesc(const std::string& tableName) const;
+
 };
+
 using PlanContextPtr = std::shared_ptr<PlanContext>;
 
 }

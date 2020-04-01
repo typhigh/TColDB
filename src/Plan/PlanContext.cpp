@@ -6,34 +6,24 @@ using namespace std;
 
 namespace Plan {
 
-PlanContext::PlanContext(const vector<string>& tableNames, bool ReadOnly) 
+Columns::FieldPtr PlanContext::FetchField(Columns::RowID rid, Columns::ColID cid) const
 {
-    tableMetasRef.clear();
-    tableMetasRef.resize(tableNames.size());
-    for (size_t i = 0; i < tableNames.size(); ++i) {
-        Columns::TablePtr table = Databases::Database::GetInstance()->GetCatalog()->GetTable(tableNames[i]);
-        tableMetasRef[i] = ReadOnly ? table->GetCurrentReadOnlyTableMeta()
-                                    : table->GetCurrentWriteTableMeta();
-    }
+    return context->FetchField(rid, cid);
 }
 
-Columns::TableMetaReadOnlyPtr PlanContext::GetTableMeta(const string& tableName) const
+Columns::FieldPtr PlanContext::FetchField(const std::string& tableName, Columns::RowID rid, Columns::ColID cid) const
 {
-    for (int i = 0; i < tableMetasRef.size(); ++i) {
-        if (tableMetasRef[i]->GetTableName() == tableName) {
-            return tableMetasRef[i];
-        }
-    }
-    return Columns::TableMetaReadOnlyPtr();
+    return context->FetchField(tableName, rid, cid);
+}
+    
+Columns::TupleDescPtr PlanContext::GetTableTupleDesc() const
+{
+    return context->GetTableTupleDesc();
 }
 
-Columns::TableMetaReadOnlyPtr PlanContext::GetTableMeta() const 
+Columns::TupleDescPtr PlanContext::GetTableTupleDesc(const std::string& tableName) const
 {
-    if (tableMetasRef.size() != 1) {
-        LOG_ERROR("expected only one tableMeta");
-        return Columns::TableMetaReadOnlyPtr();
-    }
-    return tableMetasRef[0];
+    return context->GetTableTupleDesc(tableName);
 }
 
 }

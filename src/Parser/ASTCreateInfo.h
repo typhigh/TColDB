@@ -17,10 +17,11 @@ public:
 public:
 	~ASTCreateInfo();
 	ASTCreateInfo() {}
+
+public:
 	std::string ToString() const;
 	bool IsWriteSQL() const;
     std::vector<std::string> GetTablesRef() const;
-
 };
 
 using ASTCreateInfoPtr = std::shared_ptr<ASTCreateInfo>;

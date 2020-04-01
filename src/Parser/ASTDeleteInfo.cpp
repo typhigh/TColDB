@@ -15,7 +15,7 @@ string ASTDeleteInfo::ToString() const
     return "ASTDeleteInfo";
 }
 
-Plan::PlanPtr ASTDeleteInfo::MakePlan() const 
+Plan::PlanPtr ASTDeleteInfo::MakePlan(Plan::PlanContextPtr context) const 
 {
     return Plan::PlanPtr();
 }

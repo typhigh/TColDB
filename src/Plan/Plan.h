@@ -10,17 +10,18 @@ class Plan
 {
 private:
     PlanPtr parent;
+    
+protected:
+    PlanContextPtr context;
 
 public:
-    Plan() {};
+    Plan(PlanContextPtr context) : context(context){};
     virtual ~Plan() {}
-    void SetPlanContext(PlanContextPtr planContext);
-    void SetPlanContext(const std::vector<std::string>& tableNames, bool ReadOnly);
-    
+
+public:
+    void SetPlanContext(PlanContextPtr context);
     PlanPtr GetParent();
     void SetParent(PlanPtr parent);
-protected:
-    PlanContextPtr planContext;
 
 public:
     virtual bool Accept (PlanVisitorPtr visitor) = 0;

@@ -29,10 +29,9 @@ string ASTSelectInfo::ToString() const
     return "ASTSelectInfo";
 }
 
-Plan::PlanPtr ASTSelectInfo::MakePlan(Plan::PlanContextPtr planContext) const 
+Plan::PlanPtr ASTSelectInfo::MakePlan(Plan::PlanContextPtr context) const 
 {
     Plan::PlanPtr ret;
-    ret->SetPlanContext(planContext);
 
     // First we deal with Where and Table (LowPLan)
     Plan::PlanPtr LowPlan;
@@ -43,23 +42,19 @@ Plan::PlanPtr ASTSelectInfo::MakePlan(Plan::PlanContextPtr planContext) const
 
     if (tables->size() > 1) {
         // JoinPlan
-        Plan::JoinPlanPtr plan = Plan::PlansCreator::CreateJoinPlan();
-        plan->SetPlanContext(planContext);
+        Plan::JoinPlanPtr plan = Plan::PlansCreator::CreateJoinPlan(context);
         plan->SetCondition(where);
         for (size_t i = 0; i < tables->size(); ++i)  {
-            Plan::PlanPtr subPlan = Plan::PlansCreator::CreateScanPlan(tables->at(i));
-            subPlan->SetPlanContext(planContext);
+            Plan::PlanPtr subPlan = Plan::PlansCreator::CreateScanPlan(tables->at(i), context);
             plan->AddSubPlan(subPlan);
             subPlan->SetParent(plan);
         }
         LowPlan = plan;
     } else {
-        Plan::ScanPlanPtr plan = Plan::PlansCreator::CreateScanPlan(tables->at(0));
-        plan->SetPlanContext(planContext);
+        Plan::ScanPlanPtr plan = Plan::PlansCreator::CreateScanPlan(tables->at(0), context);
         if (where) {
             // FilterPlan
-            Plan::FilterPlanPtr filterPlan = Plan::PlansCreator::CreateFilterPlan();
-            filterPlan->SetPlanContext(planContext);
+            Plan::FilterPlanPtr filterPlan = Plan::PlansCreator::CreateFilterPlan(context);
             filterPlan->SetPredicator(where);
             filterPlan->SetSubPlan(plan);
             plan->SetParent(filterPlan);
@@ -76,8 +71,7 @@ Plan::PlanPtr ASTSelectInfo::MakePlan(Plan::PlanContextPtr planContext) const
         ret = LowPlan;
     } else if (Expression::IsAggregate(exprs)) {
         // AggregatePlan
-        Plan::AggregatePlanPtr plan = make_shared<Plan::AggregatePlan>();
-        plan->SetPlanContext(planContext);
+        Plan::AggregatePlanPtr plan = make_shared<Plan::AggregatePlan>(context);
         for (const ExprNode* expr: *exprs) {
             if (Expression::IsAggregate(expr)) {
                 // We only consider aggregate expr and ignore other expr
@@ -91,8 +85,7 @@ Plan::PlanPtr ASTSelectInfo::MakePlan(Plan::PlanContextPtr planContext) const
         ret = plan;
     } else {
         // ProjectPlan
-        Plan::ProjectPlanPtr plan = make_shared<Plan::ProjectPlan>();
-        plan->SetPlanContext(planContext);
+        Plan::ProjectPlanPtr plan = make_shared<Plan::ProjectPlan>(context);
         plan->SetProjector(exprs);
         plan->SetSubPlan(LowPlan);
         ret = plan;

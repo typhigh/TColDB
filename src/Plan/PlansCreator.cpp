@@ -3,33 +3,29 @@ using namespace std;
 
 namespace Plan {
 
-AggregatePlanPtr PlansCreator::CreateAggregatePlan()
+AggregatePlanPtr PlansCreator::CreateAggregatePlan(PlanContextPtr context)
 {
-    return make_shared<AggregatePlan>();
+    return make_shared<AggregatePlan>(context);
 }
-FilterPlanPtr PlansCreator::CreateFilterPlan()
+FilterPlanPtr PlansCreator::CreateFilterPlan(PlanContextPtr context)
 {
-    return make_shared<FilterPlan>();
-}
-
-JoinPlanPtr PlansCreator::CreateJoinPlan()
-{
-    return make_shared<JoinPlan>();
+    return make_shared<FilterPlan>(context);
 }
 
-ProjectPlanPtr PlansCreator::CreateProjectPlan()
+JoinPlanPtr PlansCreator::CreateJoinPlan(PlanContextPtr context)
 {
-    return make_shared<ProjectPlan>();
+    return make_shared<JoinPlan>(context);
 }
 
-ScanPlanPtr PlansCreator::CreateScanPlan()
+ProjectPlanPtr PlansCreator::CreateProjectPlan(PlanContextPtr context)
 {
-    return make_shared<ScanPlan>();
+    return make_shared<ProjectPlan>(context);
 }
 
-ScanPlanPtr PlansCreator::CreateScanPlan(Parser::TableFrom* table)
+
+ScanPlanPtr PlansCreator::CreateScanPlan(Parser::TableFrom* table, PlanContextPtr context)
 {
-    return make_shared<ScanPlan>(table);
+    return make_shared<ScanPlan>(table, context);
 }
 
 }

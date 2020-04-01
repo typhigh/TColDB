@@ -11,7 +11,7 @@ private:
     PlanPtr subPlan;
     Executor::ProjectorPtr projector;
 public:
-    ProjectPlan(/* args */) {}
+    ProjectPlan(PlanContextPtr context) : Plan(context) {}
     virtual ~ProjectPlan() {}
     void SetProjector(Executor::ProjectorPtr projector);
     void SetProjector(const Parser::ExprNodeList* exprs);

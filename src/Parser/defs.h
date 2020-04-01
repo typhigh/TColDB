@@ -90,6 +90,8 @@ enum TermType_t
 
 class TermType;
 class IAST;
+class IASTNeedPlan;
+class IASTNotNeedPlan;
 class FieldDef;
 class ColumnRef;
 class ASTCreateInfo;
@@ -102,6 +104,8 @@ class ASTSelectInfo;
 class TableFrom;
 
 using IASTPtr = std::shared_ptr<IAST>;
+using IASTNeedPlanPtr = std::shared_ptr<IASTNeedPlan>;
+using IASTNotNeedPlanPtr = std::shared_ptr<IASTNotNeedPlan>;
 using ColumnRefList = std::vector<ColumnRef*>;
 using FieldDefList = std::vector<FieldDef*>;
 using TableFromList = std::vector<TableFrom*>;

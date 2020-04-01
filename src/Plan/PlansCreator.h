@@ -12,12 +12,11 @@ namespace Plan {
 class PlansCreator
 {
 public:
-    static AggregatePlanPtr CreateAggregatePlan();
-    static FilterPlanPtr    CreateFilterPlan();
-    static JoinPlanPtr      CreateJoinPlan();
-    static ProjectPlanPtr   CreateProjectPlan();
-    static ScanPlanPtr      CreateScanPlan();
-    static ScanPlanPtr      CreateScanPlan(Parser::TableFrom* table);
+    static AggregatePlanPtr CreateAggregatePlan(PlanContextPtr context);
+    static FilterPlanPtr    CreateFilterPlan(PlanContextPtr context);
+    static JoinPlanPtr      CreateJoinPlan(PlanContextPtr context);
+    static ProjectPlanPtr   CreateProjectPlan(PlanContextPtr context);
+    static ScanPlanPtr      CreateScanPlan(Parser::TableFrom* table, PlanContextPtr context);
 };
 
 

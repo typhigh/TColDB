@@ -13,7 +13,7 @@ private:
     std::shared_ptr<Parser::ExprNode*> condition;
 
 public:
-    JoinPlan(/* args */) {}
+    JoinPlan(PlanContextPtr context) : Plan(context) {}
 
     void SetSubPlans(const std::vector<PlanPtr> &subPlans);
     void AddSubPlan(PlanPtr subPlan);

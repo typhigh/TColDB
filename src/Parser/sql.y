@@ -628,7 +628,7 @@ database_name : IDENTIFIER       { $$ = $1; }
 
 %%
 
-void yyerror(Parser::SQLReslut* result, const char *msg)
+void yyerror(Parser::SQLParserResult* result, const char *msg)
 {
 	result->SetError(msg);
 //	fprintf(stderr, "[Error] %s\n", msg);
@@ -638,7 +638,6 @@ int yywrap()
 {
 	return 1;
 }
-
 
 char run_parser(const char *input, Parser::SQLParserResult* result)
 {
