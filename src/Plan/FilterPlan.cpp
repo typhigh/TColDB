@@ -33,4 +33,9 @@ PlanType_t FilterPlan::GetType() const
     return PLAN_FILTER;
 }
 
+Plans FilterPlan::GetChildren()
+{
+    return {subPlan};
+}
+
 }

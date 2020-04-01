@@ -29,4 +29,9 @@ PlanType_t ProjectPlan::GetType() const
     return PLAN_PROJECT;
 }
 
+Plans ProjectPlan::GetChildren()
+{
+    return {subPlan};
+}
+
 }

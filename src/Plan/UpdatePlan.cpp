@@ -25,4 +25,9 @@ PlanType_t UpdatePlan::GetType() const
     return PLAN_UPDATE;
 }
 
+Plans UpdatePlan::GetChildren()
+{
+    return {subPlan};
+}
+
 }

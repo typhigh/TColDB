@@ -23,10 +23,12 @@ public:
 public:
     virtual bool VisitPlan(PlanPtr          plan) const = 0;
     virtual bool VisitPlan(AggregatePlanPtr plan) const;
+    virtual bool VisitPlan(DeletePlanPtr    plan) const;
     virtual bool VisitPlan(FilterPlanPtr    plan) const;
     virtual bool VisitPlan(JoinPlanPtr      plan) const;
     virtual bool VisitPlan(ProjectPlanPtr   plan) const;
     virtual bool VisitPlan(ScanPlanPtr      plan) const;
+    virtual bool VisitPlan(UpdatePlan       plan) const;
 };
 
 

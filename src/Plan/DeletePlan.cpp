@@ -18,4 +18,9 @@ PlanType_t DeletePlan::GetType() const
     return PLAN_DELETE;
 }
 
+Plans DeletePlan::GetChildren()
+{
+    return {subPlan};
+}
+
 }

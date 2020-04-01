@@ -29,4 +29,10 @@ PlanType_t ScanPlan::GetType() const
     return PLAN_SCAN;
 }
 
+Plans ScanPlan::GetChildren()
+{
+    /// The leaf node in plans-tree
+    return {};
+}
+
 }

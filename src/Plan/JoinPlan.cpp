@@ -29,4 +29,9 @@ PlanType_t JoinPlan::GetType() const
     return PLAN_JOIN;
 }
 
+Plans JoinPlan::GetChildren()
+{
+    return subPlans;
+}
+
 }

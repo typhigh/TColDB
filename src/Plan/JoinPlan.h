@@ -24,6 +24,7 @@ public:
 public:
     bool Accept (PlanVisitorPtr visitor);
     PlanType_t GetType() const;
+    Plans GetChildren();
 };
 
 using JoinPlanPtr = std::shared_ptr<JoinPlan>;

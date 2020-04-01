@@ -23,6 +23,7 @@ public:
 private:
     bool Accept (PlanVisitorPtr rule);
     PlanType_t GetType() const;
+    Plans GetChildren();
 };
 
 using AggregatePlanPtr = std::shared_ptr<AggregatePlan>;

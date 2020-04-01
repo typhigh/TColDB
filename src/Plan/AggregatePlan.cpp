@@ -34,4 +34,9 @@ PlanType_t AggregatePlan::GetType() const
     return PLAN_AGGREGATE;
 }
 
+Plans AggregatePlan::GetChildren() 
+{
+    return {subPlan};
+}
+
 }

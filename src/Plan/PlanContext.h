@@ -22,7 +22,6 @@ public:
     /// Get tupleDesc by (tableName opt)
     Columns::TupleDescPtr GetTableTupleDesc() const;
     Columns::TupleDescPtr GetTableTupleDesc(const std::string& tableName) const;
-
 };
 
 using PlanContextPtr = std::shared_ptr<PlanContext>;

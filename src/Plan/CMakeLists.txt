@@ -11,6 +11,7 @@ set (SOURCE
     ${CMAKE_CURRENT_SOURCE_DIR}/JoinPlan.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Plan.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PlanContext.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/PlanOperations.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PlansCreator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ProjectPlan.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ScanPlan.cpp
