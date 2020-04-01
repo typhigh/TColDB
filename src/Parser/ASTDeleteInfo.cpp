@@ -1,4 +1,5 @@
 #include "ASTDeleteInfo.h"
+#include "../Plan/PlansCreator.h"
 #include "../Utils/StringUtils.h"
 #include "Expression/Expression.h"
 using namespace std;
@@ -17,7 +18,24 @@ string ASTDeleteInfo::ToString() const
 
 Plan::PlanPtr ASTDeleteInfo::MakePlan(Plan::PlanContextPtr context) const 
 {
-    return Plan::PlanPtr();
+    Plan::PlanPtr lowPlan;
+    Plan::ScanPlanPtr plan = Plan::PlansCreator::CreateScanPlan(table, context);
+    
+    /// First we deal with Where and Table (lowPlan)
+    if (where) {
+        Plan::FilterPlanPtr filterPlan = Plan::PlansCreator::CreateFilterPlan(context);
+        filterPlan->SetPredicator(where);
+        filterPlan->SetSubPlan(plan);
+        plan->SetParent(filterPlan);
+        lowPlan = filterPlan;
+    } else {
+        lowPlan = plan;
+    }
+
+    /// Second we deal with DeletePlan
+    Plan::DeletePlanPtr deletePlan = Plan::PlansCreator::CreateDeletePlan(context);
+    deletePlan->SetSubPlan(lowPlan);
+    return deletePlan;
 }
 
 bool ASTDeleteInfo::IsWriteSQL() const

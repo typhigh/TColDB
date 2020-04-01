@@ -14,4 +14,10 @@ Predicator::~Predicator()
     Parser::Expression::Free(this->cond);
 }
 
+bool Predicator::Predicate(Columns::FieldPtr field)
+{
+    /*TODO*/
+    return true;
+}
+
 }

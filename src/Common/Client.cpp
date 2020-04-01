@@ -13,7 +13,6 @@ atomic<ClientID> Client::currentID = 0;
 
 Client::Client() 
 {
-    input = output = nullptr;
     clientID = currentID.load();
     currentID++;
 }
@@ -23,14 +22,14 @@ Client::~Client()
 
 }
 
-void Client::SetInput(char* path) 
+void Client::SetInput(const string& path) 
 {
-    input = path;
+    inputPath = path;
 }
 
-void Client::SetOutput(char* path)
+void Client::SetOutput(const string& path)
 {
-    output = path;
+    outputPath = path;
 }
 
 void Client::SetServer(ServerPtr server)
@@ -58,12 +57,12 @@ void Client::Query(const string& text)
         CommandPtr cmd = make_shared<Command>(content, clientID);
         server->Query(cmd);
         string result = cmd->GetResult();
-        if (output) {
+        if (!outputPath.empty()) {
 
         } else {
             cout << result << endl;
-            if (result == "Exit") return;
         }
+        if (result == "Exit") return;
         int k = rand() % 1000;
         this_thread::sleep_for(chrono::microseconds(k));
     }

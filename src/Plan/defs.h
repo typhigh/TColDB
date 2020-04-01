@@ -3,20 +3,24 @@
 
 namespace Plan {
 class AggregatePlan;
+class DeletePlan;
 class FilterPlan;
 class JoinPlan;
 class Plan;
 class ProjectPlan;
 class ScanPlan;
+class UpdatePlan;
 class PlanVisitor;
 class PlanContext;
 
 using PlanPtr           = std::shared_ptr<Plan>;
 using AggregatePlanPtr  = std::shared_ptr<AggregatePlan>;
+using DeletePlanPtr     = std::shared_ptr<DeletePlan>;
 using FilterPlanPtr     = std::shared_ptr<FilterPlan>;
 using JoinPlanPtr       = std::shared_ptr<JoinPlan>;
 using ProjectPlanPtr    = std::shared_ptr<ProjectPlan>;
 using ScanPlanPtr       = std::shared_ptr<ScanPlan>;
+using UpdatePlanPtr     = std::shared_ptr<UpdatePlan>;
 using PlanVisitorPtr    = std::shared_ptr<PlanVisitor>;
 using PlanContextPtr    = std::shared_ptr<PlanContext>;
 
@@ -28,7 +32,9 @@ enum PlanType_t {
     PLAN_SCAN,
     PLAN_TABLESCAN,
     PLAN_INDEXSCAN,
-    PLAN_ORDER
+    PLAN_ORDER,
+    PLAN_UPDATE,
+    PLAN_DELETE
 };
 
 }

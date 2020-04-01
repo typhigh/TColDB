@@ -13,16 +13,16 @@ private:
     /* data */
     ClientID clientID;
     static std::atomic<ClientID> currentID;
-    char *input;
-    char *output;
+    std::string inputPath;
+    std::string outputPath;
     ServerPtr server;
 
 public:
     Client();
     ~Client();
 
-    void SetInput(char* path);
-    void SetOutput(char* path);
+    void SetInput(const std::string& path);
+    void SetOutput(const std::string& path);
     void SetServer(ServerPtr server);
 
     void Start();

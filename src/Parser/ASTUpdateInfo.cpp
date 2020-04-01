@@ -13,14 +13,25 @@ string ASTUpdateInfo::ToString() const
 
 Plan::PlanPtr ASTUpdateInfo::MakePlan(Plan::PlanContextPtr context) const 
 {
-    Plan::PlanPtr ret;
-    Plan::ScanPlanPtr lowPlan = Plan::PlansCreator::CreateScanPlan(table, context);
+    Plan::PlanPtr lowPlan;
+    Plan::ScanPlanPtr plan = Plan::PlansCreator::CreateScanPlan(table, context);
     
+    /// First we deal with Where and Table (lowPlan)
     if (where) {
         Plan::FilterPlanPtr filterPlan = Plan::PlansCreator::CreateFilterPlan(context);
         filterPlan->SetPredicator(where);
-        
+        filterPlan->SetSubPlan(plan);
+        plan->SetParent(filterPlan);
+        lowPlan = filterPlan;
+    } else {
+        lowPlan = plan;
     }
+    
+    /// Second we deal with UpdatePlan
+    Plan::UpdatePlanPtr updatePlan = Plan::PlansCreator::CreateUpdatePlan(column_ref->GetFieldName(), value, context);
+    updatePlan->SetSubPlan(lowPlan);
+    lowPlan->SetParent(updatePlan);
+    return updatePlan;
 }
 
 bool ASTUpdateInfo::IsWriteSQL() const
