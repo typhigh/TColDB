@@ -1,4 +1,5 @@
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Field)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Operations)
 set(HEADERS
 	${HEADERS}
     PARENT_SCOPE

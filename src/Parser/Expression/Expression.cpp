@@ -288,4 +288,44 @@ bool Expression::IsConstVal(const ExprNode* expr)
     return expr != nullptr && expr->constVal != nullptr;
 }
 
+FieldNames Expression::GetColumnsRef(const ExprNode* expr) 
+{
+    FieldNames ret;
+    if (expr == nullptr) {
+        return ret;
+    }
+    
+    if (expr->op == OPERATOR_NONE) {
+        if (expr->term_type == TERM_COLUMN_REF) {
+            ret = {expr->column_ref->GetFieldName()};
+        }
+        return ret;
+    }
+    
+    Append(ret, GetColumnsRef(expr->left));
+    Append(ret, GetColumnsRef(expr->right));
+    return ret;
+}
+
+FieldNames Expression::GetColumnsRef(const ExprNodeList* exprs)
+{
+    FieldNames ret;
+    if (exprs == nullptr) {
+        return ret;
+    }
+
+    for (const ExprNode* expr : *exprs) {
+        Append(ret, GetColumnsRef(expr));
+    }
+    
+    return ret;
+}
+
+void Expression::Append(FieldNames& result, const FieldNames& other)
+{
+    /// Use insert 
+    /// TODO: use move
+    result.insert(result.end(), other.begin(), other.end());
+}
+
 }

@@ -23,9 +23,9 @@ Executor::PredicatorPtr FilterPlan::GetPredicator()
     return predicator;
 }
 
-bool FilterPlan::Accept(PlanVisitorPtr visitor)
+bool FilterPlan::Accept(PlanVisitorPtr visitor, PlanPtr& result)
 {
-    visitor->VisitPlan(shared_from_this());
+    visitor->VisitPlan(shared_from_this(), result);
 }
 
 PlanType_t FilterPlan::GetType() const 
@@ -36,6 +36,11 @@ PlanType_t FilterPlan::GetType() const
 Plans FilterPlan::GetChildren()
 {
     return {subPlan};
+}
+
+FieldNames FilterPlan::GetColumnsRef() const 
+{
+    return this->predicator->GetColumnsRef();
 }
 
 }

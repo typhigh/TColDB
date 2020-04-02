@@ -3,29 +3,58 @@
 using namespace std;
 namespace Databases {
 
-Columns::TablePtr Catalog::GetTable(const string& tableName)
+Columns::TableID Catalog::GetTableID(const string& tableName)
 {
     shared_lock<shared_mutex> mlock(rwLock);
-    GetTableImpl(tableName);
+    return GetTableIDImpl(tableName);
 }   
 
-Columns::TablePtr Catalog::GetTableImpl(const string& tableName)
+Columns::TablePtr Catalog::GetTable(Columns::TableID tableID)
 {
-    auto item = tableMap.find(tableName);
+    shared_lock<shared_mutex> mlock(rwLock);
+    return GetTableImpl(tableID);
+}
+
+void Catalog::InsertTable(const string& tableName, Columns::TablePtr table)
+{
+    lock_guard<shared_mutex> mlock(rwLock);
+    InsertTableImpl(tableName, table);
+}
+
+Columns::TableID Catalog::GetTableIDImpl(const string& tableName)
+{
+    auto item = tableIDs.find(tableName);
+    if (item == tableIDs.end()) {
+        return Columns::NullTableID;
+    }
+    return item->second;
+}
+
+Columns::TablePtr Catalog::GetTableImpl(Columns::TableID tableID)
+{
+    auto item = tableMap.find(tableID);
     if (item == tableMap.end()) {
         return nullptr;
     }
     return item->second;
 }
-void Catalog::InsertTable(const string& tableName, Columns::TablePtr table)
-{
-    lock_guard<shared_mutex> mlock(rwLock);
-    InsertTable(tableName, table);
-}
 
 void Catalog::InsertTableImpl(const string& tableName, Columns::TablePtr table)
 {
-    tableMap.emplace(tableName, table);
+    auto item = tableIDs.find(tableName);
+    Columns::TableID tableID;
+    if (item == tableIDs.end()) {
+        tableID = GetNewTableID();
+        tableIDs.emplace(tableName, tableID);
+    } else {
+        tableID = item->second;
+    }
+    tableMap.emplace(tableID, table);
+}
+
+Columns::TableID Catalog::GetNewTableID()
+{
+    return currentTableID++;
 }
 
 void Catalog::LoadInfo()

@@ -18,5 +18,12 @@ void Aggregator::SetFieldNo(int no)
 {   
     fieldNo = no;
 }
+
+string Aggregator::GetFieldName() const 
+{
+    return fieldName;
+
+}
+
 }
 

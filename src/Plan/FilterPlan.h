@@ -23,10 +23,10 @@ public:
     void SetSubPlan(PlanPtr subPlan);
     
 public:
-    bool Accept (PlanVisitorPtr visitor);
+    bool Accept (PlanVisitorPtr visitor, PlanPtr& result);
     PlanType_t GetType() const;
     Plans GetChildren();
-
+    FieldNames GetColumnsRef() const;
 };
 using FilterPlanPtr = std::shared_ptr<FilterPlan>;
 

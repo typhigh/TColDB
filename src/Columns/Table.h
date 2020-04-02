@@ -13,7 +13,7 @@ private:
     std::atomic<bool> isWriting;
 
 public:
-    Table(/* args */) {isWriting.store(false);}
+    Table() {isWriting.store(false);}
     ~Table() {}
     
     /// Get the table meta, given if read only

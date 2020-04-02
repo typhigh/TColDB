@@ -2,6 +2,7 @@
 #include "../../Parser/defs.h"
 #include "../../Parser/ExprNode.h"
 #include "../../Parser/Expression/Expression.h"
+#include "../../Plan/Plan.h"
 #include <memory>
 #include <vector>
 namespace Executor {
@@ -22,6 +23,7 @@ public:
     Projector(const Parser::ExprNodeList* exprs);
     int GetkthField(size_t kth) const;
     void SetkthField(size_t kth, int no);
+    Plan::FieldNames GetColumnsRef() const;
 };
 
 using ProjectorPtr = std::shared_ptr<Projector>;

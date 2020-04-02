@@ -14,14 +14,14 @@ void JoinPlan::AddSubPlan(PlanPtr subPlan)
     subPlans.push_back(subPlan);
 }
 
-void JoinPlan::SetCondition(Parser::ExprNode* expr) 
+void JoinPlan::SetPredicator(Parser::ExprNode* expr) 
 {
-    condition = make_shared<Parser::ExprNode*>();
+    predicator = make_shared<Executor::Predicator>(expr);
 }
 
-bool JoinPlan::Accept (PlanVisitorPtr visitor)
+bool JoinPlan::Accept (PlanVisitorPtr visitor, PlanPtr& result)
 {
-    visitor->VisitPlan(shared_from_this());    
+    visitor->VisitPlan(shared_from_this(), result);    
 }
 
 PlanType_t JoinPlan::GetType() const 
@@ -32,6 +32,11 @@ PlanType_t JoinPlan::GetType() const
 Plans JoinPlan::GetChildren()
 {
     return subPlans;
+}
+
+FieldNames JoinPlan::GetColumnsRef() const 
+{
+    return predicator->GetColumnsRef();
 }
 
 }

@@ -20,4 +20,9 @@ bool Predicator::Predicate(Columns::FieldPtr field)
     return true;
 }
 
+Plan::FieldNames Predicator::GetColumnsRef() const 
+{
+    return Parser::Expression::GetColumnsRef(cond);
+}
+
 }

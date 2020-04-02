@@ -41,4 +41,9 @@ void Projector::SetkthField(size_t kth, int no)
     fieldsNo[kth] = no;
 }
 
+Plan::FieldNames Projector::GetColumnsRef() const 
+{
+    return Parser::Expression::GetColumnsRef(exprs);
+}
+
 }

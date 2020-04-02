@@ -21,9 +21,10 @@ public:
     void SetSubPlan(PlanPtr subPlan);
 
 private:
-    bool Accept (PlanVisitorPtr rule);
+    bool Accept (PlanVisitorPtr rule, PlanPtr& result);
     PlanType_t GetType() const;
     Plans GetChildren();
+    virtual FieldNames GetColumnsRef() const;
 };
 
 using AggregatePlanPtr = std::shared_ptr<AggregatePlan>;

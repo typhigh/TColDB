@@ -1,18 +1,19 @@
+#pragma once
 #include "Rule.h"
 
 namespace Optimizer {
 
-class ConstOptimize : public Rule
+class PredicatePushDown : public Rule
 {
 public:
-    ConstOptimize() {}
-    ~ConstOptimize() {}
+    PredicatePushDown() {}
+    ~PredicatePushDown() {}
 
-/// Visit Plan func
 public:
     bool VisitPlan(Plan::PlanPtr          plan, Plan::PlanPtr& result) const;
     bool VisitPlan(Plan::FilterPlanPtr    plan, Plan::PlanPtr& result) const;
     bool VisitPlan(Plan::JoinPlanPtr      plan, Plan::PlanPtr& result) const;
 };
+
 
 }

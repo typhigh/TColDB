@@ -3,7 +3,7 @@
 #include "../../Columns/Tuple.h"
 #include "../../Columns/Field/Field.h"
 namespace Parser {
-
+using FieldNames = std::vector<std::string>;
 using EValue = Columns::FieldPtr;
 
 class Expression
@@ -39,6 +39,12 @@ public:
     /// Is a expr a unary expr
     static bool IsUnary(const ExprNode* expr);
 
+    /// Get the columns ref of the expr
+    static FieldNames GetColumnsRef(const ExprNode* expr);
+
+    /// Get the columns ref of the expr list
+    static FieldNames GetColumnsRef(const ExprNodeList* expr);
+
 /// Eval Operation
 public:
     static EValue Eval(const ExprNode* expr, Columns::TuplePtr tuple);
@@ -48,6 +54,10 @@ public:
 public:
     static void ConstOptimize(ExprNode* expr); 
     static bool IsConstVal (const ExprNode* expr);
+
+private:
+    /// Append other to result
+    static void Append(FieldNames& result, const FieldNames& other);
 };
 
 

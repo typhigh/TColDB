@@ -19,9 +19,9 @@ ScanPlan::ScanPlan(char* tableName, PlanContextPtr context)
     
 }
 
-bool ScanPlan::Accept (PlanVisitorPtr visitor)
+bool ScanPlan::Accept (PlanVisitorPtr visitor, PlanPtr& result)
 {
-    visitor->VisitPlan(shared_from_this());
+    visitor->VisitPlan(shared_from_this(), result);
 }
 
 PlanType_t ScanPlan::GetType() const 
@@ -32,6 +32,11 @@ PlanType_t ScanPlan::GetType() const
 Plans ScanPlan::GetChildren()
 {
     /// The leaf node in plans-tree
+    return {};
+}
+
+FieldNames ScanPlan::GetColumnsRef() const 
+{
     return {};
 }
 

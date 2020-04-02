@@ -8,9 +8,9 @@ void DeletePlan::SetSubPlan(PlanPtr subPlan)
     this->subPlan = subPlan;
 }
 
-bool DeletePlan::Accept(PlanVisitorPtr visitor) 
+bool DeletePlan::Accept(PlanVisitorPtr visitor, PlanPtr& result) 
 {
-    return visitor->VisitPlan(shared_from_this());
+    return visitor->VisitPlan(shared_from_this(), result);
 }
 
 PlanType_t DeletePlan::GetType() const 
@@ -21,6 +21,11 @@ PlanType_t DeletePlan::GetType() const
 Plans DeletePlan::GetChildren()
 {
     return {subPlan};
+}
+
+FieldNames DeletePlan::GetColumnsRef() const 
+{
+    return {};
 }
 
 }

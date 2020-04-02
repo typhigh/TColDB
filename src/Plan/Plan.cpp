@@ -18,4 +18,14 @@ void Plan::SetParent(PlanPtr parent)
     this->parent = parent;
 }
 
+void Plan::SetFieldNames(FieldNames fieldNames)
+{
+    this->fieldNames = fieldNames;
+}
+
+void Plan::SetTupleDesc(Columns::TupleDescPtr desc)
+{
+    this->desc = desc;
+}
+
 }

@@ -24,9 +24,9 @@ void AggregatePlan::AddAggregator(const string& fieldName, Parser::operator_type
     );
 }
 
-bool AggregatePlan::Accept (PlanVisitorPtr visitor)
+bool AggregatePlan::Accept (PlanVisitorPtr visitor, PlanPtr& result)
 {
-    visitor->VisitPlan(shared_from_this());
+    visitor->VisitPlan(shared_from_this(), result);
 }
 
 PlanType_t AggregatePlan::GetType() const 
@@ -37,6 +37,15 @@ PlanType_t AggregatePlan::GetType() const
 Plans AggregatePlan::GetChildren() 
 {
     return {subPlan};
+}
+
+FieldNames AggregatePlan::GetColumnsRef() const 
+{
+    FieldNames ret;
+    for (auto agg : aggs) {    
+        ret.push_back(move(agg->GetFieldName()));
+    }
+    return 
 }
 
 }

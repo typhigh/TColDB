@@ -19,9 +19,9 @@ void ProjectPlan::SetSubPlan(PlanPtr subPlan)
     this->subPlan = subPlan;
 }
 
-bool ProjectPlan::Accept(PlanVisitorPtr visitor)
+bool ProjectPlan::Accept(PlanVisitorPtr visitor, PlanPtr& result)
 {
-    visitor->VisitPlan(shared_from_this());
+    visitor->VisitPlan(shared_from_this(), result);
 }
 
 PlanType_t ProjectPlan::GetType() const 
@@ -32,6 +32,11 @@ PlanType_t ProjectPlan::GetType() const
 Plans ProjectPlan::GetChildren()
 {
     return {subPlan};
+}
+
+FieldNames ProjectPlan::GetColumnsRef() const 
+{
+    return projector->GetColumnsRef();
 }
 
 }

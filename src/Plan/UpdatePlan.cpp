@@ -15,9 +15,9 @@ void UpdatePlan::SetSubPlan(PlanPtr subPlan)
     this->subPlan = subPlan;
 }
 
-bool UpdatePlan::Accept(PlanVisitorPtr visitor)
+bool UpdatePlan::Accept(PlanVisitorPtr visitor, PlanPtr& result)
 {
-    visitor->VisitPlan(shared_from_this());
+    visitor->VisitPlan(shared_from_this(), result);
 }
 
 PlanType_t UpdatePlan::GetType() const
@@ -28,6 +28,11 @@ PlanType_t UpdatePlan::GetType() const
 Plans UpdatePlan::GetChildren()
 {
     return {subPlan};
+}
+
+FieldNames UpdatePlan::GetColumnsRef() const 
+{
+    return updator->GetColumnsRef();
 }
 
 }

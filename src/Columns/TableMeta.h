@@ -3,6 +3,7 @@
 #include "TupleDesc.h"
 #include "RowID.h"
 #include "ColID.h"
+#include "TableID.h"
 #include "Field/Field.h"
 #include <memory>
 
@@ -13,6 +14,7 @@ class TableMeta
 private:
     /// data with state
     std::string tabelName; 
+    TableID tableID;
 //    TablePartMetaPtr tablePartMeta;
 //    IndexPartMetaPtr IndexPartMeta;
 

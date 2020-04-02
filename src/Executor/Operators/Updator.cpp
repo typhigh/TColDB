@@ -14,4 +14,9 @@ Updator::~Updator()
     Parser::Expression::Free(value);
 }
 
+Plan::FieldNames Updator::GetColumnsRef() const 
+{
+    return Parser::Expression::GetColumnsRef(value);
+}
+
 }
