@@ -12,7 +12,7 @@ bool ConstOptimize::VisitPlan(PlanPtr plan, PlanPtr& result) const
 
 bool ConstOptimize::VisitPlan(FilterPlanPtr plan, PlanPtr& result) const
 {   
-    Parser::ExprNode* expr = plan->GetPredicator()->cond;
+    Parser::ExprNodeList* expr = plan->GetPredicator()->conds;
     Parser::Expression::ConstOptimize(expr);
     return true;
 }

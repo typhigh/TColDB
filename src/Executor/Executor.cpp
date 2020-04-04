@@ -43,7 +43,9 @@ bool Executor::TryExecuteStatement(Common::CommandWrapPtr command)
         }
 
         /// Try one write lock
-        Columns::TablePtr table = Databases::Database::GetInstance()->GetCatalog()->GetTable(tableRefs[0]);
+        Databases::CatalogPtr catalog = Databases::Database::GetInstance()->GetCatalog();
+        Columns::TableID tableID = catalog->GetTableID(tableRefs[0]);
+        Columns::TablePtr table = catalog->GetTable(tableID);
 
         /// 
         if (table != nullptr) {
@@ -124,11 +126,13 @@ ExecutorContextPtr Executor::GetExecutorContext(const vector<string>& tableRefs,
 {
     Databases::CatalogPtr catalog = Databases::Database::GetInstance()->GetCatalog();
     vector<Columns::TableMetaReadOnlyPtr> tableMetas;   
+    vector<Columns::TableID> tableIDs;
     for (const string& name : tableRefs) {
-        Columns::TableMetaReadOnlyPtr tableMeta = catalog->GetTable(name)->GetCurrentTableMeta(isReadOnly);
+        Columns::TableID tableID = catalog->GetTableID(name);
+        Columns::TableMetaReadOnlyPtr tableMeta = catalog->GetTable(tableID)->GetCurrentTableMeta(isReadOnly);
         tableMetas.push_back(move(tableMeta));
     }
-    return make_shared<ExecutorContext>(tableMetas, shared_from_this());
+    return make_shared<ExecutorContext>(tableMetas, tableIDs, shared_from_this());
 }
 
 }

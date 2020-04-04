@@ -21,7 +21,7 @@ private:
 public:
     TableMeta(/* args */) {}
     ~TableMeta() {}
-    TupleDescPtr GetTupleDesc() const;
+    TupleDescPtr GetTupleDescCopy() const;
     std::string GetTableName() const;
     FieldPtr GetField(RowID rid, ColID cid) const;
 

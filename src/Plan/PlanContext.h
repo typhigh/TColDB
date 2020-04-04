@@ -15,13 +15,10 @@ public:
 
 /// Just used for Plan
 public:
-    /// Fetch field by (tableName opt) row's id and col's id
-    Columns::FieldPtr FetchField(Columns::RowID rid, Columns::ColID cid) const;
-    Columns::FieldPtr FetchField(const std::string& tableName, Columns::RowID rid, Columns::ColID cid) const;
-    
-    /// Get tupleDesc by (tableName opt)
+
+    /// Get tupleDesc by (tableID opt)
     Columns::TupleDescPtr GetTableTupleDesc() const;
-    Columns::TupleDescPtr GetTableTupleDesc(const std::string& tableName) const;
+    Columns::TupleDescPtr GetTableTupleDesc(Columns::TableID tableID) const;
 };
 
 using PlanContextPtr = std::shared_ptr<PlanContext>;

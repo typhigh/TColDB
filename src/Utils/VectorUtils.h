@@ -9,7 +9,7 @@ template<typename T>
 void NormalizeVector(std::vector<T>& result)
 {
     std::sort(result.begin(), result.end());
-    result.erase(std::unique(result.begin(), result.end()), result.end());
+//    result.erase(std::unique(result.begin(), result.end()), result.end());
 } 
 
 /// Merge two vectors, and normalize the result

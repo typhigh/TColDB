@@ -291,6 +291,17 @@ void Expression::ConstOptimize(ExprNode* expr)
     }
 }
 
+void Expression::ConstOptimize(ExprNodeList* exprs) 
+{
+    if (exprs == nullptr) {
+        return ;
+    }
+
+    for (ExprNode* expr : *exprs) {
+        ConstOptimize(expr);
+    }
+}
+
 bool Expression::IsConstVal(const ExprNode* expr) 
 {
     return expr != nullptr && expr->constVal != nullptr;

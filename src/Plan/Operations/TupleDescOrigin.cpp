@@ -22,7 +22,7 @@ bool TupleDescOrigin::Accept(PlanPtr plan, PlanPtr& result) const
     if (children.size() == 1) {
         Columns::TupleDescPtr desc = children[0]->GetTupleDescCopy();
         desc->SetAlis(plan->GetRenameTable());
-        if (plan->GetType == PLAN_PROJECT) {
+        if (plan->GetType() == PLAN_PROJECT) {
             desc->MaskByFieldNames(plan->GetColumnsRef());
         }
         plan->SetTupleDesc(desc);

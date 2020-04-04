@@ -3,7 +3,7 @@ using namespace std;
 
 namespace Columns {
 
-TupleDescPtr TableMeta::GetTupleDesc() const 
+TupleDescPtr TableMeta::GetTupleDescCopy() const 
 {
     return tupleDesc->Clone();
 }

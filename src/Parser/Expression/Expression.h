@@ -54,7 +54,10 @@ public:
 
 /// Const Optimize Expreesion Operation
 public:
-    static void ConstOptimize(ExprNode* expr); 
+    static void ConstOptimize(ExprNode* expr);
+
+    static void ConstOptimize(ExprNodeList* exprs);
+
     static bool IsConstVal (const ExprNode* expr);
 
 private:

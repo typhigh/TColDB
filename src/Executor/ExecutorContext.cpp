@@ -4,8 +4,12 @@ using namespace std;
 
 namespace Executor {
 
-ExecutorContext::ExecutorContext(const std::vector<Columns::TableMetaReadOnlyPtr>& tableMetas, ExecutorPtr executor)
+ExecutorContext::ExecutorContext(
+    const std::vector<Columns::TableMetaReadOnlyPtr>& tableMetas,
+    const std::vector<Columns::TableID> tableIDs,
+    ExecutorPtr executor)
     : tableMetas(tableMetas)
+    , tableIDs(tableIDs)
     , executor(executor)
 {
 }
@@ -26,11 +30,11 @@ Columns::FieldPtr ExecutorContext::FetchField(Columns::RowID rid, Columns::ColID
     return tableMeta->GetField(rid, cid);
 }
 
-Columns::FieldPtr ExecutorContext::FetchField(const std::string& tableName, Columns::RowID rid, Columns::ColID cid) const
+Columns::FieldPtr ExecutorContext::FetchField(Columns::TableID tableID, Columns::RowID rid, Columns::ColID cid) const
 {
-    Columns::TableMetaReadOnlyPtr tableMeta = GetTableMeta(tableName);
+    Columns::TableMetaReadOnlyPtr tableMeta = GetTableMeta(tableID);
     if (tableMeta == nullptr) {
-        LOG_ERROR("No such table %s", tableName.c_str());
+        LOG_WARN("No such table");
         return nullptr;
     }
     return tableMeta->GetField(rid, cid);    
@@ -43,29 +47,27 @@ Columns::TupleDescPtr ExecutorContext::GetTableTupleDesc() const
         return nullptr;
     }
     Columns::TableMetaReadOnlyPtr tableMeta = tableMetas[0];
-    return tableMeta->GetTupleDesc();
+    return tableMeta->GetTupleDescCopy();
 }
 
-Columns::TupleDescPtr ExecutorContext::GetTableTupleDesc(const std::string& tableName) const
+Columns::TupleDescPtr ExecutorContext::GetTableTupleDesc(Columns::TableID tableID) const
 {
-    Columns::TableMetaReadOnlyPtr tableMeta = GetTableMeta(tableName);
+    Columns::TableMetaReadOnlyPtr tableMeta = GetTableMeta(tableID);
     if (tableMeta == nullptr) {
-        LOG_ERROR("No such table %s", tableName.c_str());
+        LOG_WARN("No such table");
         return nullptr;
     }
-    return tableMeta->GetTupleDesc();
+    return tableMeta->GetTupleDescCopy();
 }
 
-Columns::TableMetaReadOnlyPtr ExecutorContext::GetTableMeta(const std::string& tableName) const 
+Columns::TableMetaReadOnlyPtr ExecutorContext::GetTableMeta(Columns::TableID tableID) const 
 {
-    Columns::TableMetaReadOnlyPtr tableMeta;
-    for (auto ele: tableMetas) {
-        if (ele->GetTableName() == tableName) {
-            tableMeta = ele;
-            break;
+    for (size_t i = 0; i < tableIDs.size(); ++i) {
+        if (tableIDs[i] == tableID) {
+            return tableMetas[i];
         }
     }
-    return tableMeta;
+    return nullptr;
 }
 
 }
