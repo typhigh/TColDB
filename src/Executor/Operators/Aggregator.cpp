@@ -3,26 +3,10 @@
 using namespace std;
 namespace Executor {
 
-Aggregator::Aggregator(const string& fieldName, Parser::operator_type_t aggOp)
-    : fieldName(fieldName)
-    , aggOp(aggOp)
+void Aggregator::Add(const string& fieldName, Parser::operator_type_t aggOp)
 {
-}
-
-int Aggregator::GetFieldNo() const 
-{
-    return fieldNo;
-}
-
-void Aggregator::SetFieldNo(int no)  
-{   
-    fieldNo = no;
-}
-
-string Aggregator::GetFieldName() const 
-{
-    return fieldName;
-
+    fieldNames.push_back(fieldName);
+    aggOps.push_back(aggOp);
 }
 
 }

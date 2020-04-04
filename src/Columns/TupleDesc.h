@@ -23,6 +23,9 @@ public:
     ~TupleDesc() {}
     TupleDescPtr Clone() const;
 
+    /// Information
+    std::string ToString() const;
+
     /// Set alis
     void SetAlis(const Plan::RenameTable& rename);
     
@@ -46,7 +49,7 @@ public:
     /// Mask by field names for columns eliminate
     void MaskByFieldNames(const Plan::FieldNames& fieldNames);
 
-    TupleDescPtr GetFieldsNoByFrom(TupleDescPtr from) const;
+    std::vector<int> GetFieldsNoByFrom(TupleDescPtr from) const;
 };
 
 using TupleDescPtr = std::shared_ptr<TupleDesc>;

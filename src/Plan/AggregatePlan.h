@@ -8,7 +8,7 @@ class AggregatePlan : public Plan, public std::enable_shared_from_this<Aggregate
 {
 private:
     /* data */
-    std::vector<Executor::AggregatorPtr> aggs;
+    Executor::AggregatorPtr agg;
     PlanPtr subPlan;
 
 public:
@@ -16,7 +16,6 @@ public:
     virtual ~AggregatePlan() {};
 
 public:
-    void AddAggregator(Executor::AggregatorPtr agg);
     void AddAggregator(const std::string &fieldName, Parser::operator_type_t aggOp);
     void SetSubPlan(PlanPtr subPlan);
 

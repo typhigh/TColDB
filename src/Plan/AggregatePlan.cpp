@@ -9,19 +9,9 @@ void AggregatePlan::SetSubPlan(PlanPtr subPlan)
     this->subPlan = subPlan; 
 }
 
-void AggregatePlan::AddAggregator(Executor::AggregatorPtr agg)
-{
-    aggs.push_back(agg);
-}
-
 void AggregatePlan::AddAggregator(const string& fieldName, Parser::operator_type_t aggOp)
 {
-    return AddAggregator(
-        make_shared <Executor::Aggregator>(
-            fieldName,
-            aggOp
-        )
-    );
+    agg->Add(fieldName, aggOp);
 }
 
 bool AggregatePlan::Accept (PlanVisitorPtr visitor, PlanPtr& result)
@@ -41,11 +31,7 @@ Plans AggregatePlan::GetChildren()
 
 FieldNames AggregatePlan::GetColumnsRef() const 
 {
-    FieldNames ret;
-    for (auto agg : aggs) {    
-        ret.push_back(move(agg->GetFieldName()));
-    }
-    return 
+    return agg->GetColumnsRef();
 }
 
 }
