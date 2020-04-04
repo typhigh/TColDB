@@ -4,17 +4,6 @@ using namespace std;
 
 namespace Columns {
 
-FieldPtr Tuple::GetFieldCopyImpl(const string& fieldName, int& fieldNo) const 
-{
-    for (size_t i = 0; i < fields.size(); ++i) {
-        if (desc->GetFieldName(i) == fieldName) {
-            fieldNo = i;
-            return fields[i]->Clone();
-        }
-    }
-    return nullptr;
-}
-
 FieldPtr Tuple::GetFieldCopy(int fieldNo) const
 {
     if (fieldNo < 0 || fieldNo > fields.size()) {
@@ -26,13 +15,11 @@ FieldPtr Tuple::GetFieldCopy(int fieldNo) const
 
 FieldPtr Tuple::GetFieldCopy(const std::string& fieldName, int& fieldNo) const
 {
-    /// Try match fully first
-    FieldPtr ret = GetFieldCopyImpl(fieldName, fieldNo);
-    if (ret == nullptr) {
-        /// Try match string after point
-        ret = GetFieldCopyImpl(Utils::GetPointAfter(fieldName), fieldNo);
+    if (!desc->GetFieldNo(fieldName, fieldNo)) {
+        LOG_ERROR("No such fieldName %s", fieldName.c_str());
+        return nullptr;
     }
-    return ret;
+    return GetFieldCopy(fieldNo);
 }
 
 }

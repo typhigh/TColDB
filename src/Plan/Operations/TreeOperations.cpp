@@ -1,19 +1,19 @@
-#include "PlanOperations.h"
+#include "TreeOperations.h"
 using namespace std;
 
 namespace Plan {
     
-bool PlanOperations::VisitPlansTreeRoot(PlanPtr root, PlanVisitorPtr visitor, PlanPtr& result)
+bool TreeOperations::VisitPlansTreeRoot(PlanPtr root, PlanVisitorPtr visitor, PlanPtr& result)
 {
     return VisitPlansTreeRoot(root, {visitor}, result);
 }
 
-bool PlanOperations::VisitPlansTreeRoot(PlanPtr root, const PlanVisitors& visitors, PlanPtr& result)
+bool TreeOperations::VisitPlansTreeRoot(PlanPtr root, const PlanVisitors& visitors, PlanPtr& result)
 {
     return VisitPlansTreeImpl(root, visitors, result);    
 }
 
-bool PlanOperations::VisitPlansTreeImpl(PlanPtr current, const PlanVisitors& visitors, PlanPtr& result)
+bool TreeOperations::VisitPlansTreeImpl(PlanPtr current, const PlanVisitors& visitors, PlanPtr& result)
 {
     bool ret = false;
     Plans children = current->GetChildren();
@@ -37,7 +37,7 @@ bool PlanOperations::VisitPlansTreeImpl(PlanPtr current, const PlanVisitors& vis
     return ret;
 }
 
-bool PlanOperations::VisitPlansNode(PlanPtr current, const PlanVisitors& visitors, PlanPtr& result)
+bool TreeOperations::VisitPlansNode(PlanPtr current, const PlanVisitors& visitors, PlanPtr& result)
 {
     bool ret =  false;
     for (PlanVisitorPtr visitor : visitors) {

@@ -15,7 +15,6 @@ private:
     RowID rid;
     TupleDescPtr desc;
     std::vector<FieldPtr> fields;
-    FieldPtr GetFieldCopyImpl(const std::string& fieldName, int& fieldNo) const;
 
 public:
     Tuple(/* args */) {}

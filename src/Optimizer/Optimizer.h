@@ -1,5 +1,8 @@
 #pragma once
 #include "../Plan/Plan.h"
+#include "Rules/Rule.h"
+#include "Rules/ConstOptimize.h"
+#include "Rules/PredicatePushDown.h"
 namespace Optimizer {
 
 class Optimizer
@@ -10,11 +13,11 @@ public:
     Optimizer(/* args */) {}
     ~Optimizer() {}
 
-    static void Optimize(Plan::PlanPtr plan);
+    static void Optimize(Plan::PlanPtr& plan);
     
 private:
-    static void LogicalOptimize(Plan::PlanPtr plan);
-    static void PhysicalOptimize(Plan::PlanPtr plan);
+    static void LogicalOptimize(Plan::PlanPtr& plan);
+    static void PhysicalOptimize(Plan::PlanPtr& plan);
 };
 
 

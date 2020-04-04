@@ -35,6 +35,8 @@ Plan::PlanPtr ASTDeleteInfo::MakePlan(Plan::PlanContextPtr context) const
     /// Second we deal with DeletePlan
     Plan::DeletePlanPtr deletePlan = Plan::PlansCreator::CreateDeletePlan(context);
     deletePlan->SetSubPlan(lowPlan);
+    lowPlan->SetParent(deletePlan);
+    deletePlan->SetWithSelectAll();
     return deletePlan;
 }
 

@@ -6,12 +6,12 @@ namespace Executor {
 
 Predicator::Predicator(Parser::ExprNode* cond) 
 {
-    this->cond = Parser::Expression::Copy(cond);
+    conds = Parser::Expression::GetAndExprs(cond);
 }
 
 Predicator::~Predicator() 
 {
-    Parser::Expression::Free(this->cond);
+    Parser::Expression::Free(conds);
 }
 
 bool Predicator::Predicate(Columns::FieldPtr field)
@@ -22,7 +22,7 @@ bool Predicator::Predicate(Columns::FieldPtr field)
 
 Plan::FieldNames Predicator::GetColumnsRef() const 
 {
-    return Parser::Expression::GetColumnsRef(cond);
+    return Parser::Expression::GetColumnsRef(conds);
 }
 
 }

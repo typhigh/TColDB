@@ -15,4 +15,6 @@ public:
     bool VisitPlan(Plan::JoinPlanPtr      plan, Plan::PlanPtr& result) const;
 };
 
+using ConstOptimizePtr = std::shared_ptr<ConstOptimize>;
+ConstOptimizePtr constOptimize = std::make_shared<ConstOptimize>();
 }

@@ -19,7 +19,7 @@ Projector::Projector(const Parser::ExprNodeList* exprs)
     }
 }
 
-int Projector::GetkthField(size_t kth) const 
+int Projector::GetFieldsNo(size_t kth) const 
 {
     if (kth > fieldsNo.size()) {
         LOG_ERROR("fieldsNo out of range");
@@ -28,7 +28,7 @@ int Projector::GetkthField(size_t kth) const
     return fieldsNo[kth];
 }
 
-void Projector::SetkthField(size_t kth, int no) 
+void Projector::SetFieldsNo(size_t kth, int no) 
 {
     if (kth > fieldsNo.size()) {
         LOG_ERROR("fieldsNo out of range");

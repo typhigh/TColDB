@@ -1,6 +1,8 @@
 #pragma once
 #include <memory>
-
+#include <string>
+#include <vector>
+#include "../Utils/Logger.h"
 namespace Plan {
 class AggregatePlan;
 class DeletePlan;
@@ -37,4 +39,21 @@ enum PlanType_t {
     PLAN_DELETE
 };
 
+inline std::string ToString(PlanType_t type)
+{
+    switch (type)
+    {
+    case PLAN_AGGREGATE:    return "AGGREGATE";
+    case PLAN_FILTER:       return "FILTER";
+    case PLAN_JOIN:         return "JOIN";
+    case PLAN_PROJECT:      return "PROJECT";
+    case PLAN_SCAN:         return "SCAN";
+    case PLAN_ORDER:        return "ORDER";
+    case PLAN_UPDATE:       return "UPDATE";
+    case PLAN_DELETE:       return "DELETE";
+    default:                return "UNKNOWN";
+    }
+}
+
+using FieldNames = std::vector<std::string>;
 }

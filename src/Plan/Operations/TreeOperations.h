@@ -1,10 +1,11 @@
+#pragma once
 #include "../Plan.h"
 #include "../PlanVisitor.h"
 
 namespace Plan {
 
 using PlanVisitors = std::vector<PlanVisitorPtr>;
-class PlanOperations
+class TreeOperations
 {
 public:
     /// Visit the whole tree by one visitor

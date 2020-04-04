@@ -5,8 +5,7 @@ namespace Columns {
 
 TupleDescPtr TableMeta::GetTupleDesc() const 
 {
-    /*TODO*/
-    return TupleDescPtr();
+    return tupleDesc->Clone();
 }
 
 string TableMeta::GetTableName() const 

@@ -49,6 +49,15 @@ inline std::string GetPointAfter(const std::string& s)
     return s.substr(pos+1, s.size() - pos);
 }
 
+/// Return if two field name equal
+inline bool EqualFieldName(const std::string& lhs, const std::string& rhs)
+{
+    if (lhs == rhs) {
+        return true;
+    }
+    return GetPointAfter(lhs) == rhs || GetPointAfter(rhs) == lhs;
+}
+
 /// Get string vector from a string by splite some char
 /// Example: char = ';', "1;2;3;" -> vector<string>{"1","2","3"}
 inline std::vector<std::string> Splite(const std::string& s, char ch)

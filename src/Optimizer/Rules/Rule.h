@@ -11,21 +11,21 @@
 #include <memory>
 namespace Optimizer {
 
-class Rule : public PlanVisitor
+class Rule : public Plan::PlanVisitor
 {
 public:
     /// Do it at previous step or end step in plan-tree
     bool DoitPrevious() const {return false;}
 
     /// Visit Plan func
-    virtual bool VisitPlan(PlanPtr          plan, PlanPtr& result) const = 0;
-    virtual bool VisitPlan(AggregatePlanPtr plan, PlanPtr& result) const;
-    virtual bool VisitPlan(DeletePlanPtr    plan, PlanPtr& result) const;
-    virtual bool VisitPlan(FilterPlanPtr    plan, PlanPtr& result) const;
-    virtual bool VisitPlan(JoinPlanPtr      plan, PlanPtr& result) const;
-    virtual bool VisitPlan(ProjectPlanPtr   plan, PlanPtr& result) const;
-    virtual bool VisitPlan(ScanPlanPtr      plan, PlanPtr& result) const;
-    virtual bool VisitPlan(UpdatePlan       plan, PlanPtr& result) const;
+    virtual bool VisitPlan(Plan::PlanPtr          plan, Plan::PlanPtr& result) const = 0;
+    virtual bool VisitPlan(Plan::AggregatePlanPtr plan, Plan::PlanPtr& result) const;
+    virtual bool VisitPlan(Plan::DeletePlanPtr    plan, Plan::PlanPtr& result) const;
+    virtual bool VisitPlan(Plan::FilterPlanPtr    plan, Plan::PlanPtr& result) const;
+    virtual bool VisitPlan(Plan::JoinPlanPtr      plan, Plan::PlanPtr& result) const;
+    virtual bool VisitPlan(Plan::ProjectPlanPtr   plan, Plan::PlanPtr& result) const;
+    virtual bool VisitPlan(Plan::ScanPlanPtr      plan, Plan::PlanPtr& result) const;
+    virtual bool VisitPlan(Plan::UpdatePlan       plan, Plan::PlanPtr& result) const;
 };
 using RulePtr = std::shared_ptr<Rule>;
 using Rules = std::vector<RulePtr>;

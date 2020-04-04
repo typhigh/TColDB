@@ -23,6 +23,8 @@ public:
     /// Deep free a expr-list
     static void Free(ExprNodeList* exprs);
 
+    static ExprNodeList* GetAndExprs(const ExprNode* expr);
+
 public:
     /// Is a expr aggregate
     static bool IsAggregate(const ExprNode* expr);
@@ -56,8 +58,7 @@ public:
     static bool IsConstVal (const ExprNode* expr);
 
 private:
-    /// Append other to result
-    static void Append(FieldNames& result, const FieldNames& other);
+    static void GetAndExprs(const ExprNode* expr, ExprNodeList* exprs);
 };
 
 

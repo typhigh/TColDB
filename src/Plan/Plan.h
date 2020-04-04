@@ -2,13 +2,14 @@
 #include "defs.h"
 #include "PlanContext.h"
 #include "PlanVisitor.h"
+#include "RenameTable.h"
 #include "../Columns/TupleDesc.h"
 #include <memory>
 
 namespace Plan {
 
 using Plans = std::vector<PlanPtr>;
-using FieldNames = std::vector<std::string>;
+
 class Plan
 {
 private:
@@ -17,24 +18,63 @@ private:
     /// the field names used from the 
     /// Set at the "TupleDescSetPrevious"
     FieldNames fieldNames;
+
+    /// Rename Table
+    RenameTable renameTable;
+
+    /// if it's select * xxx
+    bool selectAll;
+
+protected:
+    PlanContextPtr context;
     
+    std::vector<int> fieldsNo;
+
     /// the tupledesc at the node
     /// Set at the "TupleDescSetEnd"
     Columns::TupleDescPtr desc;
 
-protected:
-    PlanContextPtr context;
-
 public:
-    Plan(PlanContextPtr context) : context(context){};
+    Plan(PlanContextPtr context) : context(context), selectAll(false) {};
     virtual ~Plan() {}
 
 public:
+    /// Get the plan context
+    PlanContextPtr GetPlanContext() const;
+
+    /// Set the plan context
     void SetPlanContext(PlanContextPtr context);
+    
+    /// Get parent plan node
     PlanPtr GetParent();
+
+    /// Set parent plan node
     void SetParent(PlanPtr parent);
+
+    /// Get fieldNames
+    FieldNames GetFieldNames() const;
+    
+    /// Set fieldNames
     void SetFieldNames(FieldNames fieldNames);
+    
+    /// Get tupleDesc
+    Columns::TupleDescPtr GetTupleDescCopy() const;
+
+    /// Set tupleDesc
     void SetTupleDesc(Columns::TupleDescPtr desc);
+
+    /// Get RenameTable
+    RenameTable GetRenameTable() const;    
+
+    /// Set RenameTable
+    void SetRenameTable(RenameTable renameTable);
+
+    /// Set fieldsNo
+    void SetFieldsNo(const std::vector<int>& fieldsNo);
+
+    void SetWithSelectAll();
+
+    bool IsWithSelectAll() const;
 
 public:
     /// Accept the visitor (visit design pattern)

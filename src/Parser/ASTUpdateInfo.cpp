@@ -31,6 +31,7 @@ Plan::PlanPtr ASTUpdateInfo::MakePlan(Plan::PlanContextPtr context) const
     Plan::UpdatePlanPtr updatePlan = Plan::PlansCreator::CreateUpdatePlan(column_ref->GetFieldName(), value, context);
     updatePlan->SetSubPlan(lowPlan);
     lowPlan->SetParent(updatePlan);
+    updatePlan->SetWithSelectAll();
     return updatePlan;
 }
 

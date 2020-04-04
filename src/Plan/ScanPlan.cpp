@@ -8,7 +8,10 @@ ScanPlan::ScanPlan(Parser::TableFrom* tableFrom, PlanContextPtr context)
     : ScanPlan(tableFrom->table, context)
 {
     if (tableFrom->alias) {
-        desc->SetAlis(tableFrom->alias);
+        RenameTable rename;
+        rename.Set(tableName, tableFrom->alias);
+        SetRenameTable(rename);
+        desc->SetAlis(GetRenameTable());
     }
 }
 
@@ -16,7 +19,12 @@ ScanPlan::ScanPlan(char* tableName, PlanContextPtr context)
     : Plan(context)
     , tableName(tableName)
 {
-    
+    desc = context->GetTableTupleDesc(tableName);
+}
+
+string ScanPlan::GetTableName() const 
+{
+    return tableName;
 }
 
 bool ScanPlan::Accept (PlanVisitorPtr visitor, PlanPtr& result)

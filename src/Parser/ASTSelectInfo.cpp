@@ -43,7 +43,7 @@ Plan::PlanPtr ASTSelectInfo::MakePlan(Plan::PlanContextPtr context) const
     if (tables->size() > 1) {
         /// JoinPlan
         Plan::JoinPlanPtr plan = Plan::PlansCreator::CreateJoinPlan(context);
-        plan->SetCondition(where);
+        plan->SetPredicator(where);
         for (size_t i = 0; i < tables->size(); ++i)  {
             Plan::PlanPtr subPlan = Plan::PlansCreator::CreateScanPlan(tables->at(i), context);
             plan->AddSubPlan(subPlan);
@@ -69,6 +69,7 @@ Plan::PlanPtr ASTSelectInfo::MakePlan(Plan::PlanContextPtr context) const
     if (exprs == NULL) {
         /// ScanPlan
         ret = lowPlan;
+        ret->SetWithSelectAll();
     } else if (Expression::IsAggregate(exprs)) {
         /// AggregatePlan
         Plan::AggregatePlanPtr plan = make_shared<Plan::AggregatePlan>(context);
@@ -90,7 +91,7 @@ Plan::PlanPtr ASTSelectInfo::MakePlan(Plan::PlanContextPtr context) const
         plan->SetSubPlan(lowPlan);
         ret = plan;
     }
-    return ret;
+    return ret; 
 }
 
 bool ASTSelectInfo::IsWriteSQL() const

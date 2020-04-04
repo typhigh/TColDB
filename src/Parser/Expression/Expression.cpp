@@ -2,6 +2,7 @@
 #include "Operations.h"
 #include "../ASTCreator.h"
 #include "../../Utils/StringUtils.h"
+#include "../../Utils/VectorUtils.h"
 #include "../../Columns/Field/BoolField.h"
 #include "../../Columns/Field/FieldsCreator.h"
 #include <cstring>
@@ -117,6 +118,13 @@ void Expression::Free(ExprNodeList* exprs)
         Free(exprs->at(i));
     }
     delete exprs;
+}
+
+ExprNodeList* Expression::GetAndExprs(const ExprNode* expr)
+{
+    ExprNodeList* ret = new ExprNodeList();
+    GetAndExprs(expr, ret);
+    return ret;
 }
 
 bool Expression::IsAggregate(const ExprNode* expr) 
@@ -302,8 +310,8 @@ FieldNames Expression::GetColumnsRef(const ExprNode* expr)
         return ret;
     }
     
-    Append(ret, GetColumnsRef(expr->left));
-    Append(ret, GetColumnsRef(expr->right));
+    ret = GetColumnsRef(expr->left);
+    Utils::MergeVectors(ret, GetColumnsRef(expr->right));
     return ret;
 }
 
@@ -315,17 +323,25 @@ FieldNames Expression::GetColumnsRef(const ExprNodeList* exprs)
     }
 
     for (const ExprNode* expr : *exprs) {
-        Append(ret, GetColumnsRef(expr));
+        Utils::MergeVectors(ret, GetColumnsRef(expr));
     }
     
     return ret;
 }
 
-void Expression::Append(FieldNames& result, const FieldNames& other)
+void Expression::GetAndExprs(const ExprNode* expr, ExprNodeList* exprs)
 {
-    /// Use insert 
-    /// TODO: use move
-    result.insert(result.end(), other.begin(), other.end());
+    if (expr == nullptr) {
+        return;
+    }
+
+    if (expr->op == OPERATOR_AND) {
+        GetAndExprs(expr->left, exprs);
+        GetAndExprs(expr->right, exprs);
+        return;
+    } 
+
+    exprs->push_back(Expression::Copy(expr));
 }
 
 }

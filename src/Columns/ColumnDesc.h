@@ -2,6 +2,7 @@
 #include "ColID.h"
 #include "TableID.h"
 #include "../Parser/defs.h"
+#include "../Plan/RenameTable.h"
 #include <string>
 #include <memory>
 
@@ -21,9 +22,16 @@ public:
     ColumnDesc(/* args */) {}
     ~ColumnDesc() {}
 
+    std::string ToString() const;
     void SetAlis(std::string alis, bool isTableAlis = true);
+    void SetAlis(const Plan::RenameTable& rename);
     std::string GetFieldName() const;
+    
+    /// Used for sort
+    bool operator < (const ColumnDesc& other) const;
+
 };
 
 using ColumnDescPtr = std::shared_ptr<ColumnDesc>; 
+using ColumnDescs = std::vector<ColumnDesc>;
 }

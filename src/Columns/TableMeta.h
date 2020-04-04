@@ -17,7 +17,7 @@ private:
     TableID tableID;
 //    TablePartMetaPtr tablePartMeta;
 //    IndexPartMetaPtr IndexPartMeta;
-
+    TupleDescPtr tupleDesc;
 public:
     TableMeta(/* args */) {}
     ~TableMeta() {}
