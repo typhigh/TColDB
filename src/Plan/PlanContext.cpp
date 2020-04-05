@@ -5,15 +5,20 @@
 using namespace std;
 
 namespace Plan {
-    
-Columns::TupleDescPtr PlanContext::GetTableTupleDesc() const
+
+Columns::TableID PlanContext::GetTableID(const string& tableName) const 
 {
-    return context->GetTableTupleDesc();
+    return context->GetTableID(tableName);
 }
 
 Columns::TupleDescPtr PlanContext::GetTableTupleDesc(Columns::TableID tableID) const
 {
     return context->GetTableTupleDesc(tableID);
+}
+
+size_t PlanContext::GetTupleCount(Columns::TableID tableID) const 
+{
+    return context->GetTupleCount(tableID);
 }
 
 }

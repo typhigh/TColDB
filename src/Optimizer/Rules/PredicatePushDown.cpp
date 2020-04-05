@@ -19,4 +19,9 @@ bool PredicatePushDown::VisitPlan(FilterPlanPtr plan, PlanPtr& result) const
     }                                                                                                           
 } 
 
+bool PredicatePushDown::VisitPlan(JoinPlanPtr plan, PlanPtr& result) const 
+{
+    /*TODO*/
+}
+
 }

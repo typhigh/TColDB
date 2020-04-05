@@ -16,9 +16,14 @@ public:
 /// Just used for Plan
 public:
 
-    /// Get tupleDesc by (tableID opt)
-    Columns::TupleDescPtr GetTableTupleDesc() const;
+    /// Get tableID by tableName
+    Columns::TableID GetTableID(const std::string& tableName) const;
+
+    /// Get tupleDesc by tableID
     Columns::TupleDescPtr GetTableTupleDesc(Columns::TableID tableID) const;
+
+    /// Get tupleCount by tableID
+    size_t GetTupleCount(Columns::TableID tableID) const;
 };
 
 using PlanContextPtr = std::shared_ptr<PlanContext>;

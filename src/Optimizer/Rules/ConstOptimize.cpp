@@ -5,11 +5,6 @@ using namespace Plan;
 
 namespace Optimizer {
 
-bool ConstOptimize::VisitPlan(PlanPtr plan, PlanPtr& result) const 
-{
-    return false;
-}
-
 bool ConstOptimize::VisitPlan(FilterPlanPtr plan, PlanPtr& result) const
 {   
     Parser::ExprNodeList* expr = plan->GetPredicator()->conds;

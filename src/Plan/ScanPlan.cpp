@@ -19,7 +19,8 @@ ScanPlan::ScanPlan(char* tableName, PlanContextPtr context)
     : Plan(context)
     , tableName(tableName)
 {
-    desc = context->GetTableTupleDesc(tableName);
+    this->tableID = context->GetTableID(tableName);
+    this->desc = context->GetTableTupleDesc(tableID);
 }
 
 string ScanPlan::GetTableName() const 

@@ -7,6 +7,7 @@
 #include "../../Plan/JoinPlan.h"
 #include "../../Plan/ProjectPlan.h"
 #include "../../Plan/ScanPlan.h"
+#include "../../Plan/UpdatePlan.h"
 #include <string>
 #include <memory>
 namespace Optimizer {
@@ -18,14 +19,14 @@ public:
     bool DoitPrevious() const {return false;}
 
     /// Visit Plan func
-    virtual bool VisitPlan(Plan::PlanPtr          plan, Plan::PlanPtr& result) const = 0;
-    virtual bool VisitPlan(Plan::AggregatePlanPtr plan, Plan::PlanPtr& result) const;
-    virtual bool VisitPlan(Plan::DeletePlanPtr    plan, Plan::PlanPtr& result) const;
-    virtual bool VisitPlan(Plan::FilterPlanPtr    plan, Plan::PlanPtr& result) const;
-    virtual bool VisitPlan(Plan::JoinPlanPtr      plan, Plan::PlanPtr& result) const;
-    virtual bool VisitPlan(Plan::ProjectPlanPtr   plan, Plan::PlanPtr& result) const;
-    virtual bool VisitPlan(Plan::ScanPlanPtr      plan, Plan::PlanPtr& result) const;
-    virtual bool VisitPlan(Plan::UpdatePlan       plan, Plan::PlanPtr& result) const;
+    virtual bool VisitPlan(Plan::PlanPtr          plan, Plan::PlanPtr& result) const {return false;}
+    virtual bool VisitPlan(Plan::AggregatePlanPtr plan, Plan::PlanPtr& result) const {return false;}
+    virtual bool VisitPlan(Plan::DeletePlanPtr    plan, Plan::PlanPtr& result) const {return false;}
+    virtual bool VisitPlan(Plan::FilterPlanPtr    plan, Plan::PlanPtr& result) const {return false;}
+    virtual bool VisitPlan(Plan::JoinPlanPtr      plan, Plan::PlanPtr& result) const {return false;}
+    virtual bool VisitPlan(Plan::ProjectPlanPtr   plan, Plan::PlanPtr& result) const {return false;}
+    virtual bool VisitPlan(Plan::ScanPlanPtr      plan, Plan::PlanPtr& result) const {return false;}
+    virtual bool VisitPlan(Plan::UpdatePlanPtr    plan, Plan::PlanPtr& result) const {return false;}
 };
 using RulePtr = std::shared_ptr<Rule>;
 using Rules = std::vector<RulePtr>;

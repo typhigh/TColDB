@@ -6,5 +6,7 @@ set(HEADERS
 set(SOURCE
 	${SOURCE}
 	${CMAKE_CURRENT_SOURCE_DIR}/ConstOptimize.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/JoinDecompress.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/PredicatePushDown.cpp
 	PARENT_SCOPE
 )

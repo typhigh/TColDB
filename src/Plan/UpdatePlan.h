@@ -1,3 +1,4 @@
+#pragma once
 #include "Plan.h"
 #include "PlanContext.h"
 #include "../Parser/ExprNode.h"

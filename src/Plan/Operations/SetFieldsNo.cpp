@@ -8,7 +8,7 @@ bool SetFieldsNo::DoitPrevious() const
     return false;
 }
 
-bool SetFieldsNo::Accept(PlanPtr plan, PlanPtr& result) const
+bool SetFieldsNo::VisitPlan(PlanPtr plan, PlanPtr& result) const
 {
     Plans children = plan->GetChildren();
     

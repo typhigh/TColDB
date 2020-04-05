@@ -9,5 +9,10 @@ void Aggregator::Add(const string& fieldName, Parser::operator_type_t aggOp)
     aggOps.push_back(aggOp);
 }
 
+Plan::FieldNames Aggregator::GetColumnsRef() const 
+{
+    return fieldNames;
+}
+
 }
 

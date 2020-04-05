@@ -19,17 +19,6 @@ Plan::PlanContextPtr ExecutorContext::GetPlanContext()
     return make_shared<Plan::PlanContext>(shared_from_this());
 }
 
-Columns::FieldPtr ExecutorContext::FetchField(Columns::RowID rid, Columns::ColID cid) const
-{
-    if (tableMetas.size() != 1) {
-        LOG_ERROR("expected only one tableMeta");
-        return nullptr;
-    }
-
-    Columns::TableMetaReadOnlyPtr tableMeta = tableMetas[0]; 
-    return tableMeta->GetField(rid, cid);
-}
-
 Columns::FieldPtr ExecutorContext::FetchField(Columns::TableID tableID, Columns::RowID rid, Columns::ColID cid) const
 {
     Columns::TableMetaReadOnlyPtr tableMeta = GetTableMeta(tableID);
@@ -40,14 +29,15 @@ Columns::FieldPtr ExecutorContext::FetchField(Columns::TableID tableID, Columns:
     return tableMeta->GetField(rid, cid);    
 }
 
-Columns::TupleDescPtr ExecutorContext::GetTableTupleDesc() const
+Columns::TableID ExecutorContext::GetTableID(const string& tableName) const 
 {
-    if (tableMetas.size() != 1) {
-        LOG_ERROR("expected only one tableMeta");
-        return nullptr;
-    }
-    Columns::TableMetaReadOnlyPtr tableMeta = tableMetas[0];
-    return tableMeta->GetTupleDescCopy();
+    for (size_t i = 0; i < tableMetas.size(); ++i) {
+        if (tableMetas[i]->GetTableName() == tableName) {
+            return tableIDs[i];
+        }
+    }   
+    LOG_WARN("No such table %s", tableName.c_str());
+    return Columns::NullTableID;
 }
 
 Columns::TupleDescPtr ExecutorContext::GetTableTupleDesc(Columns::TableID tableID) const
@@ -60,6 +50,16 @@ Columns::TupleDescPtr ExecutorContext::GetTableTupleDesc(Columns::TableID tableI
     return tableMeta->GetTupleDescCopy();
 }
 
+size_t ExecutorContext::GetTupleCount(Columns::TableID tableID) const 
+{
+    Columns::TableMetaReadOnlyPtr tableMeta = GetTableMeta(tableID);
+    if (tableMeta == nullptr) {
+        LOG_WARN("No such table");
+        return 0;
+    }
+    return tableMeta->GetTupleCount();
+}
+
 Columns::TableMetaReadOnlyPtr ExecutorContext::GetTableMeta(Columns::TableID tableID) const 
 {
     for (size_t i = 0; i < tableIDs.size(); ++i) {
@@ -69,5 +69,4 @@ Columns::TableMetaReadOnlyPtr ExecutorContext::GetTableMeta(Columns::TableID tab
     }
     return nullptr;
 }
-
 }

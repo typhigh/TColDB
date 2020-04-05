@@ -58,4 +58,14 @@ void Plan::SetFieldsNo(const vector<int>& fieldsNo)
     this->fieldsNo = fieldsNo;
 }
 
+void Plan::SetWithSelectAll() 
+{
+    selectAll = true;
+}
+
+bool Plan::IsWithSelectAll() const
+{
+    return selectAll;
+}
+
 }

@@ -19,4 +19,10 @@ FieldPtr TableMeta::GetField(RowID rid, ColID cid) const
     return nullptr;
 }
 
+size_t TableMeta::GetTupleCount() const 
+{
+    /*TODO*/
+    
+}
+
 }

@@ -14,6 +14,7 @@ set (SOURCE
     ${CMAKE_CURRENT_SOURCE_DIR}/PlanContext.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PlansCreator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ProjectPlan.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/RenameTable.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ScanPlan.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/SelectPlan.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/UpdatePlan.cpp

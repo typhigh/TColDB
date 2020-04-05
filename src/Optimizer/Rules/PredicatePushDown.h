@@ -16,5 +16,5 @@ public:
 };
 
 using PredicatePushDownPtr = std::shared_ptr<PredicatePushDown>;
-PredicatePushDownPtr predicatePushDown = std::make_shared<PredicatePushDown>();
+
 }

@@ -18,13 +18,15 @@ private:
 //    TablePartMetaPtr tablePartMeta;
 //    IndexPartMetaPtr IndexPartMeta;
     TupleDescPtr tupleDesc;
+
 public:
     TableMeta(/* args */) {}
     ~TableMeta() {}
     TupleDescPtr GetTupleDescCopy() const;
     std::string GetTableName() const;
     FieldPtr GetField(RowID rid, ColID cid) const;
-
+    size_t GetTupleCount() const;
+    
 public:
     TableMetaReadOnlyPtr CloneReadOnly() const;
     TableMetaWritePtr CloneWrite() const;

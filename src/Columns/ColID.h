@@ -13,6 +13,10 @@ public:
     uint64_t GetID() const {
         return id;
     }
+
+    bool operator < (const ColID& other) const {
+        return id < other.id;
+    }
 };
 
 

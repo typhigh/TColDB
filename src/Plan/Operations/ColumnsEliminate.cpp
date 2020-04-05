@@ -8,7 +8,7 @@ bool ColumnsEliminate::DoitPrevious() const
     return true;
 }
  
-bool ColumnsEliminate::Accept(PlanPtr plan, PlanPtr& result) const
+bool ColumnsEliminate::VisitPlan(PlanPtr plan, PlanPtr& result) const
 {
     FieldNames need = plan->GetColumnsRef();
     PlanPtr parent = plan->GetParent();

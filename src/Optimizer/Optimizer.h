@@ -1,6 +1,5 @@
 #pragma once
 #include "../Plan/Plan.h"
-#include "Rules/Rule.h"
 #include "Rules/ConstOptimize.h"
 #include "Rules/PredicatePushDown.h"
 namespace Optimizer {

@@ -1,3 +1,4 @@
+#pragma once
 #include "Plan.h"
 namespace Plan {
 

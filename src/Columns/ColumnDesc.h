@@ -28,8 +28,12 @@ public:
     std::string GetFieldName() const;
     
     /// Used for sort
-    bool operator < (const ColumnDesc& other) const;
-
+    bool operator < (const ColumnDesc& other) const {
+        if (tableID != other.tableID) {
+            return tableID < other.tableID;
+        }
+        return cid < other.cid;
+    }
 };
 
 using ColumnDescPtr = std::shared_ptr<ColumnDesc>; 

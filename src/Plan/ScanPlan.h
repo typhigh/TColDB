@@ -12,6 +12,7 @@ class ScanPlan : public Plan, public std::enable_shared_from_this<ScanPlan>
 private:
     /* data */
     std::string tableName;
+    Columns::TableID tableID;
     // helper
     std::vector<int> columns;
     

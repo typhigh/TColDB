@@ -18,7 +18,7 @@ public:
     bool DoitPrevious() const ;
     
     /// Set the node's parent to null to eliminate shared_ptr's circle refer
-    bool Accept(PlanPtr plan, PlanPtr& result) const;
+    bool VisitPlan(PlanPtr plan, PlanPtr& result) const;
 };
 
 }

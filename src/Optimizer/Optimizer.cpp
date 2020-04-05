@@ -3,10 +3,12 @@ using namespace std;
 
 namespace Optimizer {
 
+
 Rules rules = vector<RulePtr> {
-    constOptimize,
-    predicatePushDown
+    make_shared<ConstOptimize>(),
+    make_shared<PredicatePushDown>()
 };
+
 
 void Optimizer::Optimize(Plan::PlanPtr& plan) 
 {

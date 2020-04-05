@@ -28,13 +28,16 @@ public:
     Plan::PlanContextPtr GetPlanContext();
     
     /// Fetch field by (tableName opt) row's id and col's id
-    Columns::FieldPtr FetchField(Columns::RowID rid, Columns::ColID cid) const;
     Columns::FieldPtr FetchField(Columns::TableID tableID, Columns::RowID rid, Columns::ColID cid) const;
     
-    /// Get tupleDesc by (tableName opt)
-    Columns::TupleDescPtr GetTableTupleDesc() const;
+    /// Get tableID by tableName
+    Columns::TableID GetTableID(const std::string& tableName) const;
+
+    /// Get tupleDesc by tableID
     Columns::TupleDescPtr GetTableTupleDesc(Columns::TableID tableID) const;
 
+    /// Get table's tuple count
+    size_t GetTupleCount(Columns::TableID tableID) const;
 
 private:
     Columns::TableMetaReadOnlyPtr GetTableMeta(Columns::TableID tableID) const;
