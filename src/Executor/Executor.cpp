@@ -76,6 +76,11 @@ bool Executor::IsNoneClients() const
     return clients.IsEmpty();
 }
 
+void Executor::SumbitTableMeta(Columns::TableID tableID, Columns::TableMetaWritePtr tableMeta)
+{
+    db->GetCatalog()->GetTable(tableID)->SetCurrentWriteTableMeta(tableMeta);
+}
+
 ExecutorPtr Executor::GetInstance() 
 {
     static ExecutorPtr executor = make_shared<Executor>();

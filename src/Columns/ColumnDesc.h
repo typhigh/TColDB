@@ -13,6 +13,9 @@ private:
     /// Basic information
     std::string fieldName;
     Parser::FieldType_t fieldType;
+    int width;
+    bool unique;
+    bool primary;
 
     /// Helpful information
     ColID cid;
@@ -20,6 +23,8 @@ private:
 
 public: 
     ColumnDesc(/* args */) {}
+    ColumnDesc(const std::string& fieldName, Parser::FieldType_t fieldType)
+        : fieldName(fieldName), fieldType(fieldType) {}
     ~ColumnDesc() {}
 
     std::string ToString() const;

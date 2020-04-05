@@ -20,6 +20,8 @@ private:
 
 public:
     TupleDesc(/* args */) {}
+    TupleDesc(const std::string& tableName, const ColumnDescs& descs) 
+        : tableName(tableName), descs(descs) {}
     ~TupleDesc() {}
     TupleDescPtr Clone() const;
 
@@ -53,5 +55,5 @@ public:
 };
 
 using TupleDescPtr = std::shared_ptr<TupleDesc>;
-using TupleDescs = std::vector<TupleDescPtr>;
+using TupleDescs = std::vector<TupleDescPtr>; 
 }

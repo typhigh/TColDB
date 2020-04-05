@@ -39,7 +39,9 @@ public:
     /// Get table's tuple count
     size_t GetTupleCount(Columns::TableID tableID) const;
 
-private:
+public:
+    void SubmitTableMeta(Columns::TableID tableID, Columns::TableMetaWritePtr tableMeta);
+
     Columns::TableMetaReadOnlyPtr GetTableMeta(Columns::TableID tableID) const;
 };
 

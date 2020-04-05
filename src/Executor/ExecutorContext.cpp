@@ -1,5 +1,6 @@
 #include "ExecutorContext.h"
 #include "../Plan/PlanContext.h"
+#include "Executor.h"
 using namespace std;
 
 namespace Executor {
@@ -58,6 +59,11 @@ size_t ExecutorContext::GetTupleCount(Columns::TableID tableID) const
         return 0;
     }
     return tableMeta->GetTupleCount();
+}
+
+void ExecutorContext::SubmitTableMeta(Columns::TableID tableID, Columns::TableMetaWritePtr tableMeta)
+{
+    this->executor->SumbitTableMeta(tableID, tableMeta);   
 }
 
 Columns::TableMetaReadOnlyPtr ExecutorContext::GetTableMeta(Columns::TableID tableID) const 

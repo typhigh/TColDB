@@ -22,9 +22,12 @@ private:
     Utils::ThreadPool executePool;
     Utils::ConcurrentHashSet<Common::ClientID> clients;
     static constexpr size_t runningThreadNums = 4;
+    Databases::DatabasePtr db;
 
 public:
-    Executor() : executePool("executePool", runningThreadNums) {}
+    Executor() : executePool("executePool", runningThreadNums) {
+        db = Databases::Database::GetInstance();
+    }
     ~Executor() {}
 
 public:
@@ -40,6 +43,8 @@ public:
 
     /// Get the instance of executor
     static ExecutorPtr GetInstance();
+
+    void SumbitTableMeta(Columns::TableID, Columns::TableMetaWritePtr);
 
 private:
     /// Execute a statement (command)
@@ -57,6 +62,7 @@ private:
 
     /// Get the context of executor now
     ExecutorContextPtr GetExecutorContext(const std::vector<std::string>& tableRefs, bool isReadOnly);
+
 };
 
 }

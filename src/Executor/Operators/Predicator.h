@@ -1,7 +1,7 @@
 #pragma once
 #include "../../Parser/ExprNode.h"
 #include "../../Columns/Field/Field.h"
-#include "../../Plan/Plan.h"
+#include "../../Columns/Tuple.h"
 #include <memory>
 namespace Executor {
 
@@ -15,7 +15,8 @@ public:
     Predicator(/* args */) {};
     ~Predicator();
     Predicator(Parser::ExprNode* cond);
-    bool Predicate(Columns::FieldPtr field);
+    void Add(Parser::ExprNode* cond);
+    bool Predicate(Columns::TuplePtr tuple);
     Plan::FieldNames GetColumnsRef() const;
 };
 

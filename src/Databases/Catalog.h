@@ -33,6 +33,7 @@ public:
 
     /// Insert a table
     void InsertTable(const std::string& tableName, Columns::TablePtr table);
+    
     friend class Database;
 
 private:

@@ -9,12 +9,25 @@ Predicator::Predicator(Parser::ExprNode* cond)
     conds = Parser::Expression::GetAndExprs(cond);
 }
 
+void Predicator::Add(Parser::ExprNode* cond)
+{
+    if (cond == nullptr) {
+        return;
+    } 
+
+    if (conds == nullptr) {
+        conds = new Parser::ExprNodeList();
+    } 
+
+    conds->push_back(Parser::Expression::Copy(cond));
+}
+
 Predicator::~Predicator() 
 {
     Parser::Expression::Free(conds);
 }
 
-bool Predicator::Predicate(Columns::FieldPtr field)
+bool Predicator::Predicate(Columns::TuplePtr tuple)
 {
     /*TODO*/
     return true;
