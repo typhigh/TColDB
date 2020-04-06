@@ -23,8 +23,7 @@ private:
 
 public: 
     ColumnDesc(/* args */) {}
-    ColumnDesc(const std::string& fieldName, Parser::FieldType_t fieldType)
-        : fieldName(fieldName), fieldType(fieldType) {}
+    ColumnDesc(const std::string& fieldName, Parser::FieldType_t fieldType, TableID tableID, ColID cid);
     ~ColumnDesc() {}
 
     std::string ToString() const;

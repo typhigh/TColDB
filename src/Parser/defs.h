@@ -124,7 +124,20 @@ inline std::string ToString(FieldType_t type)
     case FIELD_TYPE_VARCHAR:	return "FIELD_VARCHAR";
 	case FIELD_TYPE_NULL:		return "FIELD_NULL";
 	case FIELD_TYPE_LAZY:		return "FIELD_LAZY";
-    }
+    default:					return "FIELD_UNKNOWN";
+	}
+}
+
+inline std::string ToString(table_constraint_type_t type)
+{
+	switch (type) 
+	{
+	case TABLE_CONSTRAINT_CHECK: 		return "CHECK";
+	case TABLE_CONSTRAINT_FOREIGN_KEY:	return "FOREIGN_KEY";
+	case TABLE_CONSTRAINT_PRIMARY_KEY:	return "PRIMARY_KEY";
+	case TABLE_CONSTRAINT_UNIQUE:		return "UNIQUE";
+	default:							return "UNKNOWN";
+	}
 }
 
 }

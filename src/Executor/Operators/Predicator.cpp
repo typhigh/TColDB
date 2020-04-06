@@ -9,6 +9,16 @@ Predicator::Predicator(Parser::ExprNode* cond)
     conds = Parser::Expression::GetAndExprs(cond);
 }
 
+Predicator::Predicator(Parser::ExprNodeList* conds)
+{
+    this->conds = Parser::Expression::Copy(conds);
+}
+
+PredicatorPtr Predicator::Clone() const 
+{
+    return make_shared<Predicator>(conds);
+}
+
 void Predicator::Add(Parser::ExprNode* cond)
 {
     if (cond == nullptr) {

@@ -1,5 +1,8 @@
 #include "ASTCreateInfo.h"
 #include "../Utils/StringUtils.h"
+#include "../Columns/Field/FieldsCreator.h"
+#include "Expression/Expression.h"
+
 using namespace std;
 
 namespace Parser {
@@ -39,6 +42,7 @@ vector<string> ASTCreateInfo::GetTablesRef() const
 
 void ASTCreateInfo::Execute(Executor::ExecutorContextPtr context) const
 {
+    /// TODO: Check unique and primary key constraint
     /// Create a table 
     string tableName = Utils::CopyStringFromCString(name);
     Columns::TableID tableID = context->GetTableID(tableName);
@@ -46,19 +50,52 @@ void ASTCreateInfo::Execute(Executor::ExecutorContextPtr context) const
         LOG_WARN("some users try to create exisited table %s", tableName.c_str());
         return;
     }
+
     Columns::TableMetaWritePtr tableMetaNew = make_shared<Columns::TableMeta>();
     Columns::ColumnDescs descs;
+    vector<Columns::FieldPtr> defaultFields(fields->size());
+
+    /// Set tuple desc and default value
     for (size_t i = 0; i < fields->size(); ++i) {
         FieldDef* def = fields->at(i);
-        descs.emplace_back(def->name, def->type);
+        descs.emplace_back(def->name, def->type, tableID, tableMetaNew->CreateNextColID());
+        if (def->default_value != nullptr) {
+            defaultFields[i] = Expression::Eval(def->default_value, nullptr);
+        } else if (def->flags & FIELD_FLAG_NOTNULL) {
+            /// Don't allow null 
+            defaultFields[i] = nullptr;
+        } else {
+            defaultFields[i] = Columns::FieldsCreator::CreateNullField();
+        }
     }
     Columns::TupleDescPtr desc = make_shared<Columns::TupleDesc>(tableName, descs);
     tableMetaNew->SetTupleDesc(desc);
+    
+    /// Set table constraint checker
     Executor::PredicatorPtr checker = make_shared<Executor::Predicator>();
     for (size_t i = 0; i < constraints->size(); ++i) {
         TableConstraint* constraint = constraints->at(i);
-        if (constraint->type == )
+        table_constraint_type_t type = constraint->type;
+        switch (type)
+        {
+        case TABLE_CONSTRAINT_CHECK:
+        {
+            checker->Add(constraint->check_cond);
+            break;
+        }
+        case TABLE_CONSTRAINT_PRIMARY_KEY:
+        case TABLE_CONSTRAINT_UNIQUE:
+        {
+            /*TODO*/
+            break;
+        }
+        default:
+            LOG_ERROR("unsupported table constraint %s \n", Parser::ToString(type).c_str());
+            break;
+        }
     }
+    tableMetaNew->SetChecker(checker);
+    context->SubmitTableMeta(tableID, tableMetaNew);
 }
 
 }

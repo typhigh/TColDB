@@ -3,7 +3,9 @@
 
 namespace Parser {
 
-class FieldDef 
+class 
+
+FieldDef 
 {
 public:	
 	char *name;

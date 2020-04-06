@@ -18,6 +18,8 @@ private:
     std::string tabelName; 
     TableID tableID;
 
+    ColID currentCid;
+
 //   TablePartMetaPtr tablePartMeta;
 //    IndexPartMetaPtr IndexPartMeta;
     
@@ -30,7 +32,7 @@ private:
     std::vector<FieldPtr> defaultFields;    
 
 public:
-    TableMeta(/* args */) {}
+    TableMeta();
     ~TableMeta() {}
     
     /// Get the table tuple desc copy
@@ -48,11 +50,19 @@ public:
     /// Get tuple count
     size_t GetTupleCount() const;
 
-    void SetChecker(Parser::ExprNodeList* )
+    /// Set checker
+    void SetChecker(Executor::PredicatorPtr checker);
+
+    /// check if the tuple is under the constraint 
     bool CheckCondition(TuplePtr tuple) const;
-    
+
+    /// Create next col id
+    ColID CreateNextColID();
+        
 public:
     TableMetaReadOnlyPtr CloneReadOnly() const;
+
+    /// Clone
     TableMetaWritePtr CloneWrite() const;
 };
 

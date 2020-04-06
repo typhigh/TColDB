@@ -3,6 +3,11 @@ using namespace std;
 
 namespace Columns {
 
+TableMeta::TableMeta() 
+{
+    currentCid = ColID(0);
+}
+
 TupleDescPtr TableMeta::GetTupleDescCopy() const 
 {
     return tupleDesc->Clone();
@@ -29,9 +34,42 @@ size_t TableMeta::GetTupleCount() const
     /*TODO*/
 }
 
+void TableMeta::SetChecker(Executor::PredicatorPtr checker)
+{
+    this->checker = checker;
+}
+
 bool TableMeta::CheckCondition(TuplePtr tuple) const 
 {
     return checker->Predicate(tuple);
+}
+
+
+TableMetaWritePtr TableMeta::CloneWrite() const 
+{
+    TableMetaWritePtr ret = make_shared<TableMeta>();
+    ret->tabelName = tabelName;
+    ret->tableID = tableID;
+    ret->currentCid = currentCid;
+
+    for (size_t i = 0; i < defaultFields.size(); ++i) {
+        ret->defaultFields.push_back(defaultFields[i]->Clone());
+    }
+
+    if (tupleDesc != nullptr) {
+        ret->tupleDesc = tupleDesc->Clone();
+    }
+
+    if (checker != nullptr) {
+        ret->checker = checker->Clone();
+    }
+    
+    return ret;
+}
+
+ColID TableMeta::CreateNextColID()
+{
+    return currentCid = currentCid.NextColID();
 }
 
 }

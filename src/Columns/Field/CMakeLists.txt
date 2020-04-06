@@ -7,6 +7,7 @@ set (SOURCE
 	${SOURCE}
     ${CMAKE_CURRENT_SOURCE_DIR}/BoolField.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CharField.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Convertion.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/DateField.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/DoubleField.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FieldsCreator.cpp

@@ -5,6 +5,14 @@ using namespace std;
 
 namespace Columns {
 
+ColumnDesc::ColumnDesc(const string& fieldName, Parser::FieldType_t fieldType, TableID tableID, ColID cid) 
+    : fieldName(fieldName)
+    , fieldType(fieldType)
+    , tableID(tableID)
+    , cid(cid)
+{
+}
+
 string ColumnDesc::ToString() const 
 {
     string ret = this->fieldName + Parser::ToString(this->fieldType) + to_string(this->cid.GetID()) + "\n";

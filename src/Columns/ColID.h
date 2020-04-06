@@ -8,10 +8,15 @@ private:
     uint64_t id;
 
 public:
-    ColID(/* args */) {}
+    ColID() {}
+    ColID(uint64_t id) : id(id) {}
     ~ColID() {}
     uint64_t GetID() const {
         return id;
+    }
+
+    ColID NextColID() {
+        return ColID(id+1);
     }
 
     bool operator < (const ColID& other) const {
