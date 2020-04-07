@@ -8,11 +8,11 @@ class SQLParserResult
 private:
     IAST* sqlResult;
     char* errorMsg;
+
 public:
     SQLParserResult() {}
     ~SQLParserResult() {
         delete errorMsg;
-        delete sqlResult;
     }
 
     /// Set parser sql result

@@ -31,6 +31,10 @@ public:
 
     /// Get client id
     ClientID GetClientID() const;
+
+    /// Info
+    std::string ToString() const;
+
 };
 
 using CommandWrapPtr = std::shared_ptr<CommandWrap>;

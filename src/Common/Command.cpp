@@ -14,9 +14,9 @@ void Command::SetResult(const string& result)
     if (done) {
         return;
     }
+    this->result = result;
     done = true;
     cond.notify_all();
-    this->result = result;
 }
 
 string Command::GetResult() 

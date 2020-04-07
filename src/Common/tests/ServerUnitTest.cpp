@@ -8,6 +8,9 @@ TEST(ServerUnitTest, testDemo) {
     Common::ServerPtr server = make_shared<Server>();
     Common::ClientPtr client = make_shared<Client>();
     client->SetServer(server);
-    client->SetInput("testdata1.sql");
+    string path = getenv("TestData");
+    path += "/CreateAndShow.sql";
+    client->SetInput(path);
     client->Start();
+    server->Start();
 }

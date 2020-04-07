@@ -5,25 +5,39 @@
 #include "../Parser/IASTNotNeedPlan.h"
 #include "../Optimizer/Optimizer.h"
 #include "../Columns/TableMeta.h"
+#include "../Utils/StringUtils.h"
 
 using namespace std;
 
 namespace Executor {
+
+void Executor::StartUp()
+{
+    executePool.StartUp();
+}
+
+void Executor::ShutDown()
+{
+    executePool.ShutDown();
+}
 
 bool Executor::TryExecuteStatement(Common::CommandWrapPtr command) 
 {
     /// Step 1 : parse
     if (command->GetParserResult() == nullptr) {  
         string sql = command->GetContent();
-        Parser::SQLParserResult* parserResult;
+        Parser::SQLParserResult* parserResult = new Parser::SQLParserResult();
         bool hasError = !Parser::SQLParser::Parse(sql, parserResult);
     
         /// If has error, just delete result and send back
         if (hasError) {
-            command->SetResult(parserResult->GetErrorMsg());  
+            string errorMsg = Utils::CopyStringFromCString(parserResult->GetErrorMsg());
+            LOG_INFO("Parser get wrong %s", errorMsg.c_str());
+            command->SetResult(errorMsg);  
             if (parserResult != nullptr) {
                 delete parserResult;
             }
+            LOG_INFO("YES, right here");
             return true;
         }
 

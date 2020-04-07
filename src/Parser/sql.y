@@ -70,6 +70,7 @@ void yyerror(Parser::SQLParserResult* result, const char *s);
 #include "SQLParserResult.h"
 #include "TableConstraint.h"
 #include "TableFrom.h"
+#include "../Utils/Logger.h"
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -163,7 +164,10 @@ void yyerror(Parser::SQLParserResult* result, const char *s);
 %start sql_start
 
 %%
-sql_start  :  sql_stmt 				   { thisptr->Set($1);}
+sql_start  :  sql_stmt 
+		   { 
+				thisptr->Set($1);
+		   }
 		   ;
 
 sql_stmt   : sql_plan_stmt					{ $$ = $1;}

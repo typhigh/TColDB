@@ -67,19 +67,18 @@ inline std::vector<std::string> Splite(const std::string& s, char ch)
         if (s[i] == ch) {
             std::string now = s.substr(j, i - j + 1);
             ret.push_back(move(now));
+            j = i;
         }
     }
-    
-    if (ret.empty()) {
-        ret.push_back(s);
-    }
+
+    return ret;
 }
 
 /// Copy a new c style string, return c-style
 inline char* CopyCStringFromCString(const char* s)
 {
-    if (s == NULL) {
-        return NULL;
+    if (s == nullptr) {
+        return nullptr;
     }
     size_t len = strlen(s);
     char* ret = new char[len];
@@ -90,6 +89,9 @@ inline char* CopyCStringFromCString(const char* s)
 // Copy a new c style string, return c-style
 inline std::string CopyStringFromCString(const char* s) 
 {
+    if (s == nullptr) {
+        return " ";
+    }
     size_t len = strlen(s);
     std::string ret;
     ret.reserve(len);

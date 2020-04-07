@@ -31,6 +31,12 @@ public:
     ~Executor() {}
 
 public:
+    /// Start up (mainly executePool)
+    void StartUp();
+    
+    /// Shut down (mainly executePool)
+    void ShutDown();
+
     /// Try execute the statement
     /// If write lock is hold by other, return false
     bool TryExecuteStatement(Common::CommandWrapPtr stmt);

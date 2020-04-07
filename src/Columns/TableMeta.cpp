@@ -11,14 +11,13 @@ TableMeta::TableMeta()
 
 string TableMeta::ToString() const
 {
-    string ret;
-    stringstream out(ret);
+    stringstream out;
     out << "======== Table Info Begin ========\n"
         << "Table name = " + tabelName + "\n"
         << "Column number = " + to_string(tupleDesc->GetColumnDescs().size()) + "\n"
         << tupleDesc->ToString()
         << checker->ToString();
-    return ret; 
+    return out.str(); 
 }
 
 TupleDescPtr TableMeta::GetTupleDescCopy() const 

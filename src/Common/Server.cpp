@@ -42,17 +42,27 @@ void Server::AddClient(ClientID clientID)
 
 void Server::StartImpl() 
 {
-    /// We should load meta info 
+    LOG_INFO("Server start");
+    
+    /// We should load meta info
     Databases::DatabasePtr db = Databases::Database::GetInstance(); 
+    
+    /// Start executor
+    executor->StartUp();
+
+    started.store(true); 
     
     /// last is used as address, no other usage
     CommandWrap* last = nullptr;
     while (!executor->IsNoneClients()) {
         CommandWrapPtr cmd;
         Consume(cmd);
+
         if (cmd == nullptr) {
             continue;
         }
+
+        LOG_INFO("get a command \n%s", cmd->ToString().c_str());
         bool tryExecute = executor->TryExecuteStatement(cmd);
         if (!tryExecute) {
             /// Put back if can't execute
@@ -66,6 +76,9 @@ void Server::StartImpl()
             }
         } 
     }
+
+    /// End 
+    executor->ShutDown();
 }
 
 void Server::Produce(CommandWrapPtr cmd) 
