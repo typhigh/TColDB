@@ -23,8 +23,10 @@ public:
     /// Deep free a expr-list
     static void Free(ExprNodeList* exprs);
 
+    /// Get a and expr-list by a expr
     static ExprNodeList* GetAndExprs(const ExprNode* expr);
 
+/// Check
 public:
     /// Is a expr aggregate
     static bool IsAggregate(const ExprNode* expr);
@@ -41,12 +43,20 @@ public:
     /// Is a expr a unary expr
     static bool IsUnary(const ExprNode* expr);
 
+/// Get informations
+public:
     /// Get the columns ref of the expr
     static FieldNames GetColumnsRef(const ExprNode* expr);
 
     /// Get the columns ref of the expr list
     static FieldNames GetColumnsRef(const ExprNodeList* expr);
 
+    /// ExprNodeList's ToString 
+    static std::string ToString(const ExprNodeList* exprs);
+
+    /// ExprNode's ToString
+    static std::string ToString(const ExprNode* expr);
+    
 /// Eval Operation
 public:
     static EValue Eval(const ExprNode* expr, Columns::TuplePtr tuple);

@@ -1,6 +1,8 @@
 #pragma once
 #include "IAST.h"
 #include "../Executor/ExecutorContext.h"
+#include "../Plan/Plan.h"
+
 namespace Parser {
 
 class IASTNotNeedPlan : public IAST

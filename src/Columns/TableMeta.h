@@ -35,6 +35,9 @@ public:
     TableMeta();
     ~TableMeta() {}
     
+    /// Get the informations
+    std::string ToString() const;
+
     /// Get the table tuple desc copy
     TupleDescPtr GetTupleDescCopy() const;
 

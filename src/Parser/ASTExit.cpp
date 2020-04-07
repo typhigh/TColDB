@@ -21,6 +21,7 @@ vector<string> ASTExit::GetTablesRef() const
 void ASTExit::Execute(Executor::ExecutorContextPtr context) const
 {
     context->SubmitExit();
+    context->SubmitResult("Exit");
 }
 
 }

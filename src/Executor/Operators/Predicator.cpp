@@ -43,9 +43,19 @@ bool Predicator::Predicate(Columns::TuplePtr tuple)
     return true;
 }
 
+Parser::ExprNodeList* Predicator::Get() 
+{
+    return conds;
+}
+
 Plan::FieldNames Predicator::GetColumnsRef() const 
 {
     return Parser::Expression::GetColumnsRef(conds);
+}
+
+string Predicator::ToString() const 
+{
+    return Parser::Expression::ToString(conds);
 }
 
 }

@@ -18,4 +18,10 @@ vector<string> ASTInsertInfo::GetTablesRef() const
 {
     return vector<string> {Utils::CopyStringFromCString(table)};
 }
+
+void ASTInsertInfo::Execute(Executor::ExecutorContextPtr context) const 
+{
+    /*TODO*/
+}
+
 }

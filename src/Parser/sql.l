@@ -6,6 +6,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <cmath>
+#include "ASTCommit.h"
 #include "ASTCreateIndexInfo.h"
 #include "ASTCreateInfo.h"
 #include "ASTCreator.h"
@@ -45,6 +46,7 @@ DATE_TEMPLATE    '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
 %%
 
 use|USE          { return USE; }
+commit|COMMIT    { return COMMIT; }
 create|CREATE    { return CREATE; }
 drop|DROP        { return DROP; }
 select|SELECT    { return SELECT; }

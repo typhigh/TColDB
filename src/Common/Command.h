@@ -1,6 +1,5 @@
 #pragma once
 #include "defs.h"
-#include "../Parser/IAST.h"
 #include <memory>
 #include <string>
 #include <mutex>
@@ -38,9 +37,10 @@ public:
 
     /// Get client id
     ClientID GetclientID() const;
-    
+
 };
 
 using CommandPtr = std::shared_ptr<Command>;
 
 }
+

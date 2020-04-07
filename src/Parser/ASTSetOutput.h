@@ -17,6 +17,7 @@ public:
     std::string ToString() const;
     bool IsWriteSQL() const;
     std::vector<std::string> GetTablesRef() const;
+    void Execute(Executor::ExecutorContextPtr context) const;
 };
 
 

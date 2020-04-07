@@ -340,6 +340,64 @@ FieldNames Expression::GetColumnsRef(const ExprNodeList* exprs)
     return ret;
 }
 
+string Expression::ToString(const ExprNodeList* exprs)
+{
+    string ret = "{";
+    if (exprs == nullptr) {
+        return "{}";
+    }
+
+    for (const ExprNode* expr: *exprs) {
+        ret += "\t" + ToString(expr);
+    }
+
+    ret += "}";
+    return ret;
+}
+
+string Expression::ToString(const ExprNode* expr)
+{
+    string ret;
+    if (expr == nullptr) {
+        return "nullptr";
+    }
+
+    if (IsLeafNode(expr)) {
+        switch (expr->term_type)
+        {
+        case TERM_BOOL:         return to_string(expr->val_b);
+        case TERM_STRING:   
+        case TERM_DATE:         return Utils::CopyStringFromCString(expr->val_s);
+        case TERM_FLOAT:        return to_string(expr->val_f);
+        case TERM_INT:          return to_string(expr->val_i);
+        case TERM_NULL:         return "null";
+        case TERM_COLUMN_REF:   return expr->column_ref->GetFieldName();
+        case TERM_LITERAL_LIST:
+        {
+            ret = "{";
+            for (size_t i = 0 ; i < expr->literal_list->size(); ++i) {
+                ret += ToString(expr->literal_list->at(i)) + ",";
+            }
+            ret += "}";
+            return ret;
+        }
+        default:         
+        {
+            LOG_ERROR("unknown term type");
+            return "";
+        }
+        }
+    }
+
+    if (IsUnary(expr)) {
+        ret = Operations::ToString(expr->op) + ToString(expr->left);
+        return ret;
+    }
+    
+    ret = ToString(expr->left) + Operations::ToString(expr->op) + ToString(expr->right);
+    return ret;
+}
+
 void Expression::GetAndExprs(const ExprNode* expr, ExprNodeList* exprs)
 {
     if (expr == nullptr) {

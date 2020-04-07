@@ -1,5 +1,6 @@
 #pragma once
 #include "Command.h"
+#include "../Parser/IAST.h"
 
 namespace Common {
 class CommandWrap

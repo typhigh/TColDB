@@ -88,19 +88,23 @@ enum TermType_t
 	TERM_NULL
 } ;
 
-class TermType;
 class IAST;
 class IASTNeedPlan;
 class IASTNotNeedPlan;
 class FieldDef;
 class ColumnRef;
+class ASTCommit;
 class ASTCreateInfo;
+class ASTDeleteInfo;
+class ASTDropTableInfo;
+class ASTExit;
 class ASTInsertInfo;
+class ASTSelectInfo;
+class ASTSetOutput;
+class ASTShowTableInfo;
+class ASTUpdateInfo;
 class ExprNode;
 class TableConstraint;
-class ASTDeleteInfo;
-class ASTUpdateInfo;
-class ASTSelectInfo;
 class TableFrom;
 
 using IASTPtr = std::shared_ptr<IAST>;

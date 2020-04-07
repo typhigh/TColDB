@@ -19,10 +19,16 @@ void Command::SetResult(const string& result)
     this->result = result;
 }
 
-string Command::GetResult() {
+string Command::GetResult() 
+{
     unique_lock<std::mutex> lock(mutex);
     cond.wait(lock, [this] { return done;});
     return result;
+}
+
+ClientID Command::GetclientID() const
+{
+    return clientID;
 }
 
 }

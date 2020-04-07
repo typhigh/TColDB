@@ -7,6 +7,7 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include "ASTCommit.h"
 #include "ASTCreateIndexInfo.h"
 #include "ASTCreateInfo.h"
 #include "ASTCreator.h"
@@ -45,6 +46,7 @@ void yyerror(Parser::SQLParserResult* result, const char *s);
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "ASTCommit.h"
 #include "ASTCreateIndexInfo.h"
 #include "ASTCreateInfo.h"
 #include "ASTCreator.h"
@@ -91,6 +93,7 @@ void yyerror(Parser::SQLParserResult* result, const char *s);
 	Parser::ColumnRefList*				column_refs;
 	Parser::TableConstraint*			constraint;
 	Parser::TableConstraintList*		constraints;
+	Parser::ASTCommit*					commit;
 	Parser::ASTCreateInfo*				table_def;
 	Parser::ASTDeleteInfo*				delete_info;
 	Parser::ASTDropTableInfo*			table_drop;
@@ -113,7 +116,7 @@ void yyerror(Parser::SQLParserResult* result, const char *s);
 %token LEFT RIGHT FULL ASC DESC ORDER BY IN ON AS
 %token DISTINCT GROUP USING INDEX TABLE DATABASE
 %token DEFAULT UNIQUE PRIMARY FOREIGN REFERENCES CHECK KEY OUTPUT
-%token USE CREATE DROP SELECT INSERT UPDATE DELETE SHOW SET EXIT
+%token USE COMMIT CREATE DROP SELECT INSERT UPDATE DELETE SHOW SET EXIT
 
 %token IDENTIFIER
 %token DATE_LITERAL
@@ -141,6 +144,7 @@ void yyerror(Parser::SQLParserResult* result, const char *s);
 %type <ast> sql_stmt
 %type <ast_plan> sql_plan_stmt
 %type <ast_noplan> sql_noplan_stmt
+%type <commit> commit_stmt
 %type <insert> insert_stmt insert_columns
 %type <update_info> update_stmt
 %type <delete_info> delete_stmt
@@ -278,7 +282,11 @@ setpath_stmt		: SET OUTPUT '=' STRING_LITERAL {
 			   			$$ = node; 
 		   			}
 		   			;
-
+commit_stmt			: COMMIT {
+						ASTCommit* node = new ASTCommit();
+						$$ = node;
+					}
+					;
 table_refs          : table_refs ',' table_item {
 						$1->push_back($3);
 						$$ = $1;

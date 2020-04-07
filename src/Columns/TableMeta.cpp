@@ -1,4 +1,5 @@
 #include "TableMeta.h"
+#include <sstream>
 using namespace std;
 
 namespace Columns {
@@ -6,6 +7,18 @@ namespace Columns {
 TableMeta::TableMeta() 
 {
     currentCid = ColID(0);
+}
+
+string TableMeta::ToString() const
+{
+    string ret;
+    stringstream out(ret);
+    out << "======== Table Info Begin ========\n"
+        << "Table name = " + tabelName + "\n"
+        << "Column number = " + to_string(tupleDesc->GetColumnDescs().size()) + "\n"
+        << tupleDesc->ToString()
+        << checker->ToString();
+    return ret; 
 }
 
 TupleDescPtr TableMeta::GetTupleDescCopy() const 

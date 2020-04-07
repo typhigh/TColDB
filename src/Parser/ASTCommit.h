@@ -1,3 +1,4 @@
+#pragma once
 #include "IASTNotNeedPlan.h"
 
 namespace Parser {

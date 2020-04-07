@@ -7,7 +7,7 @@ namespace Executor {
 
 class Predicator
 {
-public:
+private:
     /* data */
     Parser::ExprNodeList* conds;
     
@@ -17,9 +17,13 @@ public:
     Predicator(Parser::ExprNode* cond);
     Predicator(Parser::ExprNodeList* conds);
     PredicatorPtr Clone() const;
+
+public:
     void Add(Parser::ExprNode* cond);
     bool Predicate(Columns::TuplePtr tuple);
+    Parser::ExprNodeList* Get();
     Plan::FieldNames GetColumnsRef() const;
+    std::string ToString() const;
 };
 
 }

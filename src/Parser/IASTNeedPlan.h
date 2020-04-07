@@ -1,5 +1,7 @@
 #pragma once
 #include "IAST.h"
+#include "../Plan/Plan.h"
+#include "../Plan/PlanContext.h"
 
 namespace Parser {
 
