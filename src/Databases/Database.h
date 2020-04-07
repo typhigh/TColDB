@@ -21,6 +21,9 @@ public:
     ~Database();
     static DatabasePtr GetInstance();
     CatalogPtr GetCatalog();
+
+public:
+    void Commit();
 };
 
 

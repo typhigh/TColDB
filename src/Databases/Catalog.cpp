@@ -24,10 +24,13 @@ void Catalog::InsertTable(const string& tableName, Columns::TablePtr table)
 Columns::TableID Catalog::GetTableIDImpl(const string& tableName)
 {
     auto item = tableIDs.find(tableName);
-    if (item == tableIDs.end()) {
-        return Columns::NullTableID;
+    if (item != tableIDs.end()) {
+        return item->second;
     }
-    return item->second;
+    Columns::TableID tableID = GetNewTableID();
+    tableIDs.emplace(tableName, tableID);
+    tableMap.emplace(tableID, nullptr);
+    return tableID;
 }
 
 Columns::TablePtr Catalog::GetTableImpl(Columns::TableID tableID)
@@ -54,7 +57,7 @@ void Catalog::InsertTableImpl(const string& tableName, Columns::TablePtr table)
 
 Columns::TableID Catalog::GetNewTableID()
 {
-    return currentTableID++;
+    return ++currentTableID;
 }
 
 void Catalog::LoadInfo()
@@ -69,6 +72,13 @@ void Catalog::StoreInfo()
     LOG_INFO("Store Catalog begin");
     /*TODO*/
     LOG_INFO("Store Catalog end");
+}
+
+void Catalog::UpdateAllTableMetas()
+{
+    for (auto iter = tableMap.begin(); iter != tableMap.end(); ++iter) {
+        iter->second->Update();
+    }
 }
 
 }

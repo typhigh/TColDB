@@ -15,7 +15,7 @@ private:
     /// content
     const std::string cmd;
     std::string result;
-    ClientID clientID;
+    const ClientID clientID;
 
 private:
     /// state
@@ -26,14 +26,19 @@ private:
 public:
     Command(const std::string& cmd, ClientID clientID) : cmd (cmd), clientID(clientID) {}
     ~Command() {}
-    /// Get Content
+
+    /// Get content
     std::string GetContent() const;
     
-    /// Set Result
+    /// Set result
     void SetResult(const std::string& result);
     
-    /// Get Result (waiting future Set)
+    /// Get result (waiting future Set)
     std::string GetResult();
+
+    /// Get client id
+    ClientID GetclientID() const;
+    
 };
 
 using CommandPtr = std::shared_ptr<Command>;

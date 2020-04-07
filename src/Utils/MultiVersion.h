@@ -44,7 +44,7 @@ public:
     }
 
     /// Update an object with new version.
-    void set(Version && value)
+    void set(Version value)
     {
         std::lock_guard<std::shared_mutex> wLock(rwLock);
         current_version = value;

@@ -38,6 +38,9 @@ public:
     /// Add Client by server
     void AddClient(Common::ClientID clientID);
 
+    /// Remove Client
+    void RemoveClient(Common::ClientID clientID);
+    
     /// Is none clients
     bool IsNoneClients() const;
 
@@ -46,13 +49,12 @@ public:
 
     void SumbitTableMeta(Columns::TableID, Columns::TableMetaWritePtr);
 
+    void SubmitCommit(); 
+
 private:
     /// Execute a statement (command)
     /// Note: statement has been parsed.
     void ExecuteStatementImpl(Common::CommandWrapPtr stmt);
-
-    /// Remove Client
-    void RemoveClient(Common::ClientID clientID);
 
     /// Execute the optimized plan
     void ExecutePlan(Plan::PlanPtr plan, ExecutorContextPtr context, bool isReadOnly);

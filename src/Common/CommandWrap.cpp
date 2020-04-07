@@ -27,4 +27,9 @@ void CommandWrap::SetParserResult(Parser::IAST* parserResult)
     this->parserResult = parserResult;
 }
 
+ClientID CommandWrap::GetClientID() const 
+{
+    return data->GetclientID();
+}
+
 }

@@ -21,6 +21,7 @@ private:
 protected:  
     void LoadInfo();
     void StoreInfo();
+    void UpdateAllTableMetas();
 
 public:
     Catalog() : currentTableID(0){}

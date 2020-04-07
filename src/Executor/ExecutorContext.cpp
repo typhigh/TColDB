@@ -61,11 +61,6 @@ size_t ExecutorContext::GetTupleCount(Columns::TableID tableID) const
     return tableMeta->GetTupleCount();
 }
 
-void ExecutorContext::SubmitTableMeta(Columns::TableID tableID, Columns::TableMetaWritePtr tableMeta)
-{
-    this->executor->SumbitTableMeta(tableID, tableMeta);   
-}
-
 Columns::TableMetaReadOnlyPtr ExecutorContext::GetTableMeta(Columns::TableID tableID) const 
 {
     for (size_t i = 0; i < tableIDs.size(); ++i) {
@@ -75,4 +70,26 @@ Columns::TableMetaReadOnlyPtr ExecutorContext::GetTableMeta(Columns::TableID tab
     }
     return nullptr;
 }
+
+void ExecutorContext::SubmitTableMeta(Columns::TableID tableID, Columns::TableMetaWritePtr tableMeta)
+{
+    executor->SumbitTableMeta(tableID, tableMeta);   
+}
+
+void ExecutorContext::SubmitCommit() 
+{
+    executor->SubmitCommit();
+}
+
+void ExecutorContext::SubmitExit()
+{
+    SubmitCommit();
+    executor->RemoveClient(command->GetClientID());
+}
+
+void ExecutorContext::SubmitResult(const string& result)
+{
+    command->SetResult(result);
+}
+
 }

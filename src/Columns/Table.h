@@ -18,9 +18,9 @@ public:
     
     /// Get the table meta, given if read only
     TableMetaReadOnlyPtr GetCurrentTableMeta(bool isReadOnly) const;
-    void SetCurrentReadOnlyTableMeta(TableMetaReadOnlyPtr&& tableMeta);
-    void SetCurrentWriteTableMeta(TableMetaReadOnlyPtr&& tableMeta); 
-
+    void SetCurrentReadOnlyTableMeta(TableMetaReadOnlyPtr tableMeta);
+    void SetCurrentWriteTableMeta(TableMetaReadOnlyPtr tableMeta); 
+    void Update();
     /// Try lock the table before write, if it's hold by others, return false
     bool TryWriteLock();
 

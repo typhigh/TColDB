@@ -27,6 +27,9 @@ public:
 
     /// Set parser result
     void SetParserResult(Parser::IAST* parserResult);
+
+    /// Get client id
+    ClientID GetClientID() const;
 };
 
 using CommandWrapPtr = std::shared_ptr<CommandWrap>;

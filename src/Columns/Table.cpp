@@ -22,14 +22,19 @@ TableMetaReadOnlyPtr Table::GetCurrentWriteTableMeta() const
     return currentWriteTableMeta.get();
 }
 
-void Table::SetCurrentReadOnlyTableMeta(TableMetaReadOnlyPtr && tableMeta) 
+void Table::SetCurrentReadOnlyTableMeta(TableMetaReadOnlyPtr tableMeta) 
 {
-    currentReadOnlyTableMeta.set(move(tableMeta));
+    currentReadOnlyTableMeta.set(tableMeta);
 }
 
-void Table::SetCurrentWriteTableMeta(TableMetaReadOnlyPtr && tableMeta)
+void Table::SetCurrentWriteTableMeta(TableMetaReadOnlyPtr tableMeta)
 {
-    currentWriteTableMeta.set(move(tableMeta));
+    currentWriteTableMeta.set(tableMeta);
+}
+
+void Table::Update()
+{
+    currentReadOnlyTableMeta.set(currentReadOnlyTableMeta.get());
 }
 
 bool Table::TryWriteLock() 

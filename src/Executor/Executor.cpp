@@ -71,6 +71,11 @@ void Executor::AddClient(Common::ClientID clientID)
     clients.Insert(clientID);       
 }
 
+void Executor::RemoveClient(Common::ClientID clientID)
+{
+    clients.Remove(clientID);
+}
+
 bool Executor::IsNoneClients() const 
 {
     return clients.IsEmpty();
@@ -79,6 +84,11 @@ bool Executor::IsNoneClients() const
 void Executor::SumbitTableMeta(Columns::TableID tableID, Columns::TableMetaWritePtr tableMeta)
 {
     db->GetCatalog()->GetTable(tableID)->SetCurrentWriteTableMeta(tableMeta);
+}
+
+void Executor::SubmitCommit()
+{
+    db->Commit();
 }
 
 ExecutorPtr Executor::GetInstance() 
@@ -94,7 +104,7 @@ void Executor::ExecutePlan(Plan::PlanPtr plan, ExecutorContextPtr context, bool 
 
 void Executor::ExecuteNoPlan(Parser::IASTNotNeedPlan* stmt, ExecutorContextPtr context, bool isReadOnly)
 {
-
+    stmt->Execute(context);
 }
 
 void Executor::ExecuteStatementImpl(Common::CommandWrapPtr command) 
@@ -120,11 +130,6 @@ void Executor::ExecuteStatementImpl(Common::CommandWrapPtr command)
 
     /// Delete the stmt
     delete stmt;
-}
-
-void Executor::RemoveClient(Common::ClientID clientID)
-{
-    clients.Remove(clientID);
 }
 
 ExecutorContextPtr Executor::GetExecutorContext(const vector<string>& tableRefs, bool isReadOnly)

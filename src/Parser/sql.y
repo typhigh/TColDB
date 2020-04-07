@@ -183,6 +183,7 @@ sql_noplan_stmt	:  create_table_stmt ';'	{ $$ = $1;}
 				|  insert_stmt ';'			{ $$ = $1;}
 				|  exit_stmt ';'			{ $$ = $1;}
 				|  setpath_stmt ';'			{ $$ = $1;}
+				|  commit_stmt ';'			{ $$ = $1;}
 				;
 
 create_table_stmt : CREATE TABLE table_name '(' table_fields table_extra_options ')' {
