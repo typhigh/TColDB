@@ -6,13 +6,13 @@ namespace Parser {
 class SQLParserResult
 {
 private:
-    IAST* sqlResult;
-    char* errorMsg;
+    IAST* sqlResult = nullptr;
+    char* errorMsg = nullptr;
 
 public:
     SQLParserResult() {}
     ~SQLParserResult() {
-        delete errorMsg;
+        //delete errorMsg;
     }
 
     /// Set parser sql result

@@ -67,7 +67,7 @@ inline std::vector<std::string> Splite(const std::string& s, char ch)
         if (s[i] == ch) {
             std::string now = s.substr(j, i - j + 1);
             ret.push_back(move(now));
-            j = i;
+            j = i+1;
         }
     }
 

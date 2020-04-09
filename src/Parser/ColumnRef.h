@@ -6,8 +6,8 @@ namespace Parser {
 class ColumnRef 
 {
 public:
-	char *table;
-	char *column;
+	char *table = nullptr;
+	char *column = nullptr;
 	
 	/// pos -1 means unknown pos
 	/// First we use GetFieldName know the pos, and set it

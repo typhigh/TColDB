@@ -8,9 +8,9 @@ namespace Parser {
 class ASTSelectInfo : public IASTNeedPlan
 {
 public:
-	TableFromList* tables;
-	ExprNodeList* exprs;
-	ExprNode* where;
+	TableFromList* tables = nullptr;
+	ExprNodeList* exprs = nullptr;
+	ExprNode* where = nullptr;
 	
 public:
 	ASTSelectInfo() {}

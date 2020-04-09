@@ -10,12 +10,14 @@ string Command::GetContent() const
     
 void Command::SetResult(const string& result) 
 {
-    lock_guard<std::mutex> lock(mutex);
-    if (done) {
-        return;
+    {
+        lock_guard<std::mutex> lock(mutex);
+        if (done) {
+            return;
+        }
+        this->result = result;
+        done = true;
     }
-    this->result = result;
-    done = true;
     cond.notify_all();
 }
 

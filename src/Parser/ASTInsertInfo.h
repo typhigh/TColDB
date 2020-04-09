@@ -9,9 +9,9 @@ namespace Parser {
 class ASTInsertInfo : public IASTNotNeedPlan
 {
 public:
-    char* table;
-	ColumnRefList* columns;
-    ExprNodeList* values;
+    char* table = nullptr;
+	ColumnRefList* columns = nullptr;
+    ExprNodeList* values = nullptr;
 
 public:
 	virtual ~ASTInsertInfo() {}

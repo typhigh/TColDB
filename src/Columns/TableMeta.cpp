@@ -4,7 +4,9 @@ using namespace std;
 
 namespace Columns {
 
-TableMeta::TableMeta() 
+TableMeta::TableMeta(const string& tableName, TableID tableID)
+    : tableName(tableName)
+    , tableID(tableID)
 {
     currentCid = ColID(0);
 }
@@ -13,7 +15,7 @@ string TableMeta::ToString() const
 {
     stringstream out;
     out << "======== Table Info Begin ========\n"
-        << "Table name = " + tabelName + "\n"
+        << "Table name = " + tableName + "\n"
         << "Column number = " + to_string(tupleDesc->GetColumnDescs().size()) + "\n"
         << tupleDesc->ToString()
         << checker->ToString();
@@ -32,7 +34,7 @@ void TableMeta::SetTupleDesc(TupleDescPtr desc)
 
 string TableMeta::GetTableName() const 
 {
-    return tabelName;
+    return tableName;
 }
 
 FieldPtr TableMeta::GetField(RowID rid, ColID cid) const 
@@ -59,9 +61,7 @@ bool TableMeta::CheckCondition(TuplePtr tuple) const
 
 TableMetaWritePtr TableMeta::CloneWrite() const 
 {
-    TableMetaWritePtr ret = make_shared<TableMeta>();
-    ret->tabelName = tabelName;
-    ret->tableID = tableID;
+    TableMetaWritePtr ret = make_shared<TableMeta>(tableName, tableID);
     ret->currentCid = currentCid;
 
     for (size_t i = 0; i < defaultFields.size(); ++i) {

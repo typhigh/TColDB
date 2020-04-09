@@ -11,6 +11,16 @@ using namespace std;
 
 namespace Executor {
 
+void Executor::Consume(Common::CommandWrapPtr& cmd) 
+{
+    commandQueue.WaitAndPop(cmd);
+}
+
+void Executor::Produce(Common::CommandWrapPtr cmd)
+{
+    commandQueue.Push(cmd);
+}
+
 void Executor::StartUp()
 {
     executePool.StartUp();
@@ -50,7 +60,7 @@ bool Executor::TryExecuteStatement(Common::CommandWrapPtr command)
     Parser::IAST* parserResult = command->GetParserResult();
     vector<string> tableRefs = parserResult->GetTablesRef();
     if (parserResult->IsWriteSQL()) {
-        if (tableRefs.size() != 1) {
+        if (tableRefs.size() > 1) {
             command->SetResult("Write sql only support just a table");
             delete parserResult;
             return true;
@@ -83,11 +93,16 @@ bool Executor::TryExecuteStatement(Common::CommandWrapPtr command)
 void Executor::AddClient(Common::ClientID clientID)
 {
     clients.Insert(clientID);       
+    LOG_INFO("add client %lu", clientID);
 }
 
 void Executor::RemoveClient(Common::ClientID clientID)
 {
     clients.Remove(clientID);
+    
+    /// Send a null command to avoid dead wait
+    Produce(nullptr); 
+    LOG_INFO("remove client %lu", clientID);
 }
 
 bool Executor::IsNoneClients() const 
@@ -100,9 +115,9 @@ void Executor::SumbitTableMeta(Columns::TableID tableID, Columns::TableMetaWrite
     db->GetCatalog()->GetTable(tableID)->SetCurrentWriteTableMeta(tableMeta);
 }
 
-void Executor::SubmitCommit()
+void Executor::SubmitCommit(Columns::TableID tableID)
 {
-    db->Commit();
+    db->Commit(tableID);
 }
 
 ExecutorPtr Executor::GetInstance() 
@@ -119,6 +134,7 @@ void Executor::ExecutePlan(Plan::PlanPtr plan, ExecutorContextPtr context, bool 
 void Executor::ExecuteNoPlan(Parser::IASTNotNeedPlan* stmt, ExecutorContextPtr context, bool isReadOnly)
 {
     stmt->Execute(context);
+    LOG_DEBUG("Yes oh 2");
 }
 
 void Executor::ExecuteStatementImpl(Common::CommandWrapPtr command) 
@@ -132,7 +148,7 @@ void Executor::ExecuteStatementImpl(Common::CommandWrapPtr command)
 
     vector<string> tablesRef = stmt->GetTablesRef();
     bool isReadOnly = !stmt->IsWriteSQL();
-    ExecutorContextPtr context = GetExecutorContext(tablesRef, isReadOnly);
+    ExecutorContextPtr context = GetExecutorContext(tablesRef, command, isReadOnly);
     if (stmt->NeedMakePlan()) {
         Plan::PlanContextPtr planContext = context->GetPlanContext();
         Plan::PlanPtr plan = dynamic_cast<Parser::IASTNeedPlan*>(stmt)->MakePlan(planContext);
@@ -144,9 +160,18 @@ void Executor::ExecuteStatementImpl(Common::CommandWrapPtr command)
 
     /// Delete the stmt
     delete stmt;
+    if (!isReadOnly) {
+        for (auto& tableName: tablesRef) {
+            Databases::CatalogPtr catalog = Databases::Database::GetInstance()->GetCatalog();
+            Columns::TableID tableID = catalog->GetTableID(tableName);
+            Columns::TablePtr table = catalog->GetTable(tableID);
+            table->ReleaseWriteLock();
+        }
+        LOG_DEBUG("Release the lease");
+    }
 }
 
-ExecutorContextPtr Executor::GetExecutorContext(const vector<string>& tableRefs, bool isReadOnly)
+ExecutorContextPtr Executor::GetExecutorContext(const vector<string>& tableRefs, Common::CommandWrapPtr command, bool isReadOnly)
 {
     Databases::CatalogPtr catalog = Databases::Database::GetInstance()->GetCatalog();
     vector<Columns::TableMetaReadOnlyPtr> tableMetas;   
@@ -155,8 +180,9 @@ ExecutorContextPtr Executor::GetExecutorContext(const vector<string>& tableRefs,
         Columns::TableID tableID = catalog->GetTableID(name);
         Columns::TableMetaReadOnlyPtr tableMeta = catalog->GetTable(tableID)->GetCurrentTableMeta(isReadOnly);
         tableMetas.push_back(move(tableMeta));
+        tableIDs.push_back(tableID);
     }
-    return make_shared<ExecutorContext>(tableMetas, tableIDs, shared_from_this());
+    return make_shared<ExecutorContext>(tableMetas, tableIDs, tableRefs, command, shared_from_this());
 }
 
 }

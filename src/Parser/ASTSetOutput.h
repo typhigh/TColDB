@@ -8,7 +8,7 @@ class ASTSetOutput : public IASTNotNeedPlan
 {
 public:
     /* data */
-    char* path;
+    char* path = nullptr;
 
 public:
     ASTSetOutput() {}

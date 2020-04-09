@@ -51,12 +51,15 @@ void ASTCreateInfo::Execute(Executor::ExecutorContextPtr context) const
         return;
     }
 
-    Columns::TableMetaWritePtr tableMetaNew = make_shared<Columns::TableMeta>();
+    Columns::TableMetaWritePtr tableMetaNew = make_shared<Columns::TableMeta>(tableName, tableID);
     Columns::ColumnDescs descs;
-    vector<Columns::FieldPtr> defaultFields(fields->size());
+    vector<Columns::FieldPtr> defaultFields;
+
+    size_t n = (fields != nullptr ? fields->size() : 0);
+    defaultFields.resize(n);
 
     /// Set tuple desc and default value
-    for (size_t i = 0; i < fields->size(); ++i) {
+    for (size_t i = 0; i < n; ++i) {
         FieldDef* def = fields->at(i);
         descs.emplace_back(def->name, def->type, tableID, tableMetaNew->CreateNextColID());
         if (def->default_value != nullptr) {
@@ -73,7 +76,9 @@ void ASTCreateInfo::Execute(Executor::ExecutorContextPtr context) const
     
     /// Set table constraint checker
     Executor::PredicatorPtr checker = make_shared<Executor::Predicator>();
-    for (size_t i = 0; i < constraints->size(); ++i) {
+    n = constraints != nullptr ? constraints->size() : 0;
+
+    for (size_t i = 0; i < n; ++i) {
         TableConstraint* constraint = constraints->at(i);
         table_constraint_type_t type = constraint->type;
         switch (type)
@@ -94,8 +99,10 @@ void ASTCreateInfo::Execute(Executor::ExecutorContextPtr context) const
             break;
         }
     }
+
     tableMetaNew->SetChecker(checker);
     context->SubmitTableMeta(tableID, tableMetaNew);
+    context->SubmitResult("done");
 }
 
 }

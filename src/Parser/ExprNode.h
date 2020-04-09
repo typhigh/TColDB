@@ -9,7 +9,7 @@ class ExprNode  {
 public:
 	union 
 	{
-		int    val_i;
+		int    val_i = 0;
 		float  val_f;
 		bool   val_b;
 		char  *val_s;
@@ -17,7 +17,7 @@ public:
 		ExprNode   	*left;
 		ExprNodeList *literal_list;
 	};
-	ExprNode *right;
+	ExprNode *right = nullptr;
 	operator_type_t op;
 	TermType_t term_type;
 

@@ -8,7 +8,11 @@ namespace Parser {
 bool SQLParser::Parse(const string& sql, SQLParserResult* result)
 {
     /// Step 1 : lexer and program parse
-    run_parser(sql.c_str(), result);
+    if (sql == "") {
+        run_parser(nullptr, result);
+    } else {
+        run_parser(sql.c_str(), result);
+    }
     if (result == nullptr || result->GetErrorMsg() != nullptr) {
         return  false;
     }

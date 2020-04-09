@@ -6,11 +6,15 @@ using namespace std;
 namespace Executor {
 
 ExecutorContext::ExecutorContext(
-    const std::vector<Columns::TableMetaReadOnlyPtr>& tableMetas,
-    const std::vector<Columns::TableID> tableIDs,
+    const vector<Columns::TableMetaReadOnlyPtr>& tableMetas,
+    const vector<Columns::TableID>& tableIDs,
+    const vector<string>& tableNames,
+    Common::CommandWrapPtr command,
     ExecutorPtr executor)
     : tableMetas(tableMetas)
     , tableIDs(tableIDs)
+    , tableNames(tableNames)
+    , command(command)
     , executor(executor)
 {
 }
@@ -32,8 +36,8 @@ Columns::FieldPtr ExecutorContext::FetchField(Columns::TableID tableID, Columns:
 
 Columns::TableID ExecutorContext::GetTableID(const string& tableName) const 
 {
-    for (size_t i = 0; i < tableMetas.size(); ++i) {
-        if (tableMetas[i]->GetTableName() == tableName) {
+    for (size_t i = 0; i < tableNames.size(); ++i) {
+        if (tableNames[i] == tableName) {
             return tableIDs[i];
         }
     }   
@@ -78,12 +82,11 @@ void ExecutorContext::SubmitTableMeta(Columns::TableID tableID, Columns::TableMe
 
 void ExecutorContext::SubmitCommit() 
 {
-    executor->SubmitCommit();
+    executor->SubmitCommit(tableIDs[0]);
 }
 
 void ExecutorContext::SubmitExit()
 {
-    SubmitCommit();
     executor->RemoveClient(command->GetClientID());
 }
 

@@ -8,8 +8,9 @@ class TableConstraint
 {
 public:
 	table_constraint_type_t type;
-	ColumnRef *column_ref, *foreign_column_ref;
-	ExprNode *check_cond;
+	ColumnRef *column_ref = nullptr;
+	ColumnRef *foreign_column_ref = nullptr;
+	ExprNode *check_cond = nullptr;
 
 public:
 	TableConstraint() {}

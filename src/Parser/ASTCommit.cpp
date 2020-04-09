@@ -1,4 +1,5 @@
 #include "ASTCommit.h"
+#include "../Utils/StringUtils.h"
 using namespace std;
 
 namespace Parser {
@@ -15,13 +16,13 @@ bool ASTCommit::IsWriteSQL() const
 
 vector<string> ASTCommit::GetTablesRef() const 
 {
-    return {};
+    return {Utils::CopyStringFromCString(table)};
 }
 
 void ASTCommit::Execute(Executor::ExecutorContextPtr context) const
 {
-    context->SubmitCommit();    
-    context->SubmitResult("Exit done");
+    context->SubmitCommit();
+    context->SubmitResult("done");
 }
 
 }

@@ -15,7 +15,7 @@ class Projector
 private:
     // If >= 0 means fieldNo, o.w. means NULL or EXPR
     std::vector<int> fieldsNo;
-    Parser::ExprNodeList* exprs;
+    Parser::ExprNodeList* exprs = nullptr;
 
 public:
     Projector() {}

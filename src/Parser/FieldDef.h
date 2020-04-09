@@ -8,11 +8,11 @@ class
 FieldDef 
 {
 public:	
-	char *name;
+	char *name = nullptr;
 	FieldType_t type;
 	int width;
 	int flags;
-	ExprNode *default_value;
+	ExprNode *default_value = nullptr;
 
 public:
 	FieldDef() {}

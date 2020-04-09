@@ -286,8 +286,9 @@ setpath_stmt		: SET OUTPUT '=' STRING_LITERAL {
 			   			$$ = node; 
 		   			}
 		   			;
-commit_stmt			: COMMIT {
+commit_stmt			: COMMIT table_name {
 						ASTCommit* node = new ASTCommit();
+						node->table = $2;
 						$$ = node;
 					}
 					;

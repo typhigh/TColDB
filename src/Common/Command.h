@@ -18,7 +18,7 @@ private:
 
 private:
     /// state
-    bool done;
+    bool done = false;
     std::mutex mutex;
     std::condition_variable cond;
 

@@ -23,7 +23,7 @@ public:
     CatalogPtr GetCatalog();
 
 public:
-    void Commit();
+    void Commit(Columns::TableID tableID);
 };
 
 

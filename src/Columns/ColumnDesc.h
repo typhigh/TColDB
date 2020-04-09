@@ -13,16 +13,15 @@ private:
     /// Basic information
     std::string fieldName;
     Parser::FieldType_t fieldType;
-    int width;
-    bool unique;
-    bool primary;
+    int width = 0;
+    bool unique = false;
+    bool primary = false;
 
     /// Helpful information
     ColID cid;
     TableID tableID;
 
 public: 
-    ColumnDesc(/* args */) {}
     ColumnDesc(const std::string& fieldName, Parser::FieldType_t fieldType, TableID tableID, ColID cid);
     ~ColumnDesc() {}
 

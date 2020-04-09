@@ -26,6 +26,7 @@ void ASTShowTableInfo::Execute(Executor::ExecutorContextPtr context) const
     
     /// Check if the table is not exisit
     if (tableMeta == nullptr) {
+        LOG_DEBUG("There is no such table");
         context->SubmitResult("No such table");
         return;
     } 

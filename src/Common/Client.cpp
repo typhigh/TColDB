@@ -62,6 +62,7 @@ void Client::Query(const string& text)
     for (auto& content : commands) {
         content = Utils::NormalizeCommand(content);
         CommandPtr cmd = make_shared<Command>(content, clientID);
+        LOG_DEBUG("content is %s", content.c_str());
         server->Query(cmd);
         string result = cmd->GetResult();
         if (!outputPath.empty()) {

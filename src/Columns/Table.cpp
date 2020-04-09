@@ -34,7 +34,7 @@ void Table::SetCurrentWriteTableMeta(TableMetaReadOnlyPtr tableMeta)
 
 void Table::Update()
 {
-    currentReadOnlyTableMeta.set(currentReadOnlyTableMeta.get());
+    currentReadOnlyTableMeta.set(currentWriteTableMeta.get());
 }
 
 bool Table::TryWriteLock() 
@@ -50,6 +50,11 @@ void Table::ReleaseWriteLock()
 {
     bool expected = true;
     isWriting.compare_exchange_strong(expected, false);
+}
+
+TableID Table::GetTableID() const 
+{
+    return tableID;
 }
 
 }

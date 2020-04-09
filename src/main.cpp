@@ -5,8 +5,9 @@
 int main(int argc, char *argv[])
 {
 	using namespace Parser;
-	SQLParserResult* result;
+	SQLParserResult* result = new SQLParserResult();
 	SQLParser::Parse("", result);
+	delete result;
 	return 0;
 	
 }

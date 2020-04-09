@@ -15,7 +15,7 @@ class ObjectPool
 {
 public:
     using ObjectBlock = Object*;
-    static const size_t DEFAULT_BLOCKSIZE = 100;
+    static const size_t DEFAULT_BLOCKSIZE = 256;
     
 private:
     std::vector<ObjectBlock> blocks;
@@ -24,8 +24,7 @@ private:
     std::string name;
 
 public:
-    ObjectPool() = default;
-    ObjectPool(const std::string& name, size_t BlockSize = DEFAULT_BLOCKSIZE) : name(name), blockSize(std::max(static_cast<size_t>(1), BlockSize)) {}  
+    ObjectPool(const std::string& name, size_t blockSize = DEFAULT_BLOCKSIZE) : name(name), blockSize(std::max(static_cast<size_t>(1), blockSize)) {}  
     
     ~ObjectPool();
 
@@ -50,7 +49,7 @@ template <typename Object>
 ObjectPool<Object>::~ObjectPool() 
 {
     for (auto block : blocks) {
-        delete block;
+        delete[] block;
     }
 }
 

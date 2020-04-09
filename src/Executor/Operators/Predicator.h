@@ -9,7 +9,7 @@ class Predicator
 {
 private:
     /* data */
-    Parser::ExprNodeList* conds;
+    Parser::ExprNodeList* conds = nullptr;
     
 public:
     Predicator(/* args */) {};

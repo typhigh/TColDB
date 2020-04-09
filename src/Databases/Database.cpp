@@ -42,9 +42,9 @@ DatabasePtr Database::GetInstance()
     return db;
 }
 
-void Database::Commit()
+void Database::Commit(Columns::TableID tableID)
 {
-    catalog->UpdateAllTableMetas();
+    catalog->Commit(tableID);
 }
 
 }

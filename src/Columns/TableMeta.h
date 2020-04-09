@@ -15,7 +15,7 @@ class TableMeta
 {
 private:
     /// data with state
-    std::string tabelName; 
+    std::string tableName; 
     TableID tableID;
 
     ColID currentCid;
@@ -32,7 +32,7 @@ private:
     std::vector<FieldPtr> defaultFields;    
 
 public:
-    TableMeta();
+    TableMeta(const std::string& tableName, TableID tableID);
     ~TableMeta() {}
     
     /// Get the informations

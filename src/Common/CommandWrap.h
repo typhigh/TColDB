@@ -8,7 +8,7 @@ class CommandWrap
 private:
     /* data */
     CommandPtr data;
-    Parser::IAST* parserResult;
+    Parser::IAST* parserResult = nullptr;
 
 public:
     CommandWrap(CommandPtr data) : data(data) {}

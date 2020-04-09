@@ -7,9 +7,10 @@ namespace Parser {
 class ASTUpdateInfo : public IASTNeedPlan
 {
 public:
-	char *table;
-	ColumnRef *column_ref;
-	ExprNode *where, *value;
+	char *table = nullptr;
+	ColumnRef *column_ref = nullptr;
+	ExprNode *where = nullptr;
+	ExprNode *value = nullptr;
 
 public:
     std::string ToString() const;

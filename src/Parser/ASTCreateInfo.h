@@ -11,9 +11,9 @@ namespace Parser {
 class ASTCreateInfo : public IASTNotNeedPlan
 {
 public:
-	char* name;
-	std::vector<FieldDef*>* fields;
-	std::vector<TableConstraint*>* constraints;
+	char* name = nullptr;
+	std::vector<FieldDef*>* fields = nullptr;
+	std::vector<TableConstraint*>* constraints = nullptr;
 
 public:
 	~ASTCreateInfo();

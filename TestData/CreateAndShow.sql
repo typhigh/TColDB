@@ -1,13 +1,8 @@
 CREATE TABLE Persons (
-	PersonID int,
-	Name varchar(20),
-	Gender varchar(1) DEFAULT 'M',
-	CHECK (PersonID > 10),
-	CHECK (Gender IN ('F', 'M'))
+    PersonID int PRIMARY KEY,
+    Name varchar(20) PRIMARY KEY,
+	Other varchar(10)
 );
-
+COMMIT Persons;
 SHOW TABLE Persons;
-
-COMMIT;
-
 EXIT;

@@ -9,7 +9,7 @@ private:
     /* data */
 public:
     NullField(/* args */) {}
-    ~NullField() {}
+    virtual ~NullField() {}
     Parser::FieldType_t GetType() const;
     std::string ToString() const;
     FieldPtr Clone() const;

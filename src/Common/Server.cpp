@@ -59,12 +59,15 @@ void Server::StartImpl()
         Consume(cmd);
 
         if (cmd == nullptr) {
+            /// Maybe come from executor
             continue;
         }
 
-        LOG_INFO("get a command \n%s", cmd->ToString().c_str());
+        LOG_INFO("Server get a command \n%s", cmd->ToString().c_str());
         bool tryExecute = executor->TryExecuteStatement(cmd);
+        LOG_DEBUG("Yes oh 3 and is %d", tryExecute);
         if (!tryExecute) {
+//            LOG_DEBUG("Try fails");
             /// Put back if can't execute
             Produce(cmd);
             if (last == cmd.get()) {
@@ -78,17 +81,18 @@ void Server::StartImpl()
     }
 
     /// End 
+    LOG_INFO("Server shut down");
     executor->ShutDown();
 }
 
 void Server::Produce(CommandWrapPtr cmd) 
 {
-    commandQueue.Push(cmd);
+    executor->Produce(cmd);
 }
 
 void Server::Consume(CommandWrapPtr& cmd) 
 {
-    commandQueue.WaitAndPop(cmd);
+    executor->Consume(cmd);
 }
 
 void Server::Query(CommandPtr cmd) 

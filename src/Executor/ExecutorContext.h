@@ -13,6 +13,8 @@ private:
 
     const std::vector<Columns::TableID> tableIDs;
 
+    const std::vector<std::string> tableNames;
+
     /// Writing table meta
     Columns::TableMetaWritePtr writeTableMeta;
 
@@ -23,7 +25,11 @@ private:
     Common::CommandWrapPtr command;
 
 public:
-    ExecutorContext(const std::vector<Columns::TableMetaReadOnlyPtr>& tableMetas, const std::vector<Columns::TableID> tableIDs, ExecutorPtr executor);
+    ExecutorContext(const std::vector<Columns::TableMetaReadOnlyPtr>& tableMetas, 
+                    const std::vector<Columns::TableID>& tableIDs, 
+                    const std::vector<std::string>& tableNames, 
+                    Common::CommandWrapPtr command,
+                    ExecutorPtr executor);
     ~ExecutorContext() {}
 
 public:

@@ -9,8 +9,10 @@ class TableFrom
 {
 public:
 	table_join_type_t join_type;
-	char *table, *join_table, *alias;
-	ExprNode *cond;
+	char *table = nullptr;
+	char *join_table = nullptr;
+	char *alias = nullptr;
+	ExprNode *cond = nullptr;
 
 public:
 	std::string GetTableRef() const;

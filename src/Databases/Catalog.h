@@ -16,15 +16,15 @@ private:
     std::unordered_map<std::string, Columns::TableID> tableIDs;
     std::unordered_map<Columns::TableID, Columns::TablePtr> tableMap;
     mutable std::shared_mutex rwLock;
-    Columns::TableID currentTableID;
+    Columns::TableID currentTableID = 0;
 
 protected:  
     void LoadInfo();
     void StoreInfo();
-    void UpdateAllTableMetas();
+    void Commit(Columns::TableID tableID);
 
 public:
-    Catalog() : currentTableID(0){}
+    Catalog() {}
     ~Catalog() {}
     /// Get table id by tableName
     Columns::TableID GetTableID(const std::string& tableName);

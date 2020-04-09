@@ -5,8 +5,9 @@ namespace Parser {
 
 class ASTCommit : public IASTNotNeedPlan
 {
-private:
-    /* data */
+public:
+    char* table = nullptr;
+
 public:
     ASTCommit(/* args */){}
     ~ASTCommit() {}

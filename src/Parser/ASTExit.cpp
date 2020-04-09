@@ -10,7 +10,7 @@ string ASTExit::ToString() const
 
 bool ASTExit::IsWriteSQL() const 
 {
-    return true;
+    return false;
 }
 
 vector<string> ASTExit::GetTablesRef() const 
@@ -22,6 +22,7 @@ void ASTExit::Execute(Executor::ExecutorContextPtr context) const
 {
     context->SubmitExit();
     context->SubmitResult("Exit");
+    LOG_DEBUG("Yes oh");
 }
 
 }

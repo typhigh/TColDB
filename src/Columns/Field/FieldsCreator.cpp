@@ -6,13 +6,13 @@ using namespace std;
 namespace Columns {
 
 /// Define the ObjectPools
-thread_local Utils::ObjectPool<BoolField>    FieldsCreator::BoolFieldPool    = Utils::ObjectPool<BoolField>();
-thread_local Utils::ObjectPool<CharField>    FieldsCreator::CharFieldPool    = Utils::ObjectPool<CharField>();
-thread_local Utils::ObjectPool<DateField>    FieldsCreator::DateFieldPool    = Utils::ObjectPool<DateField>();
-thread_local Utils::ObjectPool<DoubleField>  FieldsCreator::DoubleFieldPool  = Utils::ObjectPool<DoubleField>();
-thread_local Utils::ObjectPool<IntField>     FieldsCreator::IntFieldPool     = Utils::ObjectPool<IntField>();
-thread_local Utils::ObjectPool<NullField>    FieldsCreator::NullFieldPool    = Utils::ObjectPool<NullField>();
-thread_local Utils::ObjectPool<VarcharField> FieldsCreator::VarcharFieldPool = Utils::ObjectPool<VarcharField>();
+thread_local Utils::ObjectPool<BoolField>    FieldsCreator::BoolFieldPool    = Utils::ObjectPool<BoolField>("BoolFieldPool");
+thread_local Utils::ObjectPool<CharField>    FieldsCreator::CharFieldPool    = Utils::ObjectPool<CharField>("CharFieldPool");
+thread_local Utils::ObjectPool<DateField>    FieldsCreator::DateFieldPool    = Utils::ObjectPool<DateField>("DateFieldPool");
+thread_local Utils::ObjectPool<DoubleField>  FieldsCreator::DoubleFieldPool  = Utils::ObjectPool<DoubleField>("DoubleFieldPool");
+thread_local Utils::ObjectPool<IntField>     FieldsCreator::IntFieldPool     = Utils::ObjectPool<IntField>("IntFieldPool");
+thread_local Utils::ObjectPool<NullField>    FieldsCreator::NullFieldPool    = Utils::ObjectPool<NullField>("NullFieldPool");
+thread_local Utils::ObjectPool<VarcharField> FieldsCreator::VarcharFieldPool = Utils::ObjectPool<VarcharField>("VarcharFieldPool");
 
 void FieldsCreator::DeleteField(Field* field) 
 {

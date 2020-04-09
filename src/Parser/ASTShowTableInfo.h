@@ -8,7 +8,7 @@ class ASTShowTableInfo : public IASTNotNeedPlan
 {
 public:
     /* data */
-    char *table;
+    char *table = nullptr;
 
 public:
     ASTShowTableInfo(/* args */) {}

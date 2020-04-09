@@ -1,5 +1,4 @@
 #pragma once
-#include "../Utils/ProductConsumerQueue.h"
 #include "../Executor/Executor.h"
 #include "defs.h"
 #include "CommandWrap.h"
@@ -14,7 +13,6 @@ class Server
 {
 private:
     /* data */
-    Utils::ProductConsumerQueue<CommandWrapPtr> commandQueue;
     std::atomic<bool> started;
     Executor::ExecutorPtr executor;
 
