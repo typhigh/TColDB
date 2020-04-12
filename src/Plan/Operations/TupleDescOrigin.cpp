@@ -31,8 +31,11 @@ bool TupleDescOrigin::VisitPlan(PlanPtr plan, PlanPtr& result) const
     
     /// Join node
     Columns::TupleDescPtr desc = children[0]->GetTupleDescCopy();
+    desc->FillFieldName();
     for (size_t i = 1; i < children.size(); ++i) {
-        desc->MergeOnJoin(children[i]->GetTupleDescCopy());
+        Columns::TupleDescPtr other = children[i]->GetTupleDescCopy();
+        other->FillFieldName();
+        desc->MergeOnJoin(other);
     }
     plan->SetTupleDesc(desc);
     return true;

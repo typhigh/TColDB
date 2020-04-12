@@ -51,6 +51,9 @@ public:
     /// Mask by field names for columns eliminate
     void MaskByFieldNames(const Plan::FieldNames& fieldNames);
 
+    /// Fill the field Name by add table name 
+    void FillFieldName();
+
     std::vector<int> GetFieldsNoByFrom(TupleDescPtr from) const;
 };
 

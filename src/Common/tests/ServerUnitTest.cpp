@@ -27,5 +27,10 @@ TEST(ServerUnitTest, testCreateAndDrop)
 
 TEST(ServerUnitTest, testSelect) 
 {
-    TestFile("Select.sql");
+//    TestFile("Select.sql");
+}
+
+TEST(ServerUnitTest, testJoin)
+{
+    TestFile("Join.sql");
 }

@@ -113,4 +113,11 @@ vector<int> TupleDesc::GetFieldsNoByFrom(TupleDescPtr from) const
     return ret;
 }
 
+void TupleDesc::FillFieldName()
+{
+    for (ColumnDesc& desc : descs) {
+        desc.FillFieldName(tableName);
+    }
+}
+
 }

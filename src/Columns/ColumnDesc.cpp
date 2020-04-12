@@ -51,4 +51,21 @@ string ColumnDesc::GetFieldName() const
     return fieldName;
 }
 
+void ColumnDesc::FillFieldName(const string& tableName)
+{
+    string pureFieldName = Utils::GetPointAfter(fieldName);
+    
+    /// It's "xxx.yyy" format yet, do nothing
+    if (pureFieldName != fieldName) {
+        return ;
+    }   
+
+    if (tableName == "") {
+        LOG_ERROR("Unexpected empty tableName");
+        return;
+    }
+
+    fieldName = tableName + "." + pureFieldName;
+}
+
 }

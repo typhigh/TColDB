@@ -31,7 +31,12 @@ public:
     void SetPrimary();
     void SetUnique();
     std::string GetFieldName() const;
-    
+
+    /// Fill field name 
+    /// Example: tableName = "Person" fieldName = "a" => "Person.a"
+    /// If it'a already "xxx.yyy" yet, do nothing
+    void FillFieldName(const std::string& tableName);
+
     /// Used for sort
     bool operator < (const ColumnDesc& other) const {
         if (tableID != other.tableID) {
