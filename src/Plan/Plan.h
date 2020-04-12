@@ -77,6 +77,9 @@ public:
     bool IsWithSelectAll() const;
 
 public:
+    /// ToString func for debug, prefix is the output prefix
+    virtual std::string ToString(const std::string& prefix) const = 0;
+
     /// Accept the visitor (visit design pattern)
     virtual bool Accept (PlanVisitorPtr visitor, PlanPtr& result) = 0;
     

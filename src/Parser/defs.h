@@ -144,6 +144,18 @@ inline std::string ToString(table_constraint_type_t type)
 	}
 }
 
+inline std::string ToString(operator_type_t op)
+{
+	switch (op) {
+	case OPERATOR_SUM: 		return "OPERATOR_SUM";
+	case OPERATOR_AVG:		return "OPERATOR_AVG";
+	case OPERATOR_MIN:		return "OPERATOR_MIN";
+	case OPERATOR_MAX:		return "OPERATOR_MAX";
+	case OPERATOR_COUNT:	return "OPERATOR_COUNT";
+	default:				return "UNKNOWN";
+	}
+}
+
 }
 
 

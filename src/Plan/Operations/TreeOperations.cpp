@@ -5,7 +5,7 @@ namespace Plan {
     
 bool TreeOperations::VisitPlansTreeRoot(PlanPtr root, PlanVisitorPtr visitor, PlanPtr& result)
 {
-    return VisitPlansTreeRoot(root, {visitor}, result);
+    return VisitPlansTreeRoot(root, PlanVisitors {visitor}, result);
 }
 
 bool TreeOperations::VisitPlansTreeRoot(PlanPtr root, const PlanVisitors& visitors, PlanPtr& result)
@@ -17,6 +17,10 @@ bool TreeOperations::VisitPlansTreeImpl(PlanPtr current, const PlanVisitors& vis
 {
     bool ret = false;
     Plans children = current->GetChildren();
+
+    if (visitors.size() == 1 && visitors[0]->DoitPrevious()) {
+        VisitPlansNode(current, visitors, result);
+    }
 
     /// We use top-down DFS to visit the plans-tree
     /// Visit the children
@@ -33,7 +37,9 @@ bool TreeOperations::VisitPlansTreeImpl(PlanPtr current, const PlanVisitors& vis
     /// Now every sub-tree is the most optimized
     /// Visit the current node
     /// If it can be optimized and sub-root changed, just break and re-visit the new root
-    ret |= VisitPlansNode(current, visitors, result);
+    if (visitors.size() != 1 || !visitors[0]->DoitPrevious()) {
+        ret |= VisitPlansNode(current, visitors, result);
+    }
     return ret;
 }
 
@@ -43,6 +49,7 @@ bool TreeOperations::VisitPlansNode(PlanPtr current, const PlanVisitors& visitor
     for (PlanVisitorPtr visitor : visitors) {
         ret |= current->Accept(visitor, result);
     }
+    return ret;
 }
 
 }

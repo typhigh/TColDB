@@ -1,6 +1,7 @@
 #include "ASTCreateInfo.h"
 #include "../Utils/StringUtils.h"
 #include "../Columns/Field/FieldsCreator.h"
+#include "../Columns/Field/Convertion.h"
 #include "Expression/Expression.h"
 
 using namespace std;
@@ -62,23 +63,32 @@ void ASTCreateInfo::Execute(Executor::ExecutorContextPtr context) const
     for (size_t i = 0; i < n; ++i) {
         FieldDef* def = fields->at(i);
         descs.emplace_back(def->name, def->type, tableID, tableMetaNew->CreateNextColID());
+       
+        /// Set default value
         if (def->default_value != nullptr) {
-            defaultFields[i] = Expression::Eval(def->default_value, nullptr);
+            defaultFields[i] = Columns::Convertion::Convert(Expression::Eval(def->default_value, nullptr), def->type);
         } else if (def->flags & FIELD_FLAG_NOTNULL) {
             /// Don't allow null 
             defaultFields[i] = nullptr;
         } else {
             defaultFields[i] = Columns::FieldsCreator::CreateNullField();
         }
+
+        /// Set unique and primary
+        if (def->flags & FIELD_FLAG_PRIMARY) {
+            descs[i].SetPrimary();
+        }
+
+        if (def->flags & FIELD_FLAG_UNIQUE) {
+            descs[i].SetUnique();
+        }
     }
-    Columns::TupleDescPtr desc = make_shared<Columns::TupleDesc>(tableName, descs);
-    tableMetaNew->SetTupleDesc(desc);
     
     /// Set table constraint checker
     Executor::PredicatorPtr checker = make_shared<Executor::Predicator>();
-    n = constraints != nullptr ? constraints->size() : 0;
+    size_t m = constraints != nullptr ? constraints->size() : 0;
 
-    for (size_t i = 0; i < n; ++i) {
+    for (size_t i = 0; i < m; ++i) {
         TableConstraint* constraint = constraints->at(i);
         table_constraint_type_t type = constraint->type;
         switch (type)
@@ -89,6 +99,10 @@ void ASTCreateInfo::Execute(Executor::ExecutorContextPtr context) const
             break;
         }
         case TABLE_CONSTRAINT_PRIMARY_KEY:
+        {
+            /*TODO*/
+            break;
+        }
         case TABLE_CONSTRAINT_UNIQUE:
         {
             /*TODO*/
@@ -100,6 +114,9 @@ void ASTCreateInfo::Execute(Executor::ExecutorContextPtr context) const
         }
     }
 
+    Columns::TupleDescPtr desc = make_shared<Columns::TupleDesc>(tableName, descs);
+
+    tableMetaNew->SetTupleDesc(desc);
     tableMetaNew->SetChecker(checker);
     context->SubmitTableMeta(tableID, tableMetaNew);
     context->SubmitResult("done");

@@ -28,6 +28,13 @@ string ScanPlan::GetTableName() const
     return tableName;
 }
 
+std::string ScanPlan::ToString(const string& prefix) const
+{
+    string ret = prefix + "ScanPlan:\n";
+    ret += desc->ToString(prefix);
+    return ret;
+}
+
 bool ScanPlan::Accept (PlanVisitorPtr visitor, PlanPtr& result)
 {
     visitor->VisitPlan(shared_from_this(), result);

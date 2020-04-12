@@ -53,9 +53,9 @@ Plan::FieldNames Predicator::GetColumnsRef() const
     return Parser::Expression::GetColumnsRef(conds);
 }
 
-string Predicator::ToString() const 
+string Predicator::ToString(const string& prefix) const 
 {
-    return Parser::Expression::ToString(conds);
+    return Parser::Expression::ToString(prefix, conds);
 }
 
 }

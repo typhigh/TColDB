@@ -26,7 +26,7 @@ public:
     TupleDescPtr Clone() const;
 
     /// Information
-    std::string ToString() const;
+    std::string ToString(const std::string& prefix) const;
 
     /// Set alis
     void SetAlis(const Plan::RenameTable& rename);
@@ -42,7 +42,7 @@ public:
 
     /// Get the fieldName's fieldNo, If none, return false
     bool GetFieldNo(const std::string& fieldName, int& fieldNo) const;
-
+    
     std::string GetTableName() const;
 
     /// Set alis (another interface)

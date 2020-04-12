@@ -25,9 +25,11 @@ public:
     ColumnDesc(const std::string& fieldName, Parser::FieldType_t fieldType, TableID tableID, ColID cid);
     ~ColumnDesc() {}
 
-    std::string ToString() const;
+    std::string ToString(const std::string& prefix) const;
     void SetAlis(std::string alis, bool isTableAlis = true);
     void SetAlis(const Plan::RenameTable& rename);
+    void SetPrimary();
+    void SetUnique();
     std::string GetFieldName() const;
     
     /// Used for sort

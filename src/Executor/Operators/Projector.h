@@ -24,6 +24,8 @@ public:
     int GetFieldsNo(size_t kth) const;
     void SetFieldsNo(size_t kth, int no);
     Plan::FieldNames GetColumnsRef() const;
+
+    std::string ToString(const std::string& prefix) const;
 };
 
 using ProjectorPtr = std::shared_ptr<Projector>;

@@ -9,7 +9,7 @@ bool TupleDescOrigin::DoitPrevious() const
     return false;
 }
 
-bool TupleDescOrigin::Accept(PlanPtr plan, PlanPtr& result) const
+bool TupleDescOrigin::VisitPlan(PlanPtr plan, PlanPtr& result) const
 {
     Plans children = plan->GetChildren();
     

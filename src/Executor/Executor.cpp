@@ -128,7 +128,10 @@ ExecutorPtr Executor::GetInstance()
 
 void Executor::ExecutePlan(Plan::PlanPtr plan, ExecutorContextPtr context, bool isReadOnly) 
 {   
-
+    LOG_DEBUG("Plan tree is like: \n%s", plan->ToString("").c_str());
+    
+    /**/
+    context->SubmitResult("Done");
 }
 
 void Executor::ExecuteNoPlan(Parser::IASTNotNeedPlan* stmt, ExecutorContextPtr context, bool isReadOnly)
@@ -176,6 +179,7 @@ ExecutorContextPtr Executor::GetExecutorContext(const vector<string>& tableRefs,
     Databases::CatalogPtr catalog = Databases::Database::GetInstance()->GetCatalog();
     vector<Columns::TableMetaReadOnlyPtr> tableMetas;   
     vector<Columns::TableID> tableIDs;
+
     for (const string& name : tableRefs) {
         Columns::TableID tableID = catalog->GetTableID(name);
         Columns::TableMetaReadOnlyPtr tableMeta = catalog->GetTable(tableID)->GetCurrentTableMeta(isReadOnly);

@@ -52,10 +52,10 @@ public:
     static FieldNames GetColumnsRef(const ExprNodeList* expr);
 
     /// ExprNodeList's ToString 
-    static std::string ToString(const ExprNodeList* exprs);
+    static std::string ToString(const std::string& prefix, const ExprNodeList* exprs);
 
     /// ExprNode's ToString
-    static std::string ToString(const ExprNode* expr);
+    static std::string ToString(const std::string& prefix, const ExprNode* expr);
     
 /// Eval Operation
 public:

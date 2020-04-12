@@ -2,6 +2,7 @@
 #include "../Plan/Plan.h"
 #include "Rules/ConstOptimize.h"
 #include "Rules/PredicatePushDown.h"
+#include "Rules/JoinDecompress.h"
 namespace Optimizer {
 
 class Optimizer

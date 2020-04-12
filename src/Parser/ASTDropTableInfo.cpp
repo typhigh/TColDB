@@ -28,6 +28,13 @@ void ASTDropTableInfo::Execute(Executor::ExecutorContextPtr context) const
 {
     /*TODO*/
     Columns::TableID tableID = context->GetTableID(GetTablesRef()[0]);
+    Columns::TableMetaReadOnlyPtr tableMeta = context->GetTableMeta(tableID);
+    
+    if (tableMeta == nullptr) {
+        context->SubmitResult("No such table");
+        return;
+    }
+
     context->SubmitTableMeta(tableID, nullptr);
     context->SubmitResult("Drop done");
 }

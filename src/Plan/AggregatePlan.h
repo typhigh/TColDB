@@ -8,7 +8,7 @@ class AggregatePlan : public Plan, public std::enable_shared_from_this<Aggregate
 {
 private:
     /* data */
-    Executor::AggregatorPtr agg;
+    Executor::AggregatorPtr agg = std::make_shared<Executor::Aggregator>();
     PlanPtr subPlan;
 
 public:
@@ -20,6 +20,7 @@ public:
     void SetSubPlan(PlanPtr subPlan);
 
 private:
+    std::string ToString(const std::string& prefix) const;
     bool Accept (PlanVisitorPtr rule, PlanPtr& result);
     PlanType_t GetType() const;
     Plans GetChildren();

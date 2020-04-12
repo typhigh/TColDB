@@ -81,8 +81,9 @@ inline char* CopyCStringFromCString(const char* s)
         return nullptr;
     }
     size_t len = strlen(s);
-    char* ret = new char[len];
+    char* ret = new char[len+1];
     memcpy(ret, s, len);
+    ret[len] = 0;
     return ret;
 }
 

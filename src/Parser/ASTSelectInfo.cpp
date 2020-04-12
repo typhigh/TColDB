@@ -75,20 +75,28 @@ Plan::PlanPtr ASTSelectInfo::MakePlan(Plan::PlanContextPtr context) const
         Plan::AggregatePlanPtr plan = make_shared<Plan::AggregatePlan>(context);
         for (const ExprNode* expr: *exprs) {
             if (Expression::IsAggregate(expr)) {
+                /// LIKE COUNT(*)
+                if (expr->left == nullptr) {
+                    plan->AddAggregator("", expr->op);
+                    break;
+                }
+
                 /// We only consider aggregate expr and ignore other expr
                 plan->AddAggregator(
-                    expr->column_ref->GetFieldName(),
+                    expr->left->column_ref->GetFieldName(),
                     expr->op
                 );
             }
         }
         plan->SetSubPlan(lowPlan);
+        lowPlan->SetParent(plan);
         ret = plan;
     } else {
         /// ProjectPlan
         Plan::ProjectPlanPtr plan = make_shared<Plan::ProjectPlan>(context);
         plan->SetProjector(exprs);
         plan->SetSubPlan(lowPlan);
+        lowPlan->SetParent(plan);
         ret = plan;
     }
     return ret; 

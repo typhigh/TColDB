@@ -46,4 +46,9 @@ Plan::FieldNames Projector::GetColumnsRef() const
     return Parser::Expression::GetColumnsRef(exprs);
 }
 
+string Projector::ToString(const string& prefix) const
+{
+    return "\n";
+}
+
 }

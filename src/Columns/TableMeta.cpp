@@ -17,8 +17,8 @@ string TableMeta::ToString() const
     out << "======== Table Info Begin ========\n"
         << "Table name = " + tableName + "\n"
         << "Column number = " + to_string(tupleDesc->GetColumnDescs().size()) + "\n"
-        << tupleDesc->ToString()
-        << checker->ToString();
+        << tupleDesc->ToString("")
+        << checker->ToString("");
     return out.str(); 
 }
 

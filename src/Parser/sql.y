@@ -328,7 +328,7 @@ select_expr_list    : select_expr_list ',' select_expr {
 					}
 					;
 
-select_expr         : condition       { $$ = $1; }
+select_expr         : expr      	  { $$ = $1; }
 					| aggregate_expr  { $$ = $1; }
 
 aggregate_expr      : aggregate_op '(' aggregate_term ')' {
@@ -645,7 +645,7 @@ database_name : IDENTIFIER       { $$ = $1; }
 void yyerror(Parser::SQLParserResult* result, const char *msg)
 {
 	result->SetError(msg);
-//	fprintf(stderr, "[Error] %s\n", msg);
+	fprintf(stderr, "[Error] %s\n", msg);
 }
 
 int yywrap()

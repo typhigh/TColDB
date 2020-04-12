@@ -5,7 +5,7 @@
 #include "../Plan/defs.h"
 namespace Executor {
 
-class ExecutorContext : std::enable_shared_from_this<ExecutorContext>
+class ExecutorContext : public std::enable_shared_from_this<ExecutorContext>
 {
 private:
     /// ReadOnly table meta (snapshot) 

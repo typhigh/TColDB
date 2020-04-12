@@ -36,6 +36,25 @@
 #include <ctime>
 #include <string>
 
+/// From https://blog.csdn.net/zangle260/article/details/42869289
+#define RESET "\033[0m"
+#define BLACK "\033[30m" /* Black */
+#define RED "\033[31m" /* Red */
+#define GREEN "\033[32m" /* Green */
+#define YELLOW "\033[33m" /* Yellow */
+#define BLUE "\033[34m" /* Blue */
+#define MAGENTA "\033[35m" /* Magenta */
+#define CYAN "\033[36m" /* Cyan */
+#define WHITE "\033[37m" /* White */
+#define BOLDBLACK "\033[1m\033[30m" /* Bold Black */
+#define BOLDRED "\033[1m\033[31m" /* Bold Red */
+#define BOLDGREEN "\033[1m\033[32m" /* Bold Green */
+#define BOLDYELLOW "\033[1m\033[33m" /* Bold Yellow */
+#define BOLDBLUE "\033[1m\033[34m" /* Bold Blue */
+#define BOLDMAGENTA "\033[1m\033[35m" /* Bold Magenta */
+#define BOLDCYAN "\033[1m\033[36m" /* Bold Cyan */
+#define BOLDWHITE "\033[1m\033[37m" /* Bold White */
+
 // https://blog.galowicz.de/2016/02/20/short_file_macro/
 using cstr = const char *;
 
@@ -99,7 +118,7 @@ void OutputLogHeader(const char *file, int line, const char *func, int level);
 #define LOG_ERROR(...)                                                      \
   OutputLogHeader(__SHORT_FILE__, __LINE__, __FUNCTION__, LOG_LEVEL_ERROR); \
   ::fprintf(LOG_OUTPUT_STREAM, __VA_ARGS__);                                \
-  fprintf(LOG_OUTPUT_STREAM, "\n");                                         \
+  fprintf(LOG_OUTPUT_STREAM, "\033[0m\n");                                         \
   ::fflush(stdout)
 #else
 #define LOG_ERROR(...) ((void)0)
@@ -193,7 +212,11 @@ inline void OutputLogHeader(const char *file, int line, const char *func, int le
       type = "UNKWN";
   }
   // PAVLO: DO NOT CHANGE THIS
-  ::fprintf(LOG_OUTPUT_STREAM, "%s [%s:%d:%s] %s - ", time_str, file, line, func, type);
+  if (type == "ERROR") {
+    ::fprintf(LOG_OUTPUT_STREAM, "\033[31m%s [%s:%d:%s] %s - ", time_str, file, line, func, type);
+  } else {
+    ::fprintf(LOG_OUTPUT_STREAM, "%s [%s:%d:%s] %s - ", time_str, file, line, func, type); 
+  }
 }
 
 

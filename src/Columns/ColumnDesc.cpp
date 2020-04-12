@@ -13,9 +13,9 @@ ColumnDesc::ColumnDesc(const string& fieldName, Parser::FieldType_t fieldType, T
 {
 }
 
-string ColumnDesc::ToString() const 
+string ColumnDesc::ToString(const string& prefix) const 
 {
-    string ret = this->fieldName + Parser::ToString(this->fieldType) + to_string(this->cid.GetID()) + "\n";
+    string ret = prefix + fieldName + " " + Parser::ToString(fieldType) + " " + to_string(cid.GetID()) + "\n";
     return ret; 
 }
 
@@ -34,6 +34,16 @@ void ColumnDesc::SetAlis(string alis, bool isTableAlis)
 void ColumnDesc::SetAlis(const Plan::RenameTable& rename)
 {   
     rename.FindAlis(fieldName, fieldName);
+}
+
+void ColumnDesc::SetPrimary()
+{
+    primary = true;
+}
+
+void ColumnDesc::SetUnique() 
+{
+    unique = true;
 }
 
 string ColumnDesc::GetFieldName() const 

@@ -12,7 +12,7 @@ bool JoinDecompress::VisitPlan(PlanPtr          plan, PlanPtr& result) const
 
 bool JoinDecompress::VisitPlan(JoinPlanPtr      plan, PlanPtr& result) const
 {
-    /// Use greed al
+    /// Use greed algorithm
     Plans children = plan->GetChildren();
     vector<TableInfo> infos;
     for (size_t i = 0; i < children.size(); ++i) {
@@ -35,10 +35,14 @@ bool JoinDecompress::VisitPlan(JoinPlanPtr      plan, PlanPtr& result) const
     for (size_t i = 0; i + 2 < n; ++i) {
         JoinPlanPtr newPlan = PlansCreator::CreateJoinPlan(plan->GetPlanContext());
         newPlan->SetSubPlans({plans[i], plans[i+1]});
+        plans[i]->SetParent(newPlan);
+        plans[i+1]->SetParent(newPlan);
         plans[i+1] = newPlan;
     }
 
     plan->SetSubPlans({plans[n-2], plans[n-1]});
+    plans[n-1]->SetParent(plan);
+    plans[n-2]->SetParent(plan);
     return false;
 }
 

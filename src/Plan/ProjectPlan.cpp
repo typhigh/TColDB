@@ -19,6 +19,14 @@ void ProjectPlan::SetSubPlan(PlanPtr subPlan)
     this->subPlan = subPlan;
 }
 
+string ProjectPlan::ToString(const string& prefix) const
+{
+    string ret = prefix + "ProjectPlan:\n";
+    ret += desc->ToString(prefix);
+    ret += subPlan->ToString(prefix + "  ");
+    return ret;
+}
+
 bool ProjectPlan::Accept(PlanVisitorPtr visitor, PlanPtr& result)
 {
     visitor->VisitPlan(shared_from_this(), result);

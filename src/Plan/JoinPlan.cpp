@@ -19,6 +19,17 @@ void JoinPlan::SetPredicator(Parser::ExprNode* expr)
     predicator = make_shared<Executor::Predicator>(expr);
 }
 
+string JoinPlan::ToString(const string& prefix) const 
+{
+    string ret = prefix + "JoinPlan:\n";
+    ret += predicator->ToString(prefix);
+    ret += desc->ToString(prefix);
+    for (auto plan: subPlans) {
+        ret += plan->ToString(prefix + "  ");
+    }
+    return ret;
+}
+
 bool JoinPlan::Accept (PlanVisitorPtr visitor, PlanPtr& result)
 {
     visitor->VisitPlan(shared_from_this(), result);    

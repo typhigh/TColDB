@@ -23,7 +23,7 @@ public:
     bool Predicate(Columns::TuplePtr tuple);
     Parser::ExprNodeList* Get();
     Plan::FieldNames GetColumnsRef() const;
-    std::string ToString() const;
+    std::string ToString(const std::string& prefix) const;
 };
 
 }

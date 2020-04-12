@@ -10,11 +10,11 @@ TupleDescPtr TupleDesc::Clone() const
     return tuple;
 }
 
-string TupleDesc::ToString() const 
+string TupleDesc::ToString(const string& prefix) const 
 {
-    string ret = this->tableName + "\n";
+    string ret = prefix + tableName + "\n";
     for (const ColumnDesc& desc : descs) {
-        ret += desc.ToString();
+        ret += desc.ToString(prefix);
     }
     return ret;
 }
@@ -105,8 +105,8 @@ vector<int> TupleDesc::GetFieldsNoByFrom(TupleDescPtr from) const
 
     if (missed) {
         LOG_WARN("From and To tuple desc are not matched\n To information: %s\n From information %s\n"
-            , ToString().c_str()
-            , from->ToString().c_str()
+            , ToString("").c_str()
+            , from->ToString("").c_str()
         );
     }
 

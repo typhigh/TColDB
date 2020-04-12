@@ -20,7 +20,7 @@ public:
     JoinDecompress() {
         SetName("JoinDecompress");
     }
-    ~JoinDecompress();
+    ~JoinDecompress() {}
 
 public:
     bool VisitPlan(Plan::PlanPtr          plan, Plan::PlanPtr& result) const;

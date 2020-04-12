@@ -16,6 +16,7 @@ public:
     ~Aggregator() {};
 
 public:
+    std::string ToString(const std::string& prefix) const;
     void Add(const std::string& fieldName, Parser::operator_type_t aggOp);
     void SetFieldsNo(size_t kth, int fieldNo);
     int GetFieldsNo(size_t kth) const;

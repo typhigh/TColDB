@@ -23,6 +23,7 @@ public:
     void SetSubPlan(PlanPtr subPlan);
     
 public:
+    std::string ToString(const std::string& prefix) const;
     bool Accept (PlanVisitorPtr visitor, PlanPtr& result);
     PlanType_t GetType() const;
     Plans GetChildren();

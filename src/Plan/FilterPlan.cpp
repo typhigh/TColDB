@@ -23,6 +23,15 @@ Executor::PredicatorPtr FilterPlan::GetPredicator()
     return predicator;
 }
 
+std::string FilterPlan::ToString(const std::string& prefix) const 
+{
+    string ret = prefix + "FilterPlan:\n";
+    ret += predicator->ToString(prefix);
+    ret += desc->ToString(prefix);
+    ret += subPlan->ToString(prefix + "  ");
+    return ret;
+}
+
 bool FilterPlan::Accept(PlanVisitorPtr visitor, PlanPtr& result)
 {
     visitor->VisitPlan(shared_from_this(), result);

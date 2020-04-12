@@ -8,6 +8,14 @@ void DeletePlan::SetSubPlan(PlanPtr subPlan)
     this->subPlan = subPlan;
 }
 
+std::string DeletePlan::ToString(const string& prefix) const 
+{
+    string ret = prefix + "DeletePlan:\n";
+    ret += prefix + desc->ToString(prefix);
+    ret += subPlan->ToString(prefix + "  ");
+    return ret; 
+}
+
 bool DeletePlan::Accept(PlanVisitorPtr visitor, PlanPtr& result) 
 {
     return visitor->VisitPlan(shared_from_this(), result);

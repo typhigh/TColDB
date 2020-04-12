@@ -4,13 +4,28 @@
 using namespace std;
 using namespace Common;
 
-TEST(ServerUnitTest, testDemo) {
+void TestFile(const string& path)
+{
     Common::ServerPtr server = make_shared<Server>();
     Common::ClientPtr client = make_shared<Client>();
     client->SetServer(server);
-    string path = getenv("TestData");
-    path += "/CreateAndShow.sql";
-    client->SetInput(path);
+    string dataPath = string(getenv("TestData")) + "/" + path;
+    client->SetInput(dataPath);
     client->Start();
-    server->Start();
+    server->Start(); 
+}
+
+TEST(ServerUnitTest, testCreateAndShow) 
+{
+//    TestFile("CreateAndShow.sql");
+}
+
+TEST(ServerUnitTest, testCreateAndDrop) 
+{
+//    TestFile("CreateAndDrop.sql");
+}
+
+TEST(ServerUnitTest, testSelect) 
+{
+    TestFile("Select.sql");
 }
