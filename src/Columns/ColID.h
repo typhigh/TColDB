@@ -22,6 +22,10 @@ public:
     bool operator < (const ColID& other) const {
         return id < other.id;
     }
+    
+    bool operator <= (const ColID& other) const {
+        return id <= other.id;
+    }
 };
 
 

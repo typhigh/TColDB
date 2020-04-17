@@ -66,7 +66,7 @@ void ASTCreateInfo::Execute(Executor::ExecutorContextPtr context) const
        
         /// Set default value
         if (def->default_value != nullptr) {
-            defaultFields[i] = Columns::Convertion::Convert(Expression::Eval(def->default_value, nullptr), def->type);
+            defaultFields[i] = Columns::Convertion::Convert(Expression::Eval(def->default_value, nullptr, nullptr), def->type);
         } else if (def->flags & FIELD_FLAG_NOTNULL) {
             /// Don't allow null 
             defaultFields[i] = nullptr;

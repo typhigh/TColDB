@@ -5,5 +5,7 @@ set(HEADERS
 
 set (SOURCE
 	${SOURCE}
+    ${CMAKE_CURRENT_SOURCE_DIR}/IndexReader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/TableReader.cpp
     PARENT_SCOPE
 )

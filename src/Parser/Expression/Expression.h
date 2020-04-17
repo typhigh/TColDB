@@ -2,6 +2,8 @@
 #include "../ExprNode.h"
 #include "../../Columns/Tuple.h"
 #include "../../Columns/Field/Field.h"
+#include "../../Executor/ExecutorContext.h"
+
 namespace Parser {
 using FieldNames = std::vector<std::string>;
 using EValue = Columns::FieldPtr;
@@ -59,8 +61,8 @@ public:
     
 /// Eval Operation
 public:
-    static EValue Eval(const ExprNode* expr, Columns::TuplePtr tuple);
-    static EValue EvalLeafNode(const ExprNode* expr, Columns::TuplePtr tuple);
+    static EValue Eval(const ExprNode* expr, Columns::TuplePtr tuple, Executor::ExecutorContextPtr context);
+    static EValue EvalLeafNode(const ExprNode* expr, Columns::TuplePtr tuple, Executor::ExecutorContextPtr context);
 
 /// Const Optimize Expreesion Operation
 public:

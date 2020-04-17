@@ -2,7 +2,8 @@
 #include "defs.h"
 #include "../../Parser/ExprNode.h"
 #include "../../Columns/Field/Field.h"
-#include "../../Columns/Tuple.h"
+#include "../../Columns/defs.h"
+#include "../../Plan/Plan.h"
 namespace Executor {
 
 class Predicator

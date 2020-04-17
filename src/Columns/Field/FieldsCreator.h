@@ -5,6 +5,7 @@
 #include "DateField.h"
 #include "DoubleField.h"
 #include "IntField.h"
+#include "LazyField.h"
 #include "NullField.h"
 #include "VarcharField.h"
 #include "../../Utils/ObjectPool.h"
@@ -23,9 +24,9 @@ private:
     thread_local static Utils::ObjectPool<DateField> DateFieldPool;
     thread_local static Utils::ObjectPool<DoubleField> DoubleFieldPool;
     thread_local static Utils::ObjectPool<IntField> IntFieldPool;
+    thread_local static Utils::ObjectPool<LazyField> LazyFieldPool;
     thread_local static Utils::ObjectPool<NullField> NullFieldPool;
     thread_local static Utils::ObjectPool<VarcharField> VarcharFieldPool;
-
 /// Delete Operation
 private:
     static void DeleteField(Field* field);
@@ -37,6 +38,7 @@ public:
     static DateFieldPtr     CreateDateField();
     static DoubleFieldPtr   CreateDoubleField();
     static IntFieldPtr      CreateIntField();
+    static LazyFieldPtr     CreateLazyField();
     static NullFieldPtr     CreateNullField();
     static VarcharFieldPtr  CreateVarcharField();
 

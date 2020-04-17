@@ -7,8 +7,8 @@ class Operations
 {
 /// Operation func
 public:
-    static EValue Op(operator_type_t op, ExprNode* expr1, ExprNode* expr2, Columns::TuplePtr);
-    static EValue Op(operator_type_t op, ExprNode* expr, Columns::TuplePtr);
+    static EValue Op(operator_type_t op, ExprNode* expr1, ExprNode* expr2, Columns::TuplePtr, Executor::ExecutorContextPtr context);
+    static EValue Op(operator_type_t op, ExprNode* expr, Columns::TuplePtr, Executor::ExecutorContextPtr context);
     static bool IsIn(const Columns::Field* field, ExprNodeList* lists);
 
 /// Operation self

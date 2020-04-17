@@ -1,6 +1,5 @@
 #pragma once
 #include "defs.h"
-#include "Tuple.h"
 #include "TupleDesc.h"
 #include "RowID.h"
 #include "ColID.h"
@@ -67,6 +66,10 @@ public:
 
     /// Clone
     TableMetaWritePtr CloneWrite() const;
+
+private:
+    /// check field (rid, cid) is available (in range)
+    bool CheckInRange(RowID rid, ColID cid) const;
 };
 
 }

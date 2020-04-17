@@ -12,6 +12,7 @@ set (SOURCE
     ${CMAKE_CURRENT_SOURCE_DIR}/DoubleField.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FieldsCreator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/IntField.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/LazyField.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/NullField.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/VarcharField.cpp
     PARENT_SCOPE

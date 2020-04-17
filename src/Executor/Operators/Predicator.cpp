@@ -1,5 +1,6 @@
 #include "Predicator.h"
 #include "../../Parser/Expression/Expression.h"
+#include "../../Columns/Tuple.h"
 using namespace std;
 
 namespace Executor {

@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic CMakeFiles/ServerUnitTest.dir/ServerUnitTest.cpp.o CMakeFiles/ServerUnitTest.dir/__/__/Parser/SQLParser.cpp.o  -o ServerUnitTest /usr/local/lib/libgtest.a /usr/local/lib/libgtest_main.a -lpthread ../../Parser/libsql_parser.a ../../../libTColDB_lib.a 

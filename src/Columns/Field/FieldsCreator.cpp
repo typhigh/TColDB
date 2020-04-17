@@ -11,6 +11,7 @@ thread_local Utils::ObjectPool<CharField>    FieldsCreator::CharFieldPool    = U
 thread_local Utils::ObjectPool<DateField>    FieldsCreator::DateFieldPool    = Utils::ObjectPool<DateField>("DateFieldPool");
 thread_local Utils::ObjectPool<DoubleField>  FieldsCreator::DoubleFieldPool  = Utils::ObjectPool<DoubleField>("DoubleFieldPool");
 thread_local Utils::ObjectPool<IntField>     FieldsCreator::IntFieldPool     = Utils::ObjectPool<IntField>("IntFieldPool");
+thread_local Utils::ObjectPool<LazyField>    FieldsCreator::LazyFieldPool    = Utils::ObjectPool<LazyField>("LazyFieldPool");
 thread_local Utils::ObjectPool<NullField>    FieldsCreator::NullFieldPool    = Utils::ObjectPool<NullField>("NullFieldPool");
 thread_local Utils::ObjectPool<VarcharField> FieldsCreator::VarcharFieldPool = Utils::ObjectPool<VarcharField>("VarcharFieldPool");
 
@@ -23,6 +24,7 @@ void FieldsCreator::DeleteField(Field* field)
     case Parser::FIELD_TYPE_DATE:   return DateFieldPool.Add(dynamic_cast<DateField*>(field));
     case Parser::FIELD_TYPE_FLOAT:  return DoubleFieldPool.Add(dynamic_cast<DoubleField*>(field));
     case Parser::FIELD_TYPE_INT:    return IntFieldPool.Add(dynamic_cast<IntField*>(field));
+    case Parser::FIELD_TYPE_LAZY:   return LazyFieldPool.Add(dynamic_cast<LazyField*>(field));
     case Parser::FIELD_TYPE_NULL:   return NullFieldPool.Add(dynamic_cast<NullField*>(field));
     case Parser::FIELD_TYPE_VARCHAR:return VarcharFieldPool.Add(dynamic_cast<VarcharField*>(field));
     default:
@@ -66,6 +68,14 @@ IntFieldPtr FieldsCreator::CreateIntField()
 {
     return IntFieldPtr(
         IntFieldPool.Get(),
+        [] (Field* field) {DeleteField(field);}  
+    );
+}
+
+LazyFieldPtr FieldsCreator::CreateLazyField()
+{
+    return LazyFieldPtr(
+        LazyFieldPool.Get(),
         [] (Field* field) {DeleteField(field);}  
     );
 }

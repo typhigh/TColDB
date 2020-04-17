@@ -1,7 +1,9 @@
 #pragma once
+#include "defs.h"
 #include "RowID.h"
 #include "TupleDesc.h"
 #include "Field/Field.h"
+#include "../Executor/ExecutorContext.h"
 #include <memory>
 #include <vector>
 
@@ -22,14 +24,12 @@ public:
     
     /// Use fieldNo to fetch field copy
     /// If not exists, then return nullptr
-    FieldPtr GetFieldCopy(int fieldNo) const;
+    FieldPtr GetFieldCopy(int fieldNo, Executor::ExecutorContextPtr context);
 
     /// Use fieldName to fetch field copy and the fieldNo
     /// If not exists, then return nullptr 
-    FieldPtr GetFieldCopy(const std::string& fieldName, int& fieldNo) const;
+    FieldPtr GetFieldCopy(const std::string& fieldName, int& fieldNo, Executor::ExecutorContextPtr context);
 
 };
-
-using TuplePtr = std::shared_ptr<Tuple>;
 
 }

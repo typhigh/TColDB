@@ -84,4 +84,9 @@ ColID TableMeta::CreateNextColID()
     return currentCid = currentCid.NextColID();
 }
 
+bool TableMeta::CheckInRange(RowID rid, ColID cid) const
+{
+    return cid <= currentCid;
+}
+
 }

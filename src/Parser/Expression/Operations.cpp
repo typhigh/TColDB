@@ -5,9 +5,9 @@
 using namespace std;
 
 namespace Parser {
-EValue Operations::Op(operator_type_t op, ExprNode* expr1, ExprNode* expr2, Columns::TuplePtr tuple)
+EValue Operations::Op(operator_type_t op, ExprNode* expr1, ExprNode* expr2, Columns::TuplePtr tuple, Executor::ExecutorContextPtr context)
 {
-    EValue ret = move(Expression::Eval(expr1, tuple));
+    EValue ret = move(Expression::Eval(expr1, tuple, context));
     EValue right;
      /// We consider short-cut optimize OR AND
     if (op == OPERATOR_OR && dynamic_cast<Columns::BoolField*>(ret.get())->GetData()) {
@@ -18,7 +18,7 @@ EValue Operations::Op(operator_type_t op, ExprNode* expr1, ExprNode* expr2, Colu
     }
     
     /// Then we do a EVal
-    right = move(Expression::Eval(expr2, tuple));
+    right = move(Expression::Eval(expr2, tuple, context));
     if (IsOpCompared(op)) {
         bool compare = ret->Compare(op, right.get());
         Columns::BoolFieldPtr result = move(Columns::FieldsCreator::CreateBoolField());
@@ -30,9 +30,9 @@ EValue Operations::Op(operator_type_t op, ExprNode* expr1, ExprNode* expr2, Colu
     return ret;
 }
 
-EValue Operations::Op(operator_type_t op, ExprNode* expr, Columns::TuplePtr tuple)
+EValue Operations::Op(operator_type_t op, ExprNode* expr, Columns::TuplePtr tuple, Executor::ExecutorContextPtr context)
 {
-    EValue ret = move(Expression::Eval(expr, tuple));
+    EValue ret = move(Expression::Eval(expr, tuple, context));
     if (IsOpQuery(op)) {
         bool compare = ret->Query(op);
         Columns::BoolFieldPtr result = Columns::FieldsCreator::CreateBoolField(compare);
@@ -51,7 +51,7 @@ bool Operations::IsIn(const Columns::Field* field, ExprNodeList* lists)
     }
     for (int i = 0; i < lists->size(); ++i) {
         ExprNode* expr = lists->at(i);
-        EValue val = move(Expression::EvalLeafNode(expr, nullptr));
+        EValue val = move(Expression::EvalLeafNode(expr, nullptr, nullptr));
         if (field->Compare(OPERATOR_EQ, val.get())) {
             isIn = true;
             break;

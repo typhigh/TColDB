@@ -163,7 +163,7 @@ bool Expression::IsUnary(const ExprNode* expr)
         || expr->op == OPERATOR_ISNULL;
 }
 
-EValue Expression::Eval(const ExprNode* expr, Columns::TuplePtr tuple) 
+EValue Expression::Eval(const ExprNode* expr, Columns::TuplePtr tuple, Executor::ExecutorContextPtr context) 
 {
     /// We always ues ConstOptimize before EVal (except leaf node)
     /// We think if not const, we not allow tuple == nullptr
@@ -177,7 +177,7 @@ EValue Expression::Eval(const ExprNode* expr, Columns::TuplePtr tuple)
     }
 
     if (IsLeafNode(expr)) {
-        return EvalLeafNode(expr, tuple);
+        return EvalLeafNode(expr, tuple, context);
     }
 
     if (tuple == nullptr) {
@@ -189,7 +189,7 @@ EValue Expression::Eval(const ExprNode* expr, Columns::TuplePtr tuple)
 
     /// Check op == in ; such as expr: "x in (1, 2, 4)"
     if (op == OPERATOR_IN) {
-        EValue left = Eval(expr->left, tuple);
+        EValue left = Eval(expr->left, tuple, context);
         bool isIn = Operations::IsIn(left.get(), expr->right->literal_list);
         return Columns::FieldsCreator::CreateBoolField(isIn);
     }
@@ -197,14 +197,14 @@ EValue Expression::Eval(const ExprNode* expr, Columns::TuplePtr tuple)
     /// Check unary op ; such as : - , is null, is not null
     bool isUnary = IsUnary(expr);
     if (isUnary) {
-        return Operations::Op(op, expr->left, tuple);
+        return Operations::Op(op, expr->left, tuple, context);
     }
 
     /// Do binary op ; such as  +, -, *, /
-    return Operations::Op(op, expr->left, expr->right, tuple); 
+    return Operations::Op(op, expr->left, expr->right, tuple, context); 
 }
 
-EValue Expression::EvalLeafNode(const ExprNode* expr, Columns::TuplePtr tuple)
+EValue Expression::EvalLeafNode(const ExprNode* expr, Columns::TuplePtr tuple, Executor::ExecutorContextPtr context)
 {
     if (expr->constVal != nullptr) {
         return expr->constVal->Clone();
@@ -223,13 +223,14 @@ EValue Expression::EvalLeafNode(const ExprNode* expr, Columns::TuplePtr tuple)
         if (tuple == nullptr) {
             return nullptr;
         }
+
         ColumnRef* colRef = expr->column_ref;
         if (colRef->pos > 0) {
             /*TODO*/
-            return tuple->GetFieldCopy(colRef->pos);
+            return tuple->GetFieldCopy(colRef->pos, context);
         }
         string fieldName = colRef->GetFieldName();
-        return tuple->GetFieldCopy(fieldName, colRef->pos);
+        return tuple->GetFieldCopy(fieldName, colRef->pos, context);
     }
     default:
         LOG_ERROR("Unsupported term type in EValLeafNode");
@@ -250,7 +251,7 @@ void Expression::ConstOptimize(ExprNode* expr)
 
     /// Consider LeafNode
     if (IsLeafNode(expr)) {
-        EValue value = EvalLeafNode(expr, nullptr);
+        EValue value = EvalLeafNode(expr, nullptr, nullptr);
         if (value == nullptr) {
             /// This expr is not constant
             return ;
@@ -268,7 +269,7 @@ void Expression::ConstOptimize(ExprNode* expr)
     /// Consider Unary op
     if (IsUnary(expr)) {
         if (IsConstVal(left)) {
-            expr->constVal = Operations::Op(op, left, nullptr);
+            expr->constVal = Operations::Op(op, left, nullptr, nullptr);
         }
         return ;
     }
@@ -285,7 +286,7 @@ void Expression::ConstOptimize(ExprNode* expr)
 
     // Consider Binary op
     ConstOptimize(right);
-    EValue value = Operations::Op(op, left, right, nullptr);
+    EValue value = Operations::Op(op, left, right, nullptr, nullptr);
     if (value != nullptr) {
         expr->constVal = move(value);
     }
