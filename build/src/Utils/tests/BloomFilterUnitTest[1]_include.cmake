@@ -1,5 +1,0 @@
-if(EXISTS "/home/typhigh/Desktop/OpenSource/TColDB/build/src/Utils/tests/BloomFilterUnitTest[1]_tests.cmake")
-  include("/home/typhigh/Desktop/OpenSource/TColDB/build/src/Utils/tests/BloomFilterUnitTest[1]_tests.cmake")
-else()
-  add_test(BloomFilterUnitTest_NOT_BUILT BloomFilterUnitTest_NOT_BUILT)
-endif()

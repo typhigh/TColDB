@@ -1,1 +1,0 @@
-/usr/bin/c++  -g  -rdynamic CMakeFiles/TColDB.dir/src/main.cpp.o CMakeFiles/TColDB.dir/src/Parser/SQLParser.cpp.o  -o build/TColDB src/Parser/libsql_parser.a -lpthread libTColDB_lib.a 
