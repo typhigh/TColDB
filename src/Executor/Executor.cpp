@@ -110,6 +110,11 @@ bool Executor::IsNoneClients() const
     return clients.IsEmpty();
 }
 
+Databases::DatabasePtr Executor::GetDB()
+{
+    return db;
+}
+
 void Executor::SumbitTableMeta(Columns::TableID tableID, Columns::TableMetaWritePtr tableMeta)
 {
     db->GetCatalog()->GetTable(tableID)->SetCurrentWriteTableMeta(tableMeta);

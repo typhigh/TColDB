@@ -61,6 +61,10 @@ public:
     /// Get the instance of executor
     static ExecutorPtr GetInstance();
 
+    /// Get DB
+    Databases::DatabasePtr GetDB();
+    
+public:
     void SumbitTableMeta(Columns::TableID tableID, Columns::TableMetaWritePtr tableMeta);
 
     void SubmitCommit(Columns::TableID tableID); 

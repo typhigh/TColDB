@@ -1,30 +1,18 @@
 #pragma once
-#include <cstdint>
+#include "../Common/ID.h"
+
 namespace Columns {
 
-class ColID
+class ColID : public Common::ID
 {
-private:
-    uint64_t id;
 
 public:
-    ColID() {}
-    ColID(uint64_t id) : id(id) {}
+    ColID() : ID() {}
+    ColID(uint64_t id) : ID(id) {}
     ~ColID() {}
-    uint64_t GetID() const {
-        return id;
-    }
 
     ColID NextColID() {
-        return ColID(id+1);
-    }
-
-    bool operator < (const ColID& other) const {
-        return id < other.id;
-    }
-    
-    bool operator <= (const ColID& other) const {
-        return id <= other.id;
+        return ColID(GetID()+1);
     }
 };
 

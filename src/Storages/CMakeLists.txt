@@ -5,7 +5,10 @@ set(HEADERS
 
 set (SOURCE
 	${SOURCE}
+    ${CMAKE_CURRENT_SOURCE_DIR}/BufferPool.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ColumnsBlock.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/IndexReader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/InMemoryTable.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/TableReader.cpp
     PARENT_SCOPE
 )

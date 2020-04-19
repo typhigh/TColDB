@@ -51,6 +51,11 @@ string ColumnDesc::GetFieldName() const
     return fieldName;
 }
 
+ColID ColumnDesc::GetColID() const
+{
+    return cid;
+}
+
 void ColumnDesc::FillFieldName(const string& tableName)
 {
     string pureFieldName = Utils::GetPointAfter(fieldName);

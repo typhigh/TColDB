@@ -1,13 +1,10 @@
 #pragma once
+#include "../defs.h"
 #include "../../Parser/defs.h"
 #include "../../Utils/ObjectPool.h"
 #include <memory>
-#include <functional>
 
 namespace Columns {
-class Field;
-using FieldDeleteFunc = std::function<void (Field*)>;
-using FieldPtr = std::unique_ptr<Field, FieldDeleteFunc>;
 
 /// A base Field Class 
 class Field

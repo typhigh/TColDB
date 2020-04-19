@@ -52,6 +52,8 @@ public:
     /// Get the table meta
     Columns::TableMetaReadOnlyPtr GetTableMeta(Columns::TableID tableID) const;
 
+    /// Get the bufferPool
+
 public:
     /// Submit the new table meta
     void SubmitTableMeta(Columns::TableID tableID, Columns::TableMetaWritePtr tableMeta);

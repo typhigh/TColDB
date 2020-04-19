@@ -11,17 +11,18 @@ namespace Columns {
 
 class Tuple
 {
-
 private:
-    /* data */
-    RowID rid;
-    TupleDescPtr desc;
+    const TupleDescPtr desc;
+
+public:
     std::vector<FieldPtr> fields;
 
 public:
-    Tuple(/* args */) {}
+    Tuple(TupleDescPtr desc) : desc(desc){}
+    TupleDescPtr GetTupleDesc() const;
     ~Tuple() {}
     
+    TuplePtr Clone() const;
     /// Use fieldNo to fetch field copy
     /// If not exists, then return nullptr
     FieldPtr GetFieldCopy(int fieldNo, Executor::ExecutorContextPtr context);

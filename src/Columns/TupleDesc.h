@@ -34,6 +34,9 @@ public:
     /// Get field name by fieldNo
     std::string GetFieldName(size_t fieldNo) const;
 
+    /// Get field col id by fieldNo
+    ColID GetColID(size_t fieldNo) const;
+    
     /// Get columnDesc
     ColumnDescs GetColumnDescs() const;
     

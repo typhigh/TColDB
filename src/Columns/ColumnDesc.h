@@ -30,8 +30,13 @@ public:
     void SetAlis(const Plan::RenameTable& rename);
     void SetPrimary();
     void SetUnique();
+
+    /// Get field Name
     std::string GetFieldName() const;
 
+    /// Get col id
+    ColID GetColID() const;
+    
     /// Fill field name 
     /// Example: tableName = "Person" fieldName = "a" => "Person.a"
     /// If it'a already "xxx.yyy" yet, do nothing

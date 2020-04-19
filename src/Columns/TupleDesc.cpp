@@ -31,6 +31,11 @@ string TupleDesc::GetFieldName(size_t fieldNo) const
     return descs[fieldNo].GetFieldName();
 }
 
+ColID TupleDesc::GetColID(size_t fieldNo) const 
+{
+    return descs[fieldNo].GetColID();
+}
+
 ColumnDescs TupleDesc::GetColumnDescs() const 
 {
     return descs;

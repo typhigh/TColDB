@@ -6,6 +6,10 @@
 #include "TableID.h"
 #include "Field/Field.h"
 #include "../Executor/Operators/Predicator.h"
+#include "../ThreePart/CRoaring/roaring.hh"
+#include "../Storages/OnDiskTable.h"
+#include "../Storages/InMemoryTable.h"
+#include "../Storages/BufferPool.h"
 #include <memory>
 
 namespace Columns {
@@ -17,9 +21,11 @@ private:
     std::string tableName; 
     TableID tableID;
 
-    ColID currentCid;
+    ColID currentCID;
+    RowID currentRID;
 
-//   TablePartMetaPtr tablePartMeta;
+    Storages::OnDiskTable onDiskTable;
+    Storages::InMemoryTable inMemoryTable;
 //    IndexPartMetaPtr IndexPartMeta;
     
     TupleDescPtr tupleDesc;
@@ -30,8 +36,11 @@ private:
     /// Default field value
     std::vector<FieldPtr> defaultFields;    
 
+    /// Bitset of rows
+    Roaring rowBitest;
+
 public:
-    TableMeta(const std::string& tableName, TableID tableID);
+    TableMeta(const std::string& tableName, TableID tableID, Storages::BufferPoolPtr pool);
     ~TableMeta() {}
     
     /// Get the informations
@@ -55,21 +64,35 @@ public:
     /// Set checker
     void SetChecker(Executor::PredicatorPtr checker);
 
-    /// check if the tuple is under the constraint 
+    /// Check if the tuple is under the constraint 
     bool CheckCondition(TuplePtr tuple) const;
 
     /// Create next col id
     ColID CreateNextColID();
-        
+
+
 public:
     TableMetaReadOnlyPtr CloneReadOnly() const;
 
     /// Clone
     TableMetaWritePtr CloneWrite() const;
 
-private:
-    /// check field (rid, cid) is available (in range)
+/// Bitset 
+public:
+    /// Check field (rid, cid) is available (in range)
     bool CheckInRange(RowID rid, ColID cid) const;
+
+    /// Check rid is available
+    bool CheckInRange(RowID rid) const;
+
+    /// Delete the row, return true if no error
+    bool DeleteRow(RowID rid);
+
+    /// Insert the row, return true if no error
+    bool InsertRow(TuplePtr tuple, std::string& error);
+
+private:
+    void InsertRowImpl(TuplePtr tuple);
 };
 
 }

@@ -1,18 +1,20 @@
 #pragma once
-#include <cstdint>
+#include "../Common/ID.h"
+
 namespace Columns {
 
-class RowID
+class RowID : public Common::ID
 {
-private:
-    uint64_t id;
 
 public:
-    RowID(/* args */) {}
+    RowID() : ID() {}
+    RowID(uint64_t id) : ID(id) {}
     ~RowID() {}
-    uint64_t GetID() const {
-        return id;
+
+    RowID NextRowID() {
+        return RowID(GetID()+1);
     }
 };
+
 
 }
