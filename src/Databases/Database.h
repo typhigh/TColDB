@@ -1,5 +1,6 @@
 #pragma once
 #include "Catalog.h"
+#include "../Storages/BufferPool.h"
 
 namespace Databases {
 
@@ -11,6 +12,7 @@ private:
     /* data */
     CatalogPtr catalog;
     std::string name;
+    Storages::BufferPoolPtr bufferPool;
 
 private:
     void LoadInfo();
@@ -21,7 +23,8 @@ public:
     ~Database();
     static DatabasePtr GetInstance();
     CatalogPtr GetCatalog();
-
+    Storages::BufferPoolPtr GetBufferPool();
+    
 public:
     void Commit(Columns::TableID tableID);
 };

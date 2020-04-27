@@ -40,7 +40,7 @@ private:
     Roaring rowBitest;
 
 public:
-    TableMeta(const std::string& tableName, TableID tableID, Storages::BufferPoolPtr pool);
+    TableMeta(const std::string& tableName, TableID tableID);
     ~TableMeta() {}
     
     /// Get the informations
@@ -56,7 +56,7 @@ public:
     std::string GetTableName() const;
     
     /// Get field
-    FieldPtr GetField(RowID rid, ColID cid) const;
+    FieldPtr GetField(RowID rid, ColID cid, Storages::BufferPoolPtr bufferPool) const;
     
     /// Get tuple count
     size_t GetTupleCount() const;

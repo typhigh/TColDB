@@ -191,7 +191,7 @@ ExecutorContextPtr Executor::GetExecutorContext(const vector<string>& tableRefs,
         tableMetas.push_back(move(tableMeta));
         tableIDs.push_back(tableID);
     }
-    return make_shared<ExecutorContext>(tableMetas, tableIDs, tableRefs, command, shared_from_this());
+    return make_shared<ExecutorContext>(tableMetas, tableIDs, tableRefs, command, shared_from_this(), this->db->GetBufferPool());
 }
 
 }

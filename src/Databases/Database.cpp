@@ -36,6 +36,10 @@ CatalogPtr Database::GetCatalog()
     return catalog;
 }
 
+Storages::BufferPoolPtr Database::GetBufferPool()
+{
+    return bufferPool;
+}
 DatabasePtr Database::GetInstance() 
 {
     static DatabasePtr db = make_shared<Database>();

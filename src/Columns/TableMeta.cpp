@@ -1,15 +1,13 @@
 #include "TableMeta.h"
 #include "TupleCreator.h"
-
 #include <sstream>
 using namespace std;
 
 namespace Columns {
 
-TableMeta::TableMeta(const string& tableName, TableID tableID, Storages::BufferPoolPtr pool)
+TableMeta::TableMeta(const string& tableName, TableID tableID)
     : tableName(tableName)
     , tableID(tableID)
-    , onDiskTable(pool)
 {
     currentCID = ColID(0);
     currentRID = RowID(0);
@@ -41,7 +39,7 @@ string TableMeta::GetTableName() const
     return tableName;
 }
 
-FieldPtr TableMeta::GetField(RowID rid, ColID cid) const 
+FieldPtr TableMeta::GetField(RowID rid, ColID cid, Storages::BufferPoolPtr bufferPool) const 
 {
     /*TODO*/
     return nullptr;

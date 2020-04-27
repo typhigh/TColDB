@@ -2,7 +2,7 @@
 using namespace std;
 using namespace Columns;
 
-namespace Storage {
+namespace Storages {
 
 void InMemoryTable::Clear()
 {
@@ -22,7 +22,7 @@ Columns::RowID InMemoryTable::GetStartID() const
 
 Columns::TuplePtr InMemoryTable::GetTupleCopy(Columns::RowID rid) const
 {
-    return tuples[startID.offset(rid)]->Clone();
+    return tuples[startID.Offset(rid)]->Clone();
 }
 
 Columns::Tuples& InMemoryTable::GetTuples()

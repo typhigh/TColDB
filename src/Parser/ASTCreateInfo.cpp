@@ -52,7 +52,7 @@ void ASTCreateInfo::Execute(Executor::ExecutorContextPtr context) const
         return;
     }
 
-    Columns::TableMetaWritePtr tableMetaNew = make_shared<Columns::TableMeta>(tableName, tableID, context->);
+    Columns::TableMetaWritePtr tableMetaNew = make_shared<Columns::TableMeta>(tableName, tableID);
     Columns::ColumnDescs descs;
     vector<Columns::FieldPtr> defaultFields;
 

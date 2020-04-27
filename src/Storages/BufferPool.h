@@ -9,7 +9,7 @@ namespace Storages {
 class BufferPool
 {
 private:
-    Utils::LRUCache<ColumnBlockID, ColumnBlock> pool;
+    Utils::LRUCache<ColumnBlockID, ColumnBlock, Common::IDHashFunc> pool;
 
 public:
     BufferPool(/* args */) {}

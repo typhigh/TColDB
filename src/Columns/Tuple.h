@@ -3,7 +3,7 @@
 #include "RowID.h"
 #include "TupleDesc.h"
 #include "Field/Field.h"
-#include "../Executor/ExecutorContext.h"
+#include "../Executor/defs.h"
 #include <memory>
 #include <vector>
 

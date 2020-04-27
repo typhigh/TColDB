@@ -3,6 +3,8 @@
 #include "../Common/CommandWrap.h"
 #include "../Columns/TableMeta.h"
 #include "../Plan/defs.h"
+#include "../Storages/BufferPool.h"
+
 namespace Executor {
 
 class ExecutorContext : public std::enable_shared_from_this<ExecutorContext>
@@ -24,16 +26,18 @@ private:
     /// The client id
     Common::CommandWrapPtr command;
 
+    Storages::BufferPoolPtr bufferPool;
+    
 public:
     ExecutorContext(const std::vector<Columns::TableMetaReadOnlyPtr>& tableMetas, 
                     const std::vector<Columns::TableID>& tableIDs, 
                     const std::vector<std::string>& tableNames, 
                     Common::CommandWrapPtr command,
-                    ExecutorPtr executor);
+                    ExecutorPtr executor,
+                    Storages::BufferPoolPtr bufferPool);
     ~ExecutorContext() {}
 
 public:
-
     /// Gengerate plan context
     Plan::PlanContextPtr GetPlanContext();
     
@@ -52,8 +56,7 @@ public:
     /// Get the table meta
     Columns::TableMetaReadOnlyPtr GetTableMeta(Columns::TableID tableID) const;
 
-    /// Get the bufferPool
-
+/// Submit func
 public:
     /// Submit the new table meta
     void SubmitTableMeta(Columns::TableID tableID, Columns::TableMetaWritePtr tableMeta);

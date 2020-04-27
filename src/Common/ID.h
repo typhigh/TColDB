@@ -1,5 +1,7 @@
 #pragma once
 #include <cstdint>
+#include <cassert>
+#include <unordered_map>
 namespace Common {
 
 class ID
@@ -11,18 +13,39 @@ public:
     ID() {}
     ID(uint64_t id) : id(id) {}
     virtual ~ID() {}
-    uint64_t GetID() const {
+    uint64_t GetID() const 
+    {
         return id;
     }
 
-    bool operator < (const ID& other) const {
-        return id < other.id;
+    bool operator < (const ID& rhs) const 
+    {
+        return id < rhs.id;
     }
     
-    bool operator <= (const ID& other) const {
-        return id <= other.id;
+    bool operator <= (const ID& rhs) const 
+    {
+        return id <= rhs.id;
+    }
+
+    bool operator == (const ID& rhs) const
+    {
+        return id == rhs.id;
+    }
+
+    size_t Offset(const ID& rhs) const
+    {
+        assert(rhs.id > id);
+        return rhs.id - id;
     }
 };
 
+struct IDHashFunc
+{
+    size_t operator () (const ID& id) const
+    {
+        return std::hash<uint64_t>() (id.GetID());
+    }
+};
 
 }

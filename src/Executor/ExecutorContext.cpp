@@ -10,12 +10,14 @@ ExecutorContext::ExecutorContext(
     const vector<Columns::TableID>& tableIDs,
     const vector<string>& tableNames,
     Common::CommandWrapPtr command,
-    ExecutorPtr executor)
+    ExecutorPtr executor,
+    Storages::BufferPoolPtr bufferPool)
     : tableMetas(tableMetas)
     , tableIDs(tableIDs)
     , tableNames(tableNames)
     , command(command)
     , executor(executor)
+    , bufferPool(bufferPool)
 {
 }
 
@@ -31,7 +33,7 @@ Columns::FieldPtr ExecutorContext::FetchField(Columns::TableID tableID, Columns:
         LOG_WARN("No such table");
         return nullptr;
     }
-    return tableMeta->GetField(rid, cid);    
+    return tableMeta->GetField(rid, cid, bufferPool);    
 }
 
 Columns::TableID ExecutorContext::GetTableID(const string& tableName) const 

@@ -2,7 +2,7 @@
 #include "TupleCreator.h"
 #include "../Utils/StringUtils.h"
 #include "Field/LazyField.h"
-
+#include "../Executor/ExecutorContext.h"
 using namespace std;
 
 namespace Columns {
