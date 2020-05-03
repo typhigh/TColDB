@@ -5,8 +5,7 @@
 namespace Storages {
 
 class ColumnBlockID : public Common::ID
-{
-
+{    
 public:
     ColumnBlockID() : ID() {}
     ColumnBlockID(uint64_t id) : ID(id) {}

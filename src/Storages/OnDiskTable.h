@@ -4,30 +4,37 @@
 #include "ColumnBlock.h"
 #include "BufferPool.h"
 #include "ColumnBlockMeta.h"
-
+#include "OnDiskColumn.h"
 namespace Storages {
 
 class OnDiskTable
 {
 private:
     /* data */
-    ColumnBlockMetas blockMetas;
-    
+    OnDiskColumns onDiskColumns;
+    const static Columns::ColID startCid;
+
 public:
     OnDiskTable() {}
     ~OnDiskTable() {}
 
     /// Get block from bufferPool or disk
     /// If bufferPool == nullptr, just fetch on disk
-    void GetColumnBlock(ColumnBlockID blockID, ColumnBlockPtr& block, BufferPoolPtr bufferPool);
+    bool GetColumnBlock(Columns::ColID cid, ColumnBlockID blockID, ColumnBlockPtr& block, BufferPoolPtr bufferPool);
     
     /// Insert block
     /// If bufferPool is not nullptr, add the block to bufferPool either
-    void InsertColumnBlock(ColumnBlockID blockID, ColumnBlockPtr block, BufferPoolPtr bufferPool);
+    bool InsertColumnBlock(Columns::ColID cid, ColumnBlockID blockID, ColumnBlockPtr block, BufferPoolPtr bufferPool);
+
+    /// Get blockID by (rid,cid)
+    bool GetBlockID(Columns::RowID rid, Columns::ColID cid, ColumnBlockID& blockID) const;
 
 private:
     /// Get block from disk
-    void GetColumnBlockOnDisk(ColumnBlockID blockID, ColumnBlockPtr& block);
+    bool GetColumnBlockOnDisk(Columns::ColID cid, ColumnBlockID blockID, ColumnBlockPtr& block);
+    
+    /// Insert block to disk
+    bool InsertColumnBlockOnDisk(Columns::ColID cid, ColumnBlockID blockID, ColumnBlockPtr block);
 };
 
 }

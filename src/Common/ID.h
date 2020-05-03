@@ -2,6 +2,8 @@
 #include <cstdint>
 #include <cassert>
 #include <unordered_map>
+#include <string>
+
 namespace Common {
 
 class ID
@@ -13,6 +15,12 @@ public:
     ID() {}
     ID(uint64_t id) : id(id) {}
     virtual ~ID() {}
+
+    std::string ToString() 
+    {
+        return std::to_string(id);
+    }
+    
     uint64_t GetID() const 
     {
         return id;

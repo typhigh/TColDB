@@ -4,6 +4,7 @@
 #include "../Columns/ColID.h"
 #include "../Columns/RowID.h"
 #include "../Columns/Field/Field.h"
+#include "../Utils/AdaptiveMap.h"
 
 namespace Storages {
 
@@ -18,7 +19,10 @@ private:
 public:
     ColumnBlock(/* args */) {}
     ~ColumnBlock() {}
+
+    
 };
 using ColumnBlockPtr = std::shared_ptr<ColumnBlock>;
+using ColumnBlocks = Utils::AdaptiveMap<ColumnBlockID, ColumnBlockPtr>;
 
 }

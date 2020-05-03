@@ -1,0 +1,12 @@
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tests)
+set(HEADERS
+	${HEADERS}
+    PARENT_SCOPE
+)
+
+set(SOURCE
+	${SOURCE}
+	${CMAKE_CURRENT_SOURCE_DIR}/DoubleCoder.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/IntCoder.cpp
+	PARENT_SCOPE
+)

@@ -1,3 +1,4 @@
+#pragma once
 #include <vector>
 #include <map>
 #include <unordered_map>
@@ -12,64 +13,92 @@ template <typename TKey, typename TVal>
 class AdaptiveMap
 {
 public:
-    constexpr static size_t MapMinSize = 16;
     using KeyValue = std::pair<TKey, TVal>;
+    constexpr static size_t MapMinSize = 16;
 
 private:
     /// Use vector or unorder_map up to the size 
-    std::vector<KeyValue> vec;
-    std::map<TKey, TVal> mp;
+    std::vector<TKey> keys;
+    std::vector<TVal> values;
+    std::map<TKey, size_t> mp;
     size_t size = 0;
 
 public:
     AdaptiveMap(/* args */) {}
     ~AdaptiveMap() {}
 
-    void Insert(TKey key, TVal val);
+    void Insert(const TKey& key, const TVal& val);
 
-    bool Get(TKey key, TVal& val);
+    bool Get(const TKey& key, TVal& val) const;
+
+    bool LowBound(const TKey& key, TVal& val) const;
 };
 
 template <typename TKey, typename TVal>
-void AdaptiveMap<TKey, TVal>::Insert(TKey key, TVal val)
+void AdaptiveMap<TKey, TVal>::Insert(const TKey& key, const TVal& val)
 {
+    values.push_back(val);
     if (size < MapMinSize) {
-        vec.emplace_back(key, val);
+        keys.push_back(key);
     } else {
-        mp[key] = val;
+        mp[key] = values.size() - 1;
     }
 
     if (++size == MapMinSize) {
-        for (KeyValue& value : vec) {
-            mp.insert(value);
+        for (size_t i = 0; i < keys.size(); ++i) {
+            mp[keys[i]] = i;
         }
-        vec.clear();
+        keys.clear();
     }
 }
 
 template <typename TKey, typename TVal>
-bool AdaptiveMap<TKey, TVal>::Get(TKey key, TVal& val)
+bool AdaptiveMap<TKey, TVal>::Get(const TKey& key, TVal& val) const
 {
-    /// In vector
+    assert(values.size() == size);
+    size_t offset;
     if (size < MapMinSize) {
-        assert(vec.size() == size);        
+        /// In vector
+        assert(keys.size() == size);        
         assert(mp.size() == 0);
-        auto iter = find(vec.begin(), vec.end(), key);
-        if (iter == vec.end()) {
+        auto iter = find(keys.begin(), keys.end(), key);
+        if (iter == keys.end()) {
             return false;
         }
-        val = *iter;
-        return true;
+        offset = iter - keys.begin();
+    } else {
+        /// In map
+        assert(keys.size() == 0);
+        assert(mp.size() == size);
+        auto iter = mp.find(key);
+        if (iter == mp.end()) {
+            return false;
+        }
+        offset = iter->second;
     }
+    val = values[offset];
+    return true;
+}
 
-    /// In map
-    assert(vec.size() == 0);
-    assert(mp.size() == size);
-    auto iter = mp.find(key);
-    if (iter == mp.end()) {
-        return false;
+template <typename TKey, typename TVal>
+bool AdaptiveMap<TKey, TVal>::LowBound(const TKey& key, TVal& val) const
+{
+    size_t offset;
+    if (size < MapMinSize) {
+        auto iter = find(keys.begin(), keys.end(), key);
+        if (iter == keys.end()) {
+            return false;
+        }
+        offset = iter - keys.begin();
+    } else {
+        auto iter = mp.lower_bound(key);
+        if (iter == mp.end()) {
+            return false;
+        }
+        offset = iter->second;
     }
-    val = *iter;
+    assert(offset < size);
+    val = values[offset];
     return true;
 }
 
