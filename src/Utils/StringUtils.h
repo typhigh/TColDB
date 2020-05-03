@@ -37,6 +37,35 @@ inline std::string RandomString(int len)
     return ret;
 }
 
+/// Get Date string by (year, month, day) like "2010-10-06"
+inline std::string GetDate(int year, int month, int day)
+{
+    std::string sYear = std::to_string(year);
+    if (sYear.size() < 4) sYear = std::string(4-sYear.size(), '0') + sYear;
+    std::string sMonth = std::to_string(month);
+    if (sMonth.size() == 1) sMonth = "0" + sMonth;
+    std::string sDay = std::to_string(day);
+    if (sDay.size() == 1) sDay = "0" + sDay;
+    std::string ret = sYear + "-" + sMonth + "-" + sDay; 
+    return ret;
+}
+
+/// Check the date format is right or not
+inline bool CheckDate(const std::string& date)
+{
+    if (date.size() != 10) {
+        return false;
+    }
+    if (date[4] != '-' || date[7] != '-') {
+        return false;
+    } 
+    int year, month, day;
+    sscanf(date.c_str(), "%d-%d-%d", &year, &month, &day);
+    if (year > 9999 || year < 0 || month > 12 || month < 1 || day > 31 || day < 1) {
+        return false;
+    }
+    return true;
+}
 
 /// Get string after the point
 /// Example: "1.233" -> "233"

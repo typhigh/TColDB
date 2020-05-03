@@ -4,7 +4,7 @@
 #include <string>
 #include <cassert>
 
-namespace Storage {
+namespace Storages {
 
 
 }

@@ -1,4 +1,5 @@
 #include "Serialization.h"
+#include <cstring>
 using namespace std;
 
 namespace Storages {
@@ -21,6 +22,14 @@ Slice Serialization::WriteUint32(Slice output, uint32_t data)
     p[1] = (data >> 16) & BitMask;
     p[0] = (data >> 24) & BitMask;
     return output.RemovePrefix(4); 
+}
+
+Slice Serialization::WriteString(Slice output, const string& data)
+{
+    assert(output.GetRemain() >= data.size());
+    char* p = output.GetData();
+    memcpy(p, data.c_str(), data.size() * sizeof(char));
+    return output.RemovePrefix(data.size());
 }
 
 }
