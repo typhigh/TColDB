@@ -2,6 +2,7 @@
 #include <string>
 #include <cstdlib>
 #include <cstring>
+#include <cassert>
 
 namespace Utils {
 
@@ -27,12 +28,25 @@ inline std::string NormalizeCommand(const std::string& s)
     return Trim(s, [](char ch) {return ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n';});
 }
 
+/// Get random string with given length
 inline std::string RandomString(int len)
 {
     std::string ret(len, 0);
     srand((unsigned) time(NULL));
     for (int i = 0; i < len; ++i) {
         ret[i] = rand() % len;
+    }
+    return ret;
+}
+
+/// Get random string with given length, and every character is in [lower, upper]
+inline std::string RandomString(int len, unsigned char lower, unsigned char upper)
+{   
+    assert(upper >= lower);
+    std::string ret(len, 0);
+    srand((unsigned) time(NULL));
+    for (int i = 0; i < len; ++i) {
+        ret[i] = rand() %  (upper - lower + 1) + lower; 
     }
     return ret;
 }
@@ -48,6 +62,15 @@ inline std::string GetDate(int year, int month, int day)
     if (sDay.size() == 1) sDay = "0" + sDay;
     std::string ret = sYear + "-" + sMonth + "-" + sDay; 
     return ret;
+}
+
+/// Get random date
+inline std::string RandomDate()
+{
+    int year = rand() % 10000;
+    int month = rand() % 12 + 1;
+    int day = rand() % 31 + 1;
+    return GetDate(year, month, day);
 }
 
 /// Check the date format is right or not

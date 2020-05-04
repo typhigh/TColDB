@@ -58,7 +58,7 @@ int32_t DateCoder::GetBaseEncode(const string& data)
     int year, month, day;
     sscanf(data.c_str(), "%d-%d-%d", &year, &month, &day);
     assert(year >= 0 && month >= 1 && month <= 12 && day >= 1 && day <= 31);
-    int encode = year * 31 * 12 + month * 31 + day - 1;
+    int encode = year * 31 * 12 + (month-1)* 31 + day - 1;
     return encode;
 }
 
@@ -67,7 +67,7 @@ string DateCoder::GetDateFromBaseEncode(int32_t encode)
     int year, month, day;
     year = encode / (31 * 12);
     encode %= (31 * 12);
-    month = encode / 31;
+    month = encode / 31 + 1;
     day = encode % 31 + 1;
     return Utils::GetDate(year, month, day);
 }

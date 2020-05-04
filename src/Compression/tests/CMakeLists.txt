@@ -6,6 +6,15 @@ find_package(Snappy)
 include_directories(${GTEST_INCLUDE_DIRS})
 set(CMAKE_CXX_STANDARD 17)
 
+add_executable(DateCoderUnitTest DateCoderUnitTest.cpp ../../Parser/SQLParser.cpp)
+target_link_libraries(
+    DateCoderUnitTest
+    sql_parser
+    ${GTEST_BOTH_LIBRARIES}
+    pthread
+    ${CMAKE_PROJECT_NAME}_lib
+)
+
 add_executable(DoubleCoderUnitTest DoubleCoderUnitTest.cpp ../../Parser/SQLParser.cpp)
 target_link_libraries(
     DoubleCoderUnitTest
@@ -35,8 +44,9 @@ target_link_libraries(
 )
 
 gtest_discover_tests(
-    IntCoderUnitTest
+    DateCoderUnitTest
     DoubleCoderUnitTest
+    IntCoderUnitTest
     StringCoderUnitTest
 )
 

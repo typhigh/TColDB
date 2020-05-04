@@ -31,7 +31,7 @@ TEST(StringCoderUnitTest, testSnappy)
         TestStringOnce(s);
     }
 
-
+    /// series string
     char* s = new char[102400];
     Slice slice(s, 102400);
     vector<string> datas(times);
