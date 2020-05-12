@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
+#include <iostream>
 #include "../DateCoder.h"
+#include "../StringCoder.h"
 #include "../../Utils/StringUtils.h"
 
 using namespace std;
@@ -17,6 +19,30 @@ void TestDateOnce(const string& data, size_t need = 0)
     if (need) {
         EXPECT_EQ(now.GetUsedSize(), need);
     }
+}
+
+TEST(DateCoderUnitTest, testDateRate)
+{
+    /// 2020 
+    vector<string> datas;
+    for (size_t i = 1; i <= 12; ++i) {
+        for (size_t j = 1; j <= 20; ++j) {
+            datas.push_back(Utils::GetDate(2020, i, j));
+        }
+    }
+    
+    char s[4096];
+    Slice slice(s, 4096);
+    Slice now = slice;
+    for (string& data : datas) {
+        now = DateCoder::EnCodeDate(now, data);
+    }
+
+    cout << now.GetUsedSize() << endl;
+    size_t len = now.GetUsedSize();
+    string x = Utils::CopyStringFromCString(slice.GetData(), len); 
+    now = StringCoder::EnCodeStringWithSnappy(slice, x);
+    cout << now.GetUsedSize() << endl;
 }
 
 TEST(DateCoderUnitTest, testDate)

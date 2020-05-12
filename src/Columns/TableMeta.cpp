@@ -10,7 +10,7 @@ TableMeta::TableMeta(const string& tableName, TableID tableID)
     , tableID(tableID)
 {
     currentCID = ColID(0);
-    currentRID = RowID(0);
+    currentRID = inMemoryStartRID = RowID(0);
 }
 
 string TableMeta::ToString() const
@@ -41,8 +41,25 @@ string TableMeta::GetTableName() const
 
 FieldPtr TableMeta::GetField(RowID rid, ColID cid, Storages::BufferPoolPtr bufferPool) const 
 {
-    /*TODO*/
-    return nullptr;
+    /// In memory
+    if (inMemoryStartRID <= rid) {
+        return inMemoryTable->GetFieldCopy(rid, cid);
+    }
+
+    /// In disk
+    Storages::ColumnBlockID blockID;
+    if (!onDiskTable->GetBlockID(rid, cid, blockID)) {
+        /// Something wrong
+        LOG_WARN("This table meta has no such field as [rid:%s,cid:%s]", rid.ToString().c_str(), cid.ToString().c_str());
+        return nullptr;
+    }
+
+    Storages::ColumnBlockPtr block;
+    if (!onDiskTable->GetColumnBlock(cid, blockID, block, bufferPool)) {
+        LOG_ERROR("This table meta has the [blockID:%s] but not block", blockID.ToString().c_str());
+        return nullptr;
+    }
+    return block->GetFieldCopy(rid);
 }
 
 size_t TableMeta::GetTupleCount() const 
@@ -66,8 +83,9 @@ TableMetaWritePtr TableMeta::CloneWrite() const
     TableMetaWritePtr ret = make_shared<TableMeta>(tableName, tableID);
     ret->currentCID = currentCID;
     ret->currentRID = currentRID;
+    ret->inMemoryStartRID = inMemoryStartRID;
     ret->inMemoryTable = inMemoryTable;
-    ret->onDiskTable = onDiskTable;
+    ret->onDiskTable = onDiskTable->Clone();
     ret->rowBitest = rowBitest;
 
     for (size_t i = 0; i < defaultFields.size(); ++i) {

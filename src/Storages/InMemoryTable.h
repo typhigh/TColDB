@@ -15,17 +15,19 @@ public:
     ~InMemoryTable() {}
     void Clear();
     
+    InMemoryTablePtr Clone() const;
+    
     void SetStartID(Columns::RowID startID);
 
     Columns::RowID GetStartID() const;
 
     /// Get tuple copy    
     Columns::TuplePtr GetTupleCopy(Columns::RowID rid) const;
+    Columns::FieldPtr GetFieldCopy(Columns::RowID rid, Columns::ColID cid) const;
 
     Columns::Tuples& GetTuples();
 
     void InsertRowTuple(Columns::TuplePtr tuple);
 };
-
 
 }

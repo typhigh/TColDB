@@ -15,6 +15,9 @@ public:
     OnDiskColumn(/* args */) {}
     ~OnDiskColumn() {}
 
+    /// Clone func
+    OnDiskColumnPtr Clone() const;
+
     /// Get block from disk
     bool GetColumnBlockOnDisk(ColumnBlockID blockID, ColumnBlockPtr& block);
     
@@ -28,6 +31,4 @@ private:
     
 };
 
-using OnDiskColumnPtr = std::shared_ptr<OnDiskColumn>;
-using OnDiskColumns = std::vector<OnDiskColumnPtr>;
 }

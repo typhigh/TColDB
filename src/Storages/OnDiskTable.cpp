@@ -4,6 +4,16 @@ using namespace std;
 namespace Storages {
 
 const Columns::ColID OnDiskTable::startCid = Columns::ColID(0);
+
+OnDiskTablePtr OnDiskTable::Clone() const 
+{
+    OnDiskTablePtr ret = make_shared<OnDiskTable>();
+    for (OnDiskColumnPtr column : this->onDiskColumns) {
+        ret->onDiskColumns.push_back(column);
+    }
+    return ret;
+}
+
 bool OnDiskTable::GetColumnBlock(Columns::ColID cid, ColumnBlockID blockID, ColumnBlockPtr& block, BufferPoolPtr bufferPool)
 {
     /// First find the bufferPool

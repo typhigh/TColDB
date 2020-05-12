@@ -23,6 +23,37 @@ private:
     std::map<TKey, size_t> mp;
     size_t size = 0;
 
+public: 
+    struct AdaptiveIterator {
+        /// Data and Refs
+        size_t step;
+        size_t size;
+        typename std::map<TKey, size_t>::const_iterator mpIter;
+        bool isMap;
+        const std::vector<TKey>& keys;
+        const std::vector<TVal>& values;
+        
+        bool HasNext() {
+            return step < size;
+        }
+
+        KeyValue Next() {
+            assert(step < size);
+            KeyValue ret;
+            if (isMap) {
+                size_t offset = mpIter->second;
+                ret = {mpIter->first, values[offset]};
+                mpIter++;
+            } else {
+                ret = {keys[step], values[step]};
+            }
+            ++step;
+            return ret;
+        }
+    };
+
+    using iterator = AdaptiveIterator;
+
 public:
     AdaptiveMap(/* args */) {}
     ~AdaptiveMap() {}
@@ -32,6 +63,12 @@ public:
     bool Get(const TKey& key, TVal& val) const;
 
     bool LowBound(const TKey& key, TVal& val) const;
+
+    size_t GetSize() const;
+
+    void Clear();
+
+    iterator Begin() const;
 };
 
 template <typename TKey, typename TVal>
@@ -100,6 +137,34 @@ bool AdaptiveMap<TKey, TVal>::LowBound(const TKey& key, TVal& val) const
     assert(offset < size);
     val = values[offset];
     return true;
+}
+
+template<typename TKey, typename TVal>
+size_t AdaptiveMap<TKey, TVal>::GetSize() const
+{
+    return size;
+}
+
+template<typename TKey, typename TVal>
+void AdaptiveMap<TKey, TVal>::Clear()
+{
+    size = 0;
+    keys.clear();
+    mp.clear();
+    values.clear();
+}
+
+template<typename TKey, typename TVal>
+typename AdaptiveMap<TKey, TVal>::iterator AdaptiveMap<TKey, TVal>::Begin() const
+{
+    return iterator {
+        0,
+        size,
+        mp.cbegin(),
+        size >= MapMinSize,
+        keys,
+        values 
+    };
 }
 
 }

@@ -13,6 +13,7 @@ target_link_libraries(
     ${GTEST_BOTH_LIBRARIES}
     pthread
     ${CMAKE_PROJECT_NAME}_lib
+    snappy
 )
 
 add_executable(DoubleCoderUnitTest DoubleCoderUnitTest.cpp ../../Parser/SQLParser.cpp)

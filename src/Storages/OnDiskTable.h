@@ -18,6 +18,9 @@ public:
     OnDiskTable() {}
     ~OnDiskTable() {}
 
+    /// Clone func
+    OnDiskTablePtr Clone() const;
+
     /// Get block from bufferPool or disk
     /// If bufferPool == nullptr, just fetch on disk
     bool GetColumnBlock(Columns::ColID cid, ColumnBlockID blockID, ColumnBlockPtr& block, BufferPoolPtr bufferPool);

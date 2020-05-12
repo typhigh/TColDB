@@ -1,8 +1,9 @@
 #pragma once
 #include "defs.h"
 #include "../Utils/AdaptiveMap.h"
-#include "../Columns/Field/Field.h"
+#include "ColumnBlockStatistics.h"
 #include "ColumnBlockID.h"
+#include "ColumnBlock.h"
 namespace Storages {
 
 class ColumnBlockMeta
@@ -14,20 +15,17 @@ private:
     size_t len;
 
 /// Data statistical information
-private:
-    Columns::FieldPtr minValue;
-    Columns::FieldPtr maxValue;
-    Columns::FieldPtr sumValue;
-    size_t count;
-
-/// 
+    ColumnBlockStatistics statistics;
 private:
 ;
 public:
-    ColumnBlockMeta(/* args */) {}
+    ColumnBlockMeta() {}
     ~ColumnBlockMeta() {}
+    ColumnBlockMetaPtr Clone() const;
+
+public:
+    ColumnBlockPtr GetBlock() const;
 };
 
-using ColumnBlockMetaPtr = std::shared_ptr<ColumnBlockMeta>;
 using ColumnBlockMetas = Utils::AdaptiveMap<ColumnBlockID, ColumnBlockMetaPtr>;
 }

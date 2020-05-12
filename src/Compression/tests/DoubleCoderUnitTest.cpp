@@ -1,3 +1,4 @@
+
 #include <gtest/gtest.h>
 #include "../DoubleCoder.h"
 using namespace std;

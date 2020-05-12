@@ -12,8 +12,9 @@ Slice StringCoder::EnCodeStringWithSnappy(Slice output, const string& data)
 {
     string compress;
     snappy::Compress(data.c_str(), data.size(), &compress);
-    uint32_t length = compress.size();
+    size_t length = compress.size();
     assert(output.GetRemain() >= length + 5);
+//    LOG_INFO("compress size is %lu", length);
     output = IntCoder::EncodeVarUInt32(output, length);
     output = Serialization::WriteString(output, compress);
     return output;

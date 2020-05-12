@@ -127,12 +127,14 @@ inline std::vector<std::string> Splite(const std::string& s, char ch)
 }
 
 /// Copy a new c style string, return c-style
-inline char* CopyCStringFromCString(const char* s)
+inline char* CopyCStringFromCString(const char* s, size_t len = 0)
 {
     if (s == nullptr) {
         return nullptr;
     }
-    size_t len = strlen(s);
+    if (!len) {
+        len = strlen(s);
+    }
     char* ret = new char[len+1];
     memcpy(ret, s, len);
     ret[len] = 0;
@@ -140,12 +142,14 @@ inline char* CopyCStringFromCString(const char* s)
 }
 
 // Copy a new c style string, return c-style
-inline std::string CopyStringFromCString(const char* s) 
+inline std::string CopyStringFromCString(const char* s, size_t len = 0) 
 {
     if (s == nullptr) {
         return " ";
     }
-    size_t len = strlen(s);
+    if (!len) {
+        len = strlen(s);
+    }
     std::string ret;
     ret.reserve(len);
     ret.append(s);

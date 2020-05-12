@@ -23,9 +23,10 @@ private:
 
     ColID currentCID;
     RowID currentRID;
+    RowID inMemoryStartRID;
 
-    Storages::OnDiskTable onDiskTable;
-    Storages::InMemoryTable inMemoryTable;
+    Storages::OnDiskTablePtr onDiskTable;
+    Storages::InMemoryTablePtr inMemoryTable;
 //    IndexPartMetaPtr IndexPartMeta;
     
     TupleDescPtr tupleDesc;
